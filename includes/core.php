@@ -35,7 +35,7 @@ if (isset($_SERVER) && array_key_exists('OBSIDIAN_CONFIG', $_SERVER)) {
         include_once($configFile);
         unset($configFile);
     } else {
-        die("You specified a custom configuration file path in the environment, but this file doesn't exist: $configFile");
+        die("You've specified a custom configuration file path in the environment, but this file doesn't exist: $configFile");
     }
 } else {
     include_once("config.php");
