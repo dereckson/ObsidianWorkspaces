@@ -28,8 +28,20 @@ ini_set('register_globals', 'off');
 //Reports all errors, help notices
 error_reporting(E_ALL & ~E_NOTICE);
 
-//Load libraries
-include_once("config.php");               //Site config
+//Loads configuration
+if (isset($_SERVER) && array_key_exists('OBSIDIAN_CONFIG', $_SERVER)) {
+    $configFile = $_SERVER['OBSIDIAN_CONFIG'];
+    if (file_exists($configFile)) {
+        include_once($configFile);
+        unset($configFile);
+    } else {
+        die("You specified a custom configuration file path in the environment, but this file doesn't exist: $configFile");
+    }
+} else {
+    include_once("config.php");
+}
+
+//Loads libraries
 include_once("error.php");               //Error management
 include_once("mysql.php");              //MySQL layer
 include_once("session.php");           //Sessions handler
