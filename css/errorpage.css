@@ -1,0 +1,145 @@
+@charset "utf-8";
+
+/*  -------------------------------------------------------------
+    Obsidian Workspaces
+    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    Author:         Dereckson
+    Tags:           Error pages, responsive
+    Breakpoints:    400, 720, 1280, 1440, 1920
+    Filename:       errorpage.css
+    Version:        1.0
+    Created:        2014-01-24
+    Licence:        Dual licensed under Apache License 2.0
+                    and Creative Commons BY 4.0.
+    -------------------------------------------------------------    */
+
+/*  -------------------------------------------------------------
+    Table of contents
+    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+    :: Main styles
+    :: Responsive background
+    :: Content panel
+
+*/
+
+/*  -------------------------------------------------------------
+    Main styles
+    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -    */
+
+/*  -------------------------------------------------------------
+    Responsive background
+    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -    */
+
+@media screen and (max-width: 400px) {
+    body {
+        background-color: white;
+        background-image: url(/images/bg/MountMcKinleyClimbing_400.jpg);
+        background-position: bottom left;
+        background-attachment: fixed;
+        background-repeat: no-repeat;
+        background-size: cover;
+    }
+}
+
+@media screen and (min-width: 401px) and (max-width: 720px) {
+    body {
+        background-color: white;
+        background-image: url(/images/bg/MountMcKinleyClimbing_720.jpg);
+        background-position: bottom left;
+        background-attachment: fixed;
+        background-repeat: no-repeat;
+        background-size: cover;
+    }
+}
+
+@media screen and (min-width: 721px) and (max-width: 1280px) {
+    body {
+        background-color: white;
+        background-image: url(/images/bg/MountMcKinleyClimbing_1280.jpg);
+        background-position: bottom left;
+        background-attachment: fixed;
+        background-repeat: no-repeat;
+    }
+}
+
+@media screen and (min-width: 1281px) and (max-width: 1440px) {
+    body {
+        background-color: white;
+        background-image: url(/images/bg/MountMcKinleyClimbing_1440.jpg);
+        background-position: bottom left;
+        background-attachment: fixed;
+        background-repeat: no-repeat;
+    }
+}
+
+@media screen and (min-width: 1441px) and (max-width: 1920px) {
+    body {
+        background-color: white;
+        background-image: url(/images/bg/MountMcKinleyClimbing_1920.jpg);
+        background-position: bottom left;
+        background-attachment: fixed;
+        background-repeat: no-repeat;
+    }
+}
+
+@media screen and (min-width: 1921px) {
+    body {
+        background-color: white;
+        background-image: url(/images/bg/MountMcKinleyClimbing_large.jpg);
+        background-position: bottom left;
+        background-attachment: fixed;
+        background-repeat: no-repeat;
+    }
+}
+
+/*  -------------------------------------------------------------
+    Content panel
+    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -    */
+
+.contentpanel {
+    background-color: rgba(255, 255, 255, 0.50);
+    padding: 1em 1em;
+}
+
+.contentpanel h1, .contentpanel h2, .contentpanel p {
+    font-family: "Open Sans", "Helvetica Neue", "Helvetica", Helvetica, Arial, sans-serif;
+    color: black;
+}
+
+.contentpanel a {
+    color: #5f788d;
+}
+
+@media screen and (max-width: 834px) {
+    .contentpanel {
+        width: 100%;
+        position: fixed;
+        bottom: 0;
+        color: white;
+        text-align: center;
+    }
+}
+
+@media screen and (min-width: 835px) {
+    .contentpanel {
+        color: white;
+        width: 746px;
+        position: fixed;
+        bottom: 88px;
+        left: 88px;
+    }
+
+    .contentpanel h1 {
+        font-size: 30pt;
+    }
+
+    .contentpanel h2 {
+        font-size: 20pt;
+    }
+
+    .contentpanel p {
+        font-size: 16pt;
+        font-weight: 300;
+    }
+}
