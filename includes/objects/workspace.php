@@ -100,7 +100,6 @@ class Workspace {
         }
     }
 
-
     /**
      * Gets workspaces specified user has access to.
      * 
@@ -116,9 +115,12 @@ class Workspace {
 
         if (!$workspaces = unserialize($cache->get("workspaces-$user_id"))) {
             $clause = User::get_permissions_clause_from_user_id($user_id);
-            $sql = "SELECT DISTINCT w.* FROM " . TABLE_WORKSPACES . " w, " . TABLE_PERMISSIONS . " p
-                    WHERE p.target_resource_type = 'W' AND p.permission_name = 'accessLevel'
-                    AND $clause AND w.workspace_id = p.target_resource_id";
+            $sql =  "SELECT DISTINCT w.*
+                     FROM " . TABLE_PERMISSIONS . " p, " . TABLE_WORKSPACES . " w
+                     WHERE p.target_resource_type = 'W' AND
+                           p.target_resource_id = w.workspace_id AND
+                           p.permission_name = 'accessLevel' AND
+                           ($clause)";
             if (!$result = $db->sql_query($sql)) {
                 message_die(SQL_ERROR, "Can't get user workspaces", '', __LINE__, __FILE__, $sql);
             }
