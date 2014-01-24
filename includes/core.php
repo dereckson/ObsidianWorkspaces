@@ -13,7 +13,7 @@
  * @author      Sébastien Santoro aka Dereckson <dereckson@espace-win.org>
  * @license     http://www.opensource.org/licenses/bsd-license.php BSD
  * @filesource
- * 
+ *
  */
 
 ////////////////////////////////////////////////////////////////////////////////
