@@ -22,9 +22,6 @@
 ///                                                                          ///
 ////////////////////////////////////////////////////////////////////////////////
 
-//Disables register globals
-ini_set('register_globals', 'off');
-
 //Reports all errors, help notices
 error_reporting(E_ALL & ~E_NOTICE);
 
