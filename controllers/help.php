@@ -23,6 +23,7 @@ $file = $Config['Content']['Help'] . '/' . ($url[1] ? $url[1] : 'index') . '.htm
 
 if (file_exists($file)) {
     //Header
+    $smarty->assign('controller_custom_nav', 'nav_help.tpl');
     include('header.php');
     
     //Help page

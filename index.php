@@ -13,7 +13,7 @@
  * @author      Sébastien Santoro aka Dereckson <dereckson@espace-win.org>
  * @license     http://www.opensource.org/licenses/bsd-license.php BSD
  * @filesource
- * 
+ *
  */
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -78,13 +78,10 @@ if ($CurrentUser->id == ANONYMOUS_USER) {
 
 //Workspace
 if (Workspace::is_workspace($url[0])) {
-    $workspace = new Workspace($url[0]);
-    $controller = $url[1];
-} else {
-    $controller = $url[0];
+    $workspace = new Workspace(array_shift($url));
 }
 
-switch ($controller) {
+switch ($controller = $url[0]) {
     case '':
         //Calls homepage controller
         include("controllers/home.php");

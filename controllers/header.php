@@ -27,9 +27,11 @@ $workspaces_count = count($workspaces);
 // HTML output
 //
 
-//Gets header information
+//Assigns header information
 $smarty->assign('current_username', $CurrentUser->name);
-$smarty->assign('ip', $CurrentUser->session['session_ip']);
+if (isset($workspace)) {
+    $smarty->assign('current_workspace', $workspace);
+}
 $smarty->assign('workspaces', $workspaces);
 $smarty->assign('workspaces_count', $workspaces_count);
 
