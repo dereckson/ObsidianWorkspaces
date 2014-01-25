@@ -145,6 +145,10 @@ dl > dd + dt {
     color: #47a0ff;
 }
 
+.navbar-default {
+    border-color: inherit;
+}
+
 .navbar-default .navbar-toggle {
     border: solid 2px #0e1e2e;
 }

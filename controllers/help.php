@@ -27,6 +27,7 @@ if (file_exists($file)) {
     include('header.php');
 
     //Help page
+    $smarty->assign('help_file', $file);
     $smarty->display('help.tpl');
 
     //Footer
