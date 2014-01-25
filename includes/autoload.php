@@ -16,6 +16,9 @@
  * This magic method is called when a class can't be loaded
  */
 function obsidian_autoload ($className) {
+    //Applications
+    if ($className == 'HelloWorldApplication') { require './apps/helloworld/HelloWorldApplication.php'; return true; }
+
     //Core controllers
     if ($className == 'HeaderController') { require './controllers/header.php'; return true; }
     if ($className == 'FooterController') { require './controllers/footer.php'; return true; }
@@ -23,6 +26,7 @@ function obsidian_autoload ($className) {
 
     //Keruald and Obsidian Workspaces Libraries
     if ($className == 'Application') { require './includes/apps/Application.php'; return true; }
+    if ($className == 'ApplicationConfiguration') { require './includes/apps/ApplicationConfiguration.php'; return true; }
     if ($className == 'ApplicationContext') { require './includes/apps/ApplicationContext.php'; return true; }
 
     if ($className == 'Cache') { require './includes/cache/cache.php'; return true; }
@@ -32,9 +36,13 @@ function obsidian_autoload ($className) {
     if ($className == 'Context') { require './includes/controller/Context.php'; return true; }
     if ($className == 'Controller') { require './includes/controller/Controller.php'; return true; }
 
+    if ($className == 'Message') { require './includes/i18n/Message.php'; return true; }
+
     if ($className == 'User') { require './includes/objects/user.php'; return true; }
     if ($className == 'UserGroup') { require './includes/objects/usergroup.php'; return true; }
-    if ($className == 'Workspace') { require './includes/objects/workspace.php'; return true; }
+
+    if ($className == 'Workspace') { require './includes/workspaces/Workspace.php'; return true; }
+    if ($className == 'WorkspaceConfiguration') { require './includes/workspaces/WorkspaceConfiguration.php'; return true; }
 
     return false;
 }

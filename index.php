@@ -83,6 +83,7 @@ if ($context->user->id == ANONYMOUS_USER) {
 //Workspace
 if (Workspace::is_workspace($context->url[0])) {
     $context->workspace = Workspace::fromCode(array_shift($context->url));
+    $context->workspace->loadConfiguration();
 }
 
 switch ($controller = $context->url[0]) {
@@ -98,6 +99,16 @@ switch ($controller = $context->url[0]) {
         break;
 
     default:
+        //Current workspace application controller?
+        $workspaceConfig = $context->workspace->configuration;
+        $applicationConfiguration = NULL;
+        if ($workspaceConfig != NULL && $workspaceConfig->hasControllerBind($controller, $applicationConfiguration)) {
+            //Run controller
+            $controllerClass = $applicationConfiguration->name;
+            $controllerClass::Run($context);
+            break;
+        }
+
         //Not a workspace, nor a controller toponomy
         define('ERROR_PAGE', 404);
         include("controllers/errorpage.php");

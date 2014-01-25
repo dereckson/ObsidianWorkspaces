@@ -32,8 +32,21 @@ class HeaderController extends Controller {
         $smarty->assign('current_username', $context->user->name);
         $smarty->assign('workspaces', $workspaces);
         $smarty->assign('workspaces_count', count($workspaces));
+
         if ($this->context->workspace !== null) {
             $smarty->assign('current_workspace', $this->context->workspace);
+
+            //Gets navigation
+            $nav = [];
+            $binds = $this->context->workspace->configuration->getControllersBinds();
+            foreach ($binds as $applicationConfig) {
+                $nav[] = [
+                    'link' => $applicationConfig->nav->__toString(),
+                    'url' => $applicationConfig->bind,
+                    'icon' => $applicationConfig->icon
+                ];
+            }
+            $smarty->assign('current_workspace_nav', $nav);
         }
 
         $smarty->display('header.tpl');

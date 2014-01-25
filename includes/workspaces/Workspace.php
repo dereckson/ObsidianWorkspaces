@@ -9,7 +9,7 @@
  * Workspace class
  *
  * @package     ObsidianWorkspaces
- * @subpackage  Model
+ * @subpackage  Workspaces
  * @author      Sébastien Santoro aka Dereckson <dereckson@espace-win.org>
  * @license     http://www.opensource.org/licenses/bsd-license.php BSD
  * @filesource
@@ -27,6 +27,11 @@ class Workspace {
     public $name;
     public $created;
     public $description;
+
+    /**
+     * @var WorkspaceConfiguration The workspace configuration
+     */
+    public $configuration;
 
     /**
      * Initializes a new instance
@@ -119,6 +124,20 @@ class Workspace {
             //Gets new record id value
             $this->id = $db->sql_nextid();
         }
+    }
+
+    /**
+     * Loads configuration
+     */
+    public function loadConfiguration () {
+        global $Config;
+
+        $file = $Config['Content']['Workspaces'] . '/' . $this->code . '/workspace.conf';
+        if (!file_exists($file)) {
+            throw new Exception("Workspace configuration file doesn't exist");
+        }
+
+        $this->configuration = WorkspaceConfiguration::loadFromFile($file);
     }
 
     /**

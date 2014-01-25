@@ -140,6 +140,7 @@ $Config['StaticContentURL'] = '';
 //Content directories
 $Config['Content']['Cache'] = 'content/cache';
 $Config['Content']['Help'] = 'content/help';
+$Config['Content']['Workspaces'] = 'content/workspaces';
 
 //ImageMagick paths
 //Be careful on Windows platform convert could match the NTFS convert command.
