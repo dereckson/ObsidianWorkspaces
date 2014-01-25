@@ -11,6 +11,7 @@
     <link href="{#StaticContentURL#}/favicon.png" rel="icon" type="image/png" />
 </head>
 <body>
+    <a href="#content" class="sr-only">{#SkipNavigation#}</a>
     <div id="wrapper">
         <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
             <div class="navbar-header">
