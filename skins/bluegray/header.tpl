@@ -69,3 +69,5 @@
 {else}
 {include file='nav_main.tpl'}
 {/if}
+
+        <div id="content">
