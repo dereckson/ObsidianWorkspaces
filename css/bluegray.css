@@ -16,7 +16,9 @@
     Table of contents
     - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
+    :: Fonts
     :: Main styles
+    :: Titles
     :: Wrappers
     :: Navigation
     :: Buttons
@@ -28,11 +30,48 @@
 */
 
 /*  -------------------------------------------------------------
+    Fonts
+    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -    */
+
+@import url(http://fonts.googleapis.com/css?family=Source+Sans+Pro:400,200,400italic,600);
+
+/*  -------------------------------------------------------------
     Main styles
     - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -    */
 
 body {
-    background-color: #f8f8f8;
+    background-color: rgb(248, 248, 248);
+    font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif;
+    font-size: 11pt;
+}
+
+strong {
+    font-weight: 600;
+}
+
+/*  -------------------------------------------------------------
+    Titles
+    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -    */
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif;
+    font-weight: 200;
+}
+
+h1 {
+    font-size: 38pt;
+}
+
+h2 {
+    font-size: 28pt;
+}
+
+h3 {
+    font-size: 20pt;
+}
+
+dl > dd + dt {
+    margin-top: 1em;
 }
 
 /*  -------------------------------------------------------------
@@ -63,11 +102,57 @@ body {
     Navigation
     - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -    */
 
+/* .navbar-static-side */
+
 .navbar-static-side ul li {
     border-bottom: 1px solid #e7e7e7;
 }
 
+/* Breadcrumbs */
+
+.breadcrumb {
+    background-color: inherit;
+    font-weight: 200;
+    float: right;
+}
+
 /* Top Right Navigation Dropdown Styles */
+
+.navbar-static-top {
+    background-color: #142b43;
+}
+
+.navbar-static-top .navbar-brand {
+    color: white;
+}
+
+.navbar-static-top  a.navbar-brand:hover {
+    color: #47a0ff;
+}
+
+.navbar-static-top .nav > li > a:hover,
+.navbar-static-top .nav > li > a:focus {
+    text-decoration: none;
+    background-color: #1b3d61;
+    color: #47a0ff;
+}
+
+.navbar-static-top .nav .open > a,
+.navbar-static-top .nav .open > a:hover,
+.navbar-static-top .nav .open > a:focus {
+    background-color: #1b3d61;
+    border-color: #428bca;
+    color: #47a0ff;
+}
+
+.navbar-default .navbar-toggle {
+    border: solid 2px #0e1e2e;
+}
+
+.navbar-default .navbar-toggle:hover,
+.navbar-default .navbar-toggle:focus {
+    background-color: #1b3d61;
+}
 
 .navbar-top-links li {
     display: inline-block;
