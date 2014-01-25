@@ -25,10 +25,10 @@ if (file_exists($file)) {
     //Header
     $smarty->assign('controller_custom_nav', 'nav_help.tpl');
     include('header.php');
-    
+
     //Help page
     $smarty->display('help.tpl');
-     
+
     //Footer
     include('footer.php');
 } else {

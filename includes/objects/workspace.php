@@ -30,7 +30,7 @@ class Workspace {
 
     /**
      * Initializes a new instance
-     * 
+     *
      * @param int $id the primary key
      */
     function __construct ($id = NULL) {
@@ -102,7 +102,7 @@ class Workspace {
 
     /**
      * Gets workspaces specified user has access to.
-     * 
+     *
      * @param int $user_id The user to get his workspaces
      * @return Array A list of workspaces
      */
@@ -137,7 +137,7 @@ class Workspace {
             $cache->set("workspaces-$user_id", serialize($workspaces));
         }
 
-        return $workspaces;        
+        return $workspaces;
     }
 
     /**

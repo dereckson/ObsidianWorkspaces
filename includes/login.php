@@ -13,7 +13,7 @@
  * @author      Sébastien Santoro aka Dereckson <dereckson@espace-win.org>
  * @license     http://www.opensource.org/licenses/bsd-license.php BSD
  * @filesource
- * 
+ *
  */
 
 if ($_POST['LogIn']) {
@@ -21,7 +21,7 @@ if ($_POST['LogIn']) {
     $username = $db->sql_escape($_POST['username']);
     $sql = "SELECT user_password, user_id FROM " . TABLE_USERS . " WHERE username = '$username'";
     if ( !($result = $db->sql_query($sql)) ) message_die(SQL_ERROR, "Can't get user information", '', __LINE__, __FILE__, $sql);
-    
+
     if ($row = $db->sql_fetchrow($result)) {
         if (!$row['user_password']) {
             //No password set

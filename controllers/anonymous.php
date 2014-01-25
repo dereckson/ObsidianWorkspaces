@@ -34,7 +34,7 @@ switch ($url[0]) {
             //User tries to claim its invite to create an account
             require_once('includes/objects/invite.php');
             require_once('includes/objects/user.php');
-            
+
             //Gets invite
             $invite = new Invite($_POST['invite_code']);
             if ($invite->lastError != '') {
@@ -53,15 +53,15 @@ switch ($url[0]) {
                 } elseif (!User::is_available_login($_POST['username'])) {
                     $errors[] =  lang_get('LoginUnavailable');
                 }
-                
+
                 if (User::get_username_from_email($_POST['email']) !== false) {
                     $errors[] = "There is already an account with this e-mail.";
                 }
-                
+
                 if (!$_POST['passwd']) {
                     $errors[] = lang_get('MissingPassword');
                 }
-                               
+
                 if (count($errors)) {
                     $smarty->assign('WAP', join('<br />', $errors));
                 } else {
@@ -74,11 +74,11 @@ switch ($url[0]) {
                     $user->email = $_POST['email'];
                     $user->set_password($_POST['passwd']);
                     $user->save_to_database();
-                    
+
                     //Updates invite
                     $invite->to_user_id = $user->id;
                     $invite->save_to_database();
-                    
+
                     //Notifies inviter
                     require_once('includes/objects/message.php');
                     $message = new Message();
@@ -86,13 +86,13 @@ switch ($url[0]) {
                     $message->to = $invite->from_perso_id;
                     $message->text =  sprintf(lang_get('InviteHaveBeenClaimed'), $invite->code);
                     $message->send();
-                    
+
                     //Logs in user
                     login($user->id, $user->name);
-                    
+
                     //Prints confirm message
                     $smarty->assign('WAP', lang_get("AccountCreated"));
-                    
+
                     //Redirects users to homepage
                     header('refresh: 5; url=' . get_url());
 
@@ -104,13 +104,13 @@ switch ($url[0]) {
                     exit;
                 }
             }
-            
+
             //Keeps username, email, invite code printed on account create form
             $smarty->assign('username', $_POST['username']);
             $smarty->assign('invite_code', $_POST['invite_code']);
             $smarty->assign('email', $_POST['email']);
         }
-        
+
         //If the invite code is specified, checks format
         if ($url[1]) {
             if (preg_match("/^([A-Z]){3}([0-9]){3}$/i", $url[1])) {
@@ -119,11 +119,11 @@ switch ($url[0]) {
                 $smarty->assign('NOTIFY', lang_get("IncorrectInviteCode"));
             }
         }
-        
+
         $template = 'account_create.tpl';
         */
         break;
-    
+
     default:
         //Login form
         if (array_key_exists('LastUsername', $_COOKIE)) {
@@ -132,7 +132,7 @@ switch ($url[0]) {
         if (array_key_exists('LastOpenID', $_COOKIE)) {
             $smarty->assign('OpenID', $_COOKIE['LastOpenID']);
         }
-        
+
         $smarty->assign('LoginError', $LoginError);
         $smarty->assign('PostURL', $action = get_url() . implode('/', $url));
         $template = 'login.tpl';

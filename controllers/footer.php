@@ -19,6 +19,6 @@
  //
  // HTML output
  //
- 
+
 //Prints the template
 $smarty->display('footer.tpl');

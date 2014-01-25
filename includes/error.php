@@ -20,7 +20,7 @@
  * @author      Sébastien Santoro aka Dereckson <dereckson@espace-win.org>
  * @license     http://www.opensource.org/licenses/bsd-license.php BSD
  * @filesource
- * 
+ *
  */
 
 //Error code constants
@@ -35,7 +35,7 @@ define ("GENERAL_ERROR", 117);
  */
 function dieprint_r ($var, $title = '') {
     if (!$title) $title = 'Debug';
-    
+
     //GENERAL_ERROR with print_r call as message
     message_die(GENERAL_ERROR, '<pre>' . print_r($var, true) .'</pre>', $title);
 }
@@ -60,17 +60,17 @@ function message_die ($code, $text = '', $title = '', $line = '', $file = '', $s
             $text .= ", line $line";
         }
     }
-    
+
     //Ensures we've an error title and adds relevant extra information
     switch ($code) {
         case HACK_ERROR:
             $title = $title ? $title : "Access non authorized";
             break;
-        
+
         case SQL_ERROR:
             global $db;
             $title = $title ? $title : "SQL error";
-            
+
             //Gets SQL error information
             $sqlError = $db->sql_error();
             if ($sqlError['message'] != '') {
@@ -78,21 +78,21 @@ function message_die ($code, $text = '', $title = '', $line = '', $file = '', $s
             }
             $text .= '<br />&nbsp;<br />Query: ';
             $text .= $sql;
-            
+
             break;
-        
+
         default:
             //TODO: here can be added code to handle error error ;-)
             //Falls to GENERAL_ERROR
-        
+
         case GENERAL_ERROR:
             $title = $title ? $title : "General error";
             break;
     }
-    
+
     //HTML output of $title and $text variables
     echo '<div class="FatalError"><p class="FatalErrorTitle">', $title,
          '</p><p>', $text, '</p></div>';
-    
+
     exit;
 }

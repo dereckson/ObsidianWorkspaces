@@ -29,7 +29,7 @@ class UserGroup {
 
     /**
      * Initializes a new instance
-     * 
+     *
      * @param int $id the primary key
      */
     function __construct ($id = NULL) {

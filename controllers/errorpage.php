@@ -30,7 +30,7 @@ switch (ERROR_PAGE) {
         header("HTTP/1.0 404 Not Found");
         $smarty->display("errors/404.tpl");
         break;
- 
+
     default:
         die("Unknown error page: " . ERROR_PAGE);
 }

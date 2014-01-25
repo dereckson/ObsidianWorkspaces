@@ -21,7 +21,7 @@
             background-size: cover;
         }
     }
-    
+
     @media screen and (min-width: 401px) and (max-width: 720px) {
         body {
             background-color: black;
@@ -32,7 +32,7 @@
             background-size: cover;
         }
     }
-    
+
     @media screen and (min-width: 721px) and (max-width: 1280px) {
         body {
             background-color: black;
@@ -42,7 +42,7 @@
             background-repeat: no-repeat;
         }
     }
-    
+
     @media screen and (min-width: 1281px) and (max-width: 1440px) {
         body {
             background-color: black;
@@ -52,7 +52,7 @@
             background-repeat: no-repeat;
         }
     }
-    
+
     @media screen and (min-width: 1441px) and (max-width: 1920px) {
         body {
             background-color: black;
@@ -62,7 +62,7 @@
             background-repeat: no-repeat;
         }
     }
-    
+
     @media screen and (min-width: 1921px) {
         body {
             background-color: black;
@@ -72,24 +72,24 @@
             background-repeat: no-repeat;
         }
     }
-        
+
     .panel-default {
         opacity: 0.9;
         margin-top:30px;
     }
-    
+
     .form-group.last { margin-bottom:0px; }
-    
+
     #product {
         text-align: center;
         padding-top: 1em;
         margin-top: 0;
     }
-    
+
     #product:before {
         content: "[ ";
     }
-    
+
     #product:after {
         content: " ]";
     }
@@ -97,7 +97,7 @@
 </head>
 <body>
     <p id="product">{#Product#}</p>
-    
+
     <div class="container">
         <div class="row">
             <div class="col-md-4 col-md-offset-7">
@@ -149,7 +149,7 @@
             </div>
         </div>
     </div>
-    
+
     <script src="https://code.jquery.com/jquery.js"></script>
     <script src="{#StaticContentURL#}/js/bootstrap.min.js"></script>
 </body>

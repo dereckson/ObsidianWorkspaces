@@ -16,7 +16,7 @@
  * @author      Sébastien Santoro aka Dereckson <dereckson@espace-win.org>
  * @license     http://www.opensource.org/licenses/bsd-license.php BSD
  * @filesource
- * 
+ *
  */
 
 /**
@@ -27,20 +27,20 @@ class Session {
      * @var string session ID
      */
     public $id;
-    
+
     /**
      * @var string remote client IP
      */
     public $ip;
-    
+
     /*
      * @var Session current session instance
      */
     private static $instance;
-    
+
     /*
      * Gets or initializes current session instance
-     * 
+     *
      * @return Session current session instance
      */
     public static function load () {
@@ -49,10 +49,10 @@ class Session {
             $c = __CLASS__;
             self::$instance = new $c;
         }
-        
+
         return self::$instance;
     }
-    
+
     /**
      * Initializes a new instance of Session object
      */
@@ -61,14 +61,14 @@ class Session {
         session_start();
         $_SESSION['ID'] = session_id();
         $this->id = $_SESSION['ID'];
-        
+
         //Gets remote client IP
         $this->ip = self::get_ip();
-        
+
         //Updates or creates the session in database
         $this->update();
     }
-    
+
     /**
      * Gets remote client IP address
      * @return string IP
@@ -81,10 +81,10 @@ class Session {
             return $_SERVER['HTTP_X_FORWARDED_FOR'];
         }
 
-        //Standard cases        
+        //Standard cases
         return $_SERVER['REMOTE_ADDR'];
     }
-    
+
     /**
      * Cleans up session
      * i.  deletes expired session
@@ -94,12 +94,12 @@ class Session {
         global $db, $Config;
 
         //Gets session and online status lifetime (in seconds)
-        //If not specified in config, sets default 5 and 120 minutes values 
+        //If not specified in config, sets default 5 and 120 minutes values
         $onlineDuration  = array_key_exists('OnlineDuration', $Config)  ? $Config['OnlineDuration']  :  300;
         $sessionDuration = array_key_exists('SessionDuration', $Config) ? $Config['SessionDuration'] : 7200;
-        
+
         $resource = array_key_exists('ResourceID', $Config) ? '\'' . $db->sql_escape($Config['ResourceID']) . '\'' : 'default';
-        
+
         //Deletes expired sessions
         $sql = "DELETE FROM " . TABLE_SESSIONS . " WHERE session_resource = $resource AND TIMESTAMPDIFF(SECOND, session_updated, NOW()) > $sessionDuration";
         if (!$db->sql_query($sql)) message_die(SQL_ERROR, "Can't delete expired sessions", '', __LINE__, __FILE__, $sql);
@@ -108,20 +108,20 @@ class Session {
         $sql = "UPDATE " . TABLE_SESSIONS . " SET session_resource = $resource AND session_online = 0 WHERE TIMESTAMPDIFF(SECOND, session_updated, NOW()) > $onlineDuration";
         if (!$db->sql_query($sql)) message_die(SQL_ERROR, 'Can\'t update sessions online statuses', '', __LINE__, __FILE__, $sql);
     }
-    
-    
+
+
     /**
      * Updates or creates a session in the database
      */
     public function update () {
         global $db, $Config;
-    
+
         //Cleans up session
         //To boost SQL performances, try a random trigger
         //     e.g. if (rand(1, 100) < 3) self::clean_old_sessions();
         //or comment this line and execute a cron script you launch each minute.
         self::clean_old_sessions();
-        
+
         //Saves session in database.
         //If the session already exists, it updates the field online and updated.
         $id = $db->sql_escape($this->id);
@@ -130,16 +130,16 @@ class Session {
         $sql = "INSERT INTO " . TABLE_SESSIONS . " (session_id, session_ip, session_resource, user_id) VALUES ('$id', '$this->ip', $resource, '$user_id') ON DUPLICATE KEY UPDATE session_online = 1";
         if (!$db->sql_query($sql)) message_die(SQL_ERROR, 'Can\'t save current session', '', __LINE__, __FILE__, $sql);
     }
-    
+
     /**
      * Gets the number of online users
-     * 
+     *
      * @return int the online users count
      */
-    public function count_online () {        
+    public function count_online () {
         //Keeps result for later method call
         static $count = -1;
-        
+
         if ($count == -1) {
             //Queries sessions table
             global $db, $Config;
@@ -148,49 +148,49 @@ class Session {
             $sql = "SELECT count(*) FROM " . TABLE_SESSIONS . " WHERE session_resource = $resource AND session_online = 1";
             $count = (int)$db->sql_query_express($sql, "Can't count online users");
         }
-        
+
         //Returns number of users online
         return $count;
     }
-    
+
     /**
      * Gets the value of a custom session table field
-     * 
+     *
      * @param string $info the field to get
      * @return string the session specified field's value
      */
     public function get_info ($info) {
         global $db;
-        
+
         $id = $db->sql_escape($this->id);
         $sql = "SELECT `$info` FROM " . TABLE_SESSIONS . " WHERE session_id = '$id'";
         return $db->sql_query_express($sql, "Can't get session $info info");
     }
-    
+
     /**
      * Sets the value of a custom session table field to the specified value
-     * 
+     *
      * @param string $info the field to update
      * @param string $value the value to set
      */
     public function set_info ($info, $value) {
         global $db;
-        
+
         $value = ($value === null) ? 'NULL' : "'" . $db->sql_escape($value) . "'";
         $id = $db->sql_escape($this->id);
     	$sql = "UPDATE " . TABLE_SESSIONS . " SET `$info` = $value WHERE session_id = '$id'";
         if (!$db->sql_query($sql))
             message_die(SQL_ERROR, "Can't set session $info info", '', __LINE__, __FILE__, $sql);
     }
-    
+
     /**
      * Gets logged user information
-     * 
+     *
      * @return User the logged user information
      */
     public function get_logged_user () {
         global $db;
-        
+
         //Gets session information
         $id = $db->sql_escape($this->id);
         $sql = "SELECT * FROM " . TABLE_SESSIONS . " WHERE session_id = '$id'";
@@ -211,7 +211,7 @@ class Session {
 
     /**
      * Cleans session
-     * 
+     *
      * This method is to be called when an event implies a session destroy
      */
     public function clean () {
@@ -223,7 +223,7 @@ class Session {
 
     /**
      * Updates the session in an user login context
-     * 
+     *
      * @param string $user_id the user ID
      */
     public function user_login ($user_id) {
@@ -236,20 +236,20 @@ class Session {
         if (!$db->sql_query($sql))
             message_die(SQL_ERROR, "Can't set logged in status", '', __LINE__, __FILE__, $sql);
     }
-    
+
     /**
      * Updates the session in an user logout context
      */
     public function user_logout () {
         global $db;
-        
+
         //Sets anonymous user in sessions table
         $user_id = $db->sql_escape(ANONYMOUS_USER);
         $id  = $db->sql_escape($this->id);
         $sql = "UPDATE " . TABLE_SESSIONS . " SET user_id = '$user_id' WHERE session_id = '$id'";
         if (!$db->sql_query($sql))
             message_die(SQL_ERROR, "Can't set logged out status", '', __LINE__, __FILE__, $sql);
-        
+
         //Cleans session
         $this->clean();
     }

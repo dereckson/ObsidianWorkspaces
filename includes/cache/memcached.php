@@ -18,7 +18,7 @@
 
 /**
  * Memcached cache
- * 
+ *
  * !!! This class uses the Memcached extension AND NOT the Memcache ext !!!!
  *
  * References:
@@ -28,27 +28,27 @@
  * This class implements a singleton pattern.
  */
 class CacheMemcached {
-    
+
     /**
      * The current cache instance
      *
-     * @var CacheMemcached 
+     * @var CacheMemcached
      */
     static $instance = null;
 
     /**
      * The Memcached object
      *
-     * @var Memcached 
-     */    
+     * @var Memcached
+     */
     private $memcached = null;
-    
+
     /**
      * Gets the cache instance, initializing it if needed
-     * 
+     *
      * @return Cache the cache instance, or null if nothing is cached
      */
-    static function load () {       
+    static function load () {
         //Checks extension is okay
         if (!extension_loaded('memcached')) {
             if (extension_loaded('memcache')) {
@@ -57,11 +57,11 @@ class CacheMemcached {
                 message_die(GENERAL_ERROR, "Can't initialize $engine cache engine.<br />PHP extension memcached not loaded.", 'Cache');
             }
         }
-    
+
         //Creates the Memcached object if needed
         if (self::$instance === null) {
             global $Config;
-            
+
             self::$instance = new CacheMemcached();
             self::$instance->memcached = new Memcached();
             self::$instance->memcached->addServer(
@@ -69,10 +69,10 @@ class CacheMemcached {
                 $Config['cache']['port']
             );
         }
-        
+
         return self::$instance;
     }
-    
+
     /**
      * Gets the specified key's data
      *
