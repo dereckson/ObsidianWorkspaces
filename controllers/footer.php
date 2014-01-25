@@ -16,9 +16,16 @@
  *
  */
 
- //
- // HTML output
- //
+/**
+ * Footer controller
+ */
+class FooterController extends Controller {
 
-//Prints the template
-$smarty->display('footer.tpl');
+    /**
+     * Handle controller request
+     */
+    public function handleRequest () {
+        $this->context->templateEngine->display('footer.tpl');
+    }
+
+}

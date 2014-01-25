@@ -22,10 +22,10 @@
 
 //Serves header
 $smarty->assign('PAGE_TITLE', "Home");
-include('header.php');
+HeaderController::run($context);
 
 //Serves homepage content
 $smarty->display("home.tpl");
 
 //Serves footer
-include('footer.php');
+FooterController::run($context);

@@ -16,29 +16,27 @@
  *
  */
 
-//
-// Gets header resources
-//
-
-$workspaces = $CurrentUser->get_workspaces();
-$workspaces_count = count($workspaces);
-
-//
-// HTML output
-//
-
-//Assigns header information
-$smarty->assign('current_username', $CurrentUser->name);
-if (isset($workspace)) {
-    $smarty->assign('current_workspace', $workspace);
-}
-$smarty->assign('workspaces', $workspaces);
-$smarty->assign('workspaces_count', $workspaces_count);
-
-//Prints the template
-$smarty->display('header.tpl');
-
 /**
- * This constant indicates the header have been printed
+ * Header controller
  */
-define('HEADER_PRINTED', true);
+class HeaderController extends Controller {
+    /**
+     * Handle controller request
+     */
+    public function handleRequest () {
+        //Gets header resources
+        $workspaces = $this->context->user->get_workspaces();
+
+        //HTML output
+        $smarty = $this->context->templateEngine;
+        $smarty->assign('current_username', $context->user->name);
+        $smarty->assign('workspaces', $workspaces);
+        $smarty->assign('workspaces_count', count($workspaces));
+        if ($this->context->workspace !== null) {
+            $smarty->assign('current_workspace', $this->context->workspace);
+        }
+
+        $smarty->display('header.tpl');
+        define('HEADER_PRINTED', true);
+    }
+}

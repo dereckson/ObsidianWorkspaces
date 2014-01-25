@@ -24,10 +24,10 @@ $template = 'reports_view';
 
 //Serves header
 $smarty->assign('PAGE_TITLE', "Reports");
-include('header.php');
+HeaderController::run($context);
 
 //Servers controller content
 $smarty->display("$template.tpl");
 
 //Serves footer
-include('footer.php');
+FooterController::run($context);

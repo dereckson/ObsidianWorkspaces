@@ -134,7 +134,7 @@ switch ($url[0]) {
         }
 
         $smarty->assign('LoginError', $LoginError);
-        $smarty->assign('PostURL', $action = get_url() . implode('/', $url));
+        $smarty->assign('PostURL', $action = get_url() . implode('/', $context->url));
         $template = 'login.tpl';
         break;
 }

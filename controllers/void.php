@@ -22,9 +22,9 @@
 
 //Serves header
 $smarty->assign('PAGE_TITLE', $title);
-include('header.php');
+HeaderController::run($context);
 
 //Doesn't serve any content;
 
 //Servers footer
-include('footer.php');
+FooterController::run($context);

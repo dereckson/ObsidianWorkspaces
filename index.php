@@ -23,8 +23,9 @@
 
 //Keruald and Obsidian Workspaces libraries
 include('includes/core.php');
-include('includes/cache/cache.php');
-include('includes/objects/workspace.php');
+
+//New application context
+$context = new ApplicationContext();
 
 ////////////////////////////////////////////////////////////////////////////////
 ///
@@ -32,13 +33,13 @@ include('includes/objects/workspace.php');
 ///
 
 //Starts a new session or recovers current session
-$Session = Session::load();
+$context->session = Session::load();
 
 //Handles login or logout
 include("includes/login.php");
 
 //Gets current user information
-$CurrentUser = $Session->get_logged_user();
+$context->user = $context->session->get_logged_user();
 
 ////////////////////////////////////////////////////////////////////////////////
 ///
@@ -48,6 +49,8 @@ $CurrentUser = $Session->get_logged_user();
 define('THEME', 'bluegray');
 
 require('includes/smarty/Smarty.class.php');
+define('SMARTY_SPL_AUTOLOAD', 1);
+
 $smarty = new Smarty();
 $current_dir = dirname(__FILE__);
 $smarty->template_dir = $current_dir . '/skins/' . THEME;
@@ -57,6 +60,7 @@ $smarty->cache_dir = $Config['Content']['Cache'];
 $smarty->config_dir = $current_dir;
 
 $smarty->config_vars['StaticContentURL'] = $Config['StaticContentURL'];
+$context->templateEngine = $smarty;
 
 //Loads language files
 initialize_lang();
@@ -67,21 +71,21 @@ lang_load('core.conf');
 /// Serves the requested page
 ///
 
-$url = get_current_url_fragments();
+$context->url = get_current_url_fragments();
 
 //If the user isn't logged in (is anonymous), prints login/invite page & dies.
-if ($CurrentUser->id == ANONYMOUS_USER) {
+if ($context->user->id == ANONYMOUS_USER) {
     //Anonymous user
     include('controllers/anonymous.php');
     exit;
 }
 
 //Workspace
-if (Workspace::is_workspace($url[0])) {
-    $workspace = new Workspace(array_shift($url));
+if (Workspace::is_workspace($context->url[0])) {
+    $workspace = new Workspace(array_shift($context->url));
 }
 
-switch ($controller = $url[0]) {
+switch ($controller = $context->url[0]) {
     case '':
         //Calls homepage controller
         include("controllers/home.php");

@@ -45,6 +45,7 @@ if (isset($_SERVER) && array_key_exists('OBSIDIAN_CONFIG', $_SERVER)) {
 include_once("error.php");               //Error management
 include_once("mysql.php");              //MySQL layer
 include_once("session.php");           //Sessions handler
+include_once("autoload.php");         //Autoloader for needed classes
 
 ////////////////////////////////////////////////////////////////////////////////
 ///                                                                          ///

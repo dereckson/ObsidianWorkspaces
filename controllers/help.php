@@ -19,19 +19,19 @@
 //
 // HTML output
 //
-$file = $Config['Content']['Help'] . '/' . ($url[1] ? $url[1] : 'index') . '.html';
+$file = $Config['Content']['Help'] . '/' . ($context->url[1] ? $context->url[1] : 'index') . '.html';
 
 if (file_exists($file)) {
     //Header
     $smarty->assign('controller_custom_nav', 'nav_help.tpl');
-    include('header.php');
+    HeaderController::Run($context);
 
     //Help page
     $smarty->assign('help_file', $file);
     $smarty->display('help.tpl');
 
     //Footer
-    include('footer.php');
+    FooterController::Run($context);
 } else {
     define('ERROR_PAGE', 404);
     include("controllers/errorpage.php");
