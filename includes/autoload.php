@@ -19,6 +19,7 @@ function obsidian_autoload ($className) {
     //Core controllers
     if ($className == 'HeaderController') { require './controllers/header.php'; return true; }
     if ($className == 'FooterController') { require './controllers/footer.php'; return true; }
+    if ($className == 'HomepageController') { require './controllers/home.php'; return true; }
 
     //Keruald and Obsidian Workspaces Libraries
     if ($className == 'Application') { require './includes/apps/Application.php'; return true; }

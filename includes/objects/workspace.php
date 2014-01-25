@@ -54,10 +54,31 @@ class Workspace {
      * Loads the object zone (ie fill the properties) from the $row array
      */
     function load_from_row ($row) {
+        $this->id = $row['workspace_id'];
         $this->code = $row['workspace_code'];
         $this->name = $row['workspace_name'];
         $this->created = $row['workspace_created'];
         $this->description = $row['workspace_description'];
+    }
+
+    /**
+     * Loads the specified workspace from code
+     *
+     * @param string $code The workspace code
+     * @return Workspace The specified workspace instance
+     */
+    public static function fromCode ($code) {
+        global $db;
+        $code = $db->sql_escape($code);
+        $sql = "SELECT * FROM " . TABLE_WORKSPACES . " WHERE workspace_code = '" . $code . "'";
+        if (!$result = $db->sql_query($sql)) message_die(SQL_ERROR, "Unable to query workspaces", '', __LINE__, __FILE__, $sql);
+        if (!$row = $db->sql_fetchrow($result)) {
+            throw new Exception("Workspace unkwown: " . $code);
+        }
+
+        $workspace = new Workspace();
+        $workspace->load_from_row($row);
+        return $workspace;
     }
 
     /**

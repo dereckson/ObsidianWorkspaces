@@ -16,16 +16,58 @@
  *
  */
 
-//
-// HTML output
-//
+ /**
+ * Homepage controller
+ */
+class HomepageController extends Controller {
+    /**
+     * Handle controller request
+     */
+    public function handleRequest () {
+        $smarty = $this->context->templateEngine;
 
-//Serves header
-$smarty->assign('PAGE_TITLE', "Home");
-HeaderController::run($context);
+        if ($this->context->workspace == null) {
+            //We need a list of workspaces to allow user
+            //to select the one he wishes to access.
+            //The header has already grabbed it for us.
+            if (array_key_exists('workspaces', $smarty->tpl_vars)) {
+                $workspaces = $smarty->tpl_vars['workspaces']->value;
+            } else {
+                $workspaces = $this->context->user->get_workspaces();
+                $smarty->assign('workspaces', $workspaces);
+            }
 
-//Serves homepage content
-$smarty->display("home.tpl");
+            switch (count($workspaces)) {
+                case 0:
+                    //No workspace error message
+                    $smarty->assign('PAGE_TITLE', lang_get("Home"));
+                    $template = "home_noworkspace.tpl";
+                    break;
 
-//Serves footer
-FooterController::run($context);
+                case 1:
+                    //Autoselect workspace
+                    $this->context->workspace = $workspaces[0];
+                    break;
+
+                default:
+                    //Select workspace template
+                    $smarty->assign('PAGE_TITLE', lang_get("PickWorkspace"));
+                    $template = "home_pickworkspace.tpl";
+            }
+        }
+
+        if ($this->context->workspace != null) {
+            $smarty->assign('PAGE_TITLE', $this->context->workspace->name);
+            $template = "home_workspace.tpl";
+        }
+
+        //Serves header
+        HeaderController::run($this->context);
+
+        //Serves relevant template
+        $smarty->display($template);
+
+        //Serves footer
+        FooterController::run($this->context);
+    }
+}

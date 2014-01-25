@@ -82,13 +82,13 @@ if ($context->user->id == ANONYMOUS_USER) {
 
 //Workspace
 if (Workspace::is_workspace($context->url[0])) {
-    $workspace = new Workspace(array_shift($context->url));
+    $context->workspace = Workspace::fromCode(array_shift($context->url));
 }
 
 switch ($controller = $context->url[0]) {
     case '':
         //Calls homepage controller
-        include("controllers/home.php");
+        HomepageController::Run($context);
         break;
 
     case 'help':
