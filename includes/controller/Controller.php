@@ -20,7 +20,7 @@
  *
  * This class describes a controller
  */
-class Controller {
+class Controller implements RunnableWithContext {
     /**
      * @var string the application name
      */

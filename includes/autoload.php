@@ -43,6 +43,7 @@ function obsidian_autoload ($name) {
 
     if ($name == 'Context') { require './includes/controller/Context.php'; return true; }
     if ($name == 'Controller') { require './includes/controller/Controller.php'; return true; }
+    if ($name == 'RunnableWithContext') { require './includes/controller/RunnableWithContext.php'; return true; }
 
     if ($name == 'Message') { require './includes/i18n/Message.php'; return true; }
 
