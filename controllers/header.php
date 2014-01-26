@@ -40,11 +40,13 @@ class HeaderController extends Controller {
             $nav = [];
             $binds = $this->context->workspace->configuration->getControllersBinds();
             foreach ($binds as $applicationConfig) {
-                $nav[] = [
-                    'link' => $applicationConfig->nav->__toString(),
-                    'url' => $applicationConfig->bind,
-                    'icon' => $applicationConfig->icon
-                ];
+                if ($applicationConfig->nav !== null) {
+                    $nav[] = [
+                        'link' => $applicationConfig->nav->__toString(),
+                        'url' => $applicationConfig->bind,
+                        'icon' => $applicationConfig->icon
+                    ];
+                }
             }
             $smarty->assign('current_workspace_nav', $nav);
         }

@@ -33,7 +33,13 @@ class Message {
      */
     public function __construct ($expression) {
         if (is_array($expression)) {
-            $this->localizations = $expression;
+            if (count($expression) && is_array($expression[0])) {
+                foreach ($expression as $msg) {
+                    $this->localizations[$msg[0]] = $msg[1];
+                }
+            } else {
+                $this->localizations = $expression;
+            }
         } elseif (is_string($expression)) {
             $this->localizations = [
                 MESSAGE_FALLBACK_LANG => $expression
@@ -57,7 +63,7 @@ class Message {
             if (array_key_exists(MESSAGE_FALLBACK_LANG, $this->localizations)) {
                 return $this->localizations[MESSAGE_FALLBACK_LANG];
             }
-            return $this->localizations[0];
+            return array_values($this->localizations)[0];
         }
 
         return $this->localizations[LANG];
