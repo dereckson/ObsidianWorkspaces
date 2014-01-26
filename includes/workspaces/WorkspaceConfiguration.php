@@ -81,7 +81,8 @@ class WorkspaceConfiguration {
             foreach ($data->applications as $application) {
                 $controllerClass = $application->name;
                 if (!class_exists($controllerClass)) {
-                    throw new Exception("Application controller doesn't exist: $controllerClass. If you've just added application code, update includes/autoload.php file to register your new classes.");
+                    trigger_error("Application controller doesn't exist: $controllerClass. If you've just added application code, update includes/autoload.php file to register your new classes.", E_USER_WARNING);
+                    continue;
                 }
                 $configurationClass = $controllerClass . 'Configuration';
                 if (!class_exists($configurationClass)) {
