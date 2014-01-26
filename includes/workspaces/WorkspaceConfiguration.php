@@ -20,7 +20,7 @@
   *
   * This class maps the workspaces table.
   */
-class WorkspaceConfiguration {
+class WorkspaceConfiguration implements ObjectDeserializable {
     /**
      * @var Array applications (each element is an instance of ApplicationConfiguration)
      */

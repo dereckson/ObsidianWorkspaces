@@ -22,7 +22,7 @@
  *
  * It can be serialized into a workspace.conf application entry
  */
-class ApplicationConfiguration {
+class ApplicationConfiguration implements ObjectDeserializable {
     /**
      * @var string The URL the application is binded to, without initial slash.
      */
