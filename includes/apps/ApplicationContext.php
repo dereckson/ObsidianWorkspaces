@@ -25,4 +25,26 @@ class ApplicationContext extends Context {
      * @var ApplicationConfiguration the application configuration
      */
     public $configuration;
+
+    /**
+     * Initializes a new ApplicationContext instance from a Context instance
+     *
+     * @param Context $sourceContext The source context
+     * @param ApplicationConfiguration The application configuration (facultative)
+     */
+    public static function loadFromContext ($sourceContext, $applicationConfiguration = NULL) {
+        $applicationContext = new ApplicationContext();
+
+        $applicationContext->workspace = $sourceContext->workspace;
+        $applicationContext->user = $sourceContext->user;
+        $applicationContext->session = $sourceContext->session;
+        $applicationContext->url = $sourceContext->url;
+        $applicationContext->templateEngine = $sourceContext->templateEngine;
+
+        if ($applicationConfiguration !== NULL) {
+            $applicationContext->configuration = $applicationConfiguration;
+        }
+
+        return $applicationContext;
+    }
 }

@@ -105,7 +105,8 @@ switch ($controller = $context->url[0]) {
         if ($workspaceConfig != NULL && $workspaceConfig->hasControllerBind($controller, $applicationConfiguration)) {
             //Run controller
             $controllerClass = $applicationConfiguration->name;
-            $controllerClass::Run($context);
+            $appContext = ApplicationContext::loadFromContext($context, $applicationConfiguration);
+            $controllerClass::Run($appContext);
             break;
         }
 
