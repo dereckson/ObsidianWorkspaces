@@ -13,42 +13,44 @@
  */
 
 /**
- * This magic method is called when a class can't be loaded
+ * This SPL autoloader method is called when a class or an interface can't be loaded
  */
-function obsidian_autoload ($className) {
+function obsidian_autoload ($name) {
     //Applications
-    if ($className == 'HelloWorldApplication') { require './apps/helloworld/HelloWorldApplication.php'; return true; }
+    if ($name == 'HelloWorldApplication') { require './apps/helloworld/HelloWorldApplication.php'; return true; }
 
-    if ($className == 'MediaWikiMirrorApplication') { require './apps/mediawikimirror/MediaWikiMirrorApplication.php'; return true; }
-    if ($className == 'MediaWikiMirrorApplicationConfiguration') { require './apps/mediawikimirror/MediaWikiMirrorApplicationConfiguration.php'; return true; }
+    if ($name == 'MediaWikiMirrorApplication') { require './apps/mediawikimirror/MediaWikiMirrorApplication.php'; return true; }
+    if ($name == 'MediaWikiMirrorApplicationConfiguration') { require './apps/mediawikimirror/MediaWikiMirrorApplicationConfiguration.php'; return true; }
 
-    if ($className == 'StaticContentApplication') { require './apps/staticcontent/StaticContentApplication.php'; return true; }
-    if ($className == 'StaticContentApplicationConfiguration') { require './apps/staticcontent/StaticContentApplicationConfiguration.php'; return true; }
+    if ($name == 'StaticContentApplication') { require './apps/staticcontent/StaticContentApplication.php'; return true; }
+    if ($name == 'StaticContentApplicationConfiguration') { require './apps/staticcontent/StaticContentApplicationConfiguration.php'; return true; }
 
     //Core controllers
-    if ($className == 'HeaderController') { require './controllers/header.php'; return true; }
-    if ($className == 'FooterController') { require './controllers/footer.php'; return true; }
-    if ($className == 'HomepageController') { require './controllers/home.php'; return true; }
+    if ($name == 'HeaderController') { require './controllers/header.php'; return true; }
+    if ($name == 'FooterController') { require './controllers/footer.php'; return true; }
+    if ($name == 'HomepageController') { require './controllers/home.php'; return true; }
 
     //Keruald and Obsidian Workspaces Libraries
-    if ($className == 'Application') { require './includes/apps/Application.php'; return true; }
-    if ($className == 'ApplicationConfiguration') { require './includes/apps/ApplicationConfiguration.php'; return true; }
-    if ($className == 'ApplicationContext') { require './includes/apps/ApplicationContext.php'; return true; }
+    if ($name == 'ObjectDeserializable') { require './includes/ObjectDeserializable.php'; return true; }
 
-    if ($className == 'Cache') { require './includes/cache/cache.php'; return true; }
-    if ($className == 'CacheMemcached') { require './includes/cache/memcached.php'; return true; }
-    if ($className == 'CacheVoid') { require './includes/cache/void.php'; return true; }
+    if ($name == 'Application') { require './includes/apps/Application.php'; return true; }
+    if ($name == 'ApplicationConfiguration') { require './includes/apps/ApplicationConfiguration.php'; return true; }
+    if ($name == 'ApplicationContext') { require './includes/apps/ApplicationContext.php'; return true; }
 
-    if ($className == 'Context') { require './includes/controller/Context.php'; return true; }
-    if ($className == 'Controller') { require './includes/controller/Controller.php'; return true; }
+    if ($name == 'Cache') { require './includes/cache/cache.php'; return true; }
+    if ($name == 'CacheMemcached') { require './includes/cache/memcached.php'; return true; }
+    if ($name == 'CacheVoid') { require './includes/cache/void.php'; return true; }
 
-    if ($className == 'Message') { require './includes/i18n/Message.php'; return true; }
+    if ($name == 'Context') { require './includes/controller/Context.php'; return true; }
+    if ($name == 'Controller') { require './includes/controller/Controller.php'; return true; }
 
-    if ($className == 'User') { require './includes/objects/user.php'; return true; }
-    if ($className == 'UserGroup') { require './includes/objects/usergroup.php'; return true; }
+    if ($name == 'Message') { require './includes/i18n/Message.php'; return true; }
 
-    if ($className == 'Workspace') { require './includes/workspaces/Workspace.php'; return true; }
-    if ($className == 'WorkspaceConfiguration') { require './includes/workspaces/WorkspaceConfiguration.php'; return true; }
+    if ($name == 'User') { require './includes/objects/user.php'; return true; }
+    if ($name == 'UserGroup') { require './includes/objects/usergroup.php'; return true; }
+
+    if ($name == 'Workspace') { require './includes/workspaces/Workspace.php'; return true; }
+    if ($name == 'WorkspaceConfiguration') { require './includes/workspaces/WorkspaceConfiguration.php'; return true; }
 
     return false;
 }
