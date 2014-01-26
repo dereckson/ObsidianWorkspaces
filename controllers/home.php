@@ -16,12 +16,12 @@
  *
  */
 
- /**
+/**
  * Homepage controller
  */
 class HomepageController extends Controller {
     /**
-     * Handle controller request
+     * Handles controller request
      */
     public function handleRequest () {
         $smarty = $this->context->templateEngine;

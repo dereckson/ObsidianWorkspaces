@@ -27,7 +27,7 @@ class HelloWorldApplication extends Application {
     public static $name = "HelloWorld";
 
     /**
-     * Handle controller request
+     * Handles controller request
      */
     public function handleRequest () {
         //Reference to URL fragments and Smarty engine

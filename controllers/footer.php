@@ -6,7 +6,7 @@
  *   \ / |_) , ) | |_/ | | | | \|
  *    ~  ~    ~  ~ ~   ~ ~ ~ ~  ~
  *
-* Controller for footer (called on every regular page)
+ * Controller for footer (called on every regular page)
  *
  * @package     ObsidianWorkspaces
  * @subpackage  Controllers
@@ -22,7 +22,7 @@
 class FooterController extends Controller {
 
     /**
-     * Handle controller request
+     * Handles controller request
      */
     public function handleRequest () {
         $this->context->templateEngine->display('footer.tpl');

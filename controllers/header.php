@@ -21,7 +21,7 @@
  */
 class HeaderController extends Controller {
     /**
-     * Handle controller request
+     * Handles controller request
      */
     public function handleRequest () {
         //Gets header resources
