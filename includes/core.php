@@ -50,8 +50,9 @@ include_once("autoload.php");         //Autoloader for needed classes
 ///                                                                          ///
 ////////////////////////////////////////////////////////////////////////////////
 
-/*
+/**
  * Gets the username matching specified user id
+ *
  * @param string $user_id the user ID
  * @return string the username
  */
@@ -63,8 +64,9 @@ function get_username ($user_id) {
 	return $db->sql_query_express($sql, "Can't get username from specified user id");
 }
 
-/*
+/**
  * Gets the user id matching specified username
+ *
  * @param string $username the username
  * @return string the user ID
  */
@@ -74,6 +76,40 @@ function get_userid ($username) {
 	$username = $db->sql_escape($username);
 	$sql = 'SELECT user_id FROM '. TABLE_USERS . " WHERE username LIKE '$username'";
     return $db->sql_query_express($sql, "Can't get user id from specified username");
+}
+
+/**
+ * Gets the resource ID from an identifier
+ *
+ * @param $resource_type the resource type
+ * @param $identifier resource identifier
+ * @return mixed the resource ID (as integer), or NULL if unknown
+ */
+function get_resource_id ($resource_type, $identifier) {
+    //Trivial cases: already an ID, null or void ID
+    if (is_numeric($identifier)) {
+        return $identifier;
+    }
+    if (!$identifier) {
+        return NULL;
+    }
+
+    //Searches identifier
+    switch ($resource_type) {
+        case 'U':
+            return get_user_id($identifier);
+
+        case 'G':
+            $group = UserGroup::fromCode($identifier);
+            return $group->id;
+
+        case 'W':
+            $workspace = Workspace::fromCode($identifier);
+            return $workspace->id;
+
+        default:
+            throw new Exception("Unknown resource type: $resource_type", E_USER_ERROR);
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////

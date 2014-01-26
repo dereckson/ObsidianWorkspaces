@@ -49,21 +49,49 @@ class UserGroup {
     }
 
     /**
+     * Loads the object UserGroup (ie fill the properties) from the SQL row
+     */
+    function load_from_row ($row) {
+        $this->id = $row['group_id'];
+        $this->code = $row['group_code'];
+        $this->title = $row['group_title'];
+        $this->description = $row['group_description'];
+    }
+
+    /**
      * Loads the object UserGroup (ie fill the properties) from the database
      */
     function load_from_database () {
         global $db;
         $id = $db->sql_escape($this->id);
-        $sql = "SELECT * FROM users_groups WHERE group_id = '" . $id . "'";
+        $sql = "SELECT * FROM " . TABLE_UGROUPS . " WHERE group_id = '" . $id . "'";
         if (!$result = $db->sql_query($sql)) message_die(SQL_ERROR, "Unable to query users_groups", '', __LINE__, __FILE__, $sql);
         if (!$row = $db->sql_fetchrow($result)) {
             $this->lastError = "UserGroup unkwown: " . $this->id;
             return false;
         }
-        $this->code = $row['group_code'];
-        $this->title = $row['group_title'];
-        $this->description = $row['group_description'];
+        $this->load_from_row($row);
         return true;
+    }
+
+    /**
+     * Loads the specified user group from code
+     *
+     * @param string $code The user group code
+     * @return UserGroup The specified user  group instance
+     */
+    public static function fromCode ($code) {
+        global $db;
+        $code = $db->sql_escape($code);
+        $sql = "SELECT * FROM " . TABLE_UGROUPS . " WHERE group_code = '" . $code . "'";
+        if (!$result = $db->sql_query($sql)) message_die(SQL_ERROR, "Unable to query group", '', __LINE__, __FILE__, $sql);
+        if (!$row = $db->sql_fetchrow($result)) {
+            throw new Exception("Group unkwown: " . $code);
+        }
+
+        $instance = new static();
+        $instance->load_from_row($row);
+        return $instance;
     }
 
     /**
@@ -78,7 +106,7 @@ class UserGroup {
         $description = $db->sql_escape($this->description);
 
         //Updates or inserts
-        $sql = "REPLACE INTO users_groups (`group_id`, `group_code`, `group_title`, `group_description`) VALUES ('$id', '$code', '$title', '$description')";
+        $sql = "REPLACE INTO " . TABLE_UGROUPS . " (`group_id`, `group_code`, `group_title`, `group_description`) VALUES ('$id', '$code', '$title', '$description')";
         if (!$db->sql_query($sql)) {
             message_die(SQL_ERROR, "Unable to save", '', __LINE__, __FILE__, $sql);
         }

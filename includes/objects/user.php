@@ -215,6 +215,37 @@ class User {
     }
 
     /**
+     * Determines if the user is a member of the specified group
+     *
+     * @param UserGroup $group The group to check
+     */
+    public function isMemberOfGroup (UserGroup $group) {
+        global $db;
+        $sql = "SELECT count(*) FROM users_groups_members WHERE group_id = $group->id AND user_id = $this->id";
+        if (!$result = $db->sql_query($sql)) {
+            message_die(SQL_ERROR, "Can't determine if the user belongs to the group", '', __LINE__, __FILE__, $sql);
+        }
+        $row = $db->sql_fetchrow($result);
+
+        return $row[0] == 1;
+    }
+
+    /**
+     * Adds user to the specified group
+     *
+     * @param UserGroup $group The group where to add the user
+     * @parap boolean $isAdmin if true, set the user admin; otherwise, set it regular user.
+     */
+    public function addToGroup (UserGroup $group, $isAdmin = false) {
+        global $db;
+        $isAdmin = $isAdmin ? 1 : 0;
+        $sql = "REPLACE INTO users_groups_members VALUES ($group->id, $this->id, $isAdmin)";
+        if (!$db->sql_query($sql)) {
+            message_die(SQL_ERROR, "Can't add user to group", '', __LINE__, __FILE__, $sql);
+        }
+    }
+
+    /**
      * Gets the SQL permission clause to select resources where the user is the subject.
      *
      * @return string The SQL WHERE clause
@@ -231,6 +262,39 @@ class User {
     public function get_workspaces () {
         return Workspace::get_user_workspaces($this->id);
     }
+
+    /**
+     * Sets user permission
+     *
+     * @param string $resourceType The target resource type
+     * @param int $resourceId The target resource ID
+     * @param string $permissionName The permission name
+     * @param int $permissionFlag The permission flag (facultative; by default, 1)
+     */
+    public function setPermission ($resourceType, $resourceId, $permissionName, $permissionFlag = 1) {
+        global $db;
+        $resourceType = $db->sql_escape($resourceType);
+        if (!is_numeric($resourceId)) {
+            throw new Exception("Resource ID must be a positive or null integer, and not $resourceId.");
+        }
+        $permissionName = $db->sql_escape($permissionName);
+        if (!is_numeric($permissionFlag)) {
+            throw new Exception("Permission flag must be a positive or null integer, and not $permissionFlag.");
+        }
+
+        $sql = "REPLACE INTO permissions
+                (subject_resource_type, subject_resource_id,
+                 target_resource_type,  target_resource_id,
+                 permission_name,       permission_flag)
+                VALUES
+                ('U',               $this->id,
+                 '$resourceType',   $resourceId,
+                 '$permissionName', $permissionFlag)";
+        if (!$db->sql_query($sql)) {
+            message_die(SQL_ERROR, "Can't set user permission", '', __LINE__, __FILE__, $sql);
+        }
+    }
+
 
     /**
      * Gets the groups where an user has access to.

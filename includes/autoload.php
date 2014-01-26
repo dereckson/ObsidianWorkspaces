@@ -37,6 +37,10 @@ function obsidian_autoload ($name) {
     if ($name == 'ApplicationConfiguration') { require './includes/apps/ApplicationConfiguration.php'; return true; }
     if ($name == 'ApplicationContext') { require './includes/apps/ApplicationContext.php'; return true; }
 
+    if ($name == 'AddToGroupUserAction') { require './includes/auth/AddToGroupUserAction.php'; return true; }
+    if ($name == 'GivePermissionUserAction') { require './includes/auth/GivePermissionUserAction.php'; return true; }
+    if ($name == 'UserAction') { require './includes/auth/UserAction.php'; return true; }
+
     if ($name == 'Cache') { require './includes/cache/cache.php'; return true; }
     if ($name == 'CacheMemcached') { require './includes/cache/memcached.php'; return true; }
     if ($name == 'CacheVoid') { require './includes/cache/void.php'; return true; }
