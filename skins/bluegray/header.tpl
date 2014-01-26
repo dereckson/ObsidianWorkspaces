@@ -21,7 +21,11 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
+{if $current_workspace}
+                <a class="navbar-brand" href="{get_url($current_workspace->code)}">{$current_workspace->name}</a>
+{else}
                 <a class="navbar-brand" href="{get_url()}">{#SiteTitle#}</a>
+{/if}
             </div>
 
             <ul class="nav navbar-top-links navbar-right">
