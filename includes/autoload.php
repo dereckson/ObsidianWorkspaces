@@ -18,6 +18,8 @@
 function obsidian_autoload ($className) {
     //Applications
     if ($className == 'HelloWorldApplication') { require './apps/helloworld/HelloWorldApplication.php'; return true; }
+    if ($className == 'StaticContentApplication') { require './apps/staticcontent/StaticContentApplication.php'; return true; }
+    if ($className == 'StaticContentApplicationConfiguration') { require './apps/staticcontent/StaticContentApplicationConfiguration.php'; return true; }
 
     //Core controllers
     if ($className == 'HeaderController') { require './controllers/header.php'; return true; }
