@@ -18,6 +18,10 @@
 function obsidian_autoload ($className) {
     //Applications
     if ($className == 'HelloWorldApplication') { require './apps/helloworld/HelloWorldApplication.php'; return true; }
+
+    if ($className == 'MediaWikiMirrorApplication') { require './apps/mediawikimirror/MediaWikiMirrorApplication.php'; return true; }
+    if ($className == 'MediaWikiMirrorApplicationConfiguration') { require './apps/mediawikimirror/MediaWikiMirrorApplicationConfiguration.php'; return true; }
+
     if ($className == 'StaticContentApplication') { require './apps/staticcontent/StaticContentApplication.php'; return true; }
     if ($className == 'StaticContentApplicationConfiguration') { require './apps/staticcontent/StaticContentApplicationConfiguration.php'; return true; }
 
