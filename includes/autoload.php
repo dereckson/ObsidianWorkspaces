@@ -39,6 +39,7 @@ function obsidian_autoload ($name) {
 
     if ($name == 'AddToGroupUserAction') { require './includes/auth/AddToGroupUserAction.php'; return true; }
     if ($name == 'AuthenticationMethod') { require './includes/auth/AuthenticationMethod.php'; return true; }
+    if ($name == 'AzharProvider') { require './includes/auth/AzharProvider.php'; return true; }
     if ($name == 'GivePermissionUserAction') { require './includes/auth/GivePermissionUserAction.php'; return true; }
     if ($name == 'UserAction') { require './includes/auth/UserAction.php'; return true; }
 
