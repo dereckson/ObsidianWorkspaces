@@ -61,7 +61,12 @@
 {/if}
                 <!-- Other right navigation actions -->
                 <li>
-                    <a href="{get_url()}?action=user.logout">
+{if $current_workspace}
+                        <a href="{get_url($current_workspace->code)}?action=user.logout">
+{else}
+                        <a href="{get_url()}?action=user.logout">
+{/if}
+
                         <i class="fa fa-sign-out fa-fw"></i> {#Logout#}
                     </a>
                 </li>

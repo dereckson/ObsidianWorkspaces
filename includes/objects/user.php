@@ -28,6 +28,11 @@ class User {
     public $email;
     public $regdate;
 
+    /**
+     * @var Array An array of users already loaded, the username as user id
+     */
+    public static $hashtableById = [];
+
     /*
      * Initializes a new instance
      *
@@ -38,6 +43,21 @@ class User {
             $this->id = $id;
             $this->load_from_database();
         }
+    }
+
+    /**
+     * Initializes a new User instance if needed or get already available one.
+     *
+     * @param iint $id the user ID
+     * @return User the user instance
+     */
+    static function get ($id = NULL) {
+        if ($id && array_key_exists($id, User::$hashtableById)) {
+            return self::$hashtableById[$id];
+        }
+
+        $user = new self($id);
+        return $user;
     }
 
     /**
@@ -79,6 +99,10 @@ class User {
         $this->active   = $row['user_active'] ? true : false;
         $this->email    = $row['user_email'];
         $this->regdate  = $row['user_regdate'];
+
+        //Puts object in hashtable, so it's accessible in future call of
+        //this run through User::get($id).
+        self::$hashtableById[$this->id] = $this;
     }
 
     /**
@@ -175,17 +199,18 @@ class User {
         $user = new User();
         $user->generate_id();
         $user->active = true;
+        $user->regdate = time();
         return $user;
     }
 
     /**
      * Gets user from specified e-mail
      *
-     * @return User the user matching the specified e-mail ; null, if the mail were not found.
+     * @return User the user matching the specified e-mail; null, if the mail were not found.
      */
     public static function get_user_from_email ($mail) {
         global $db;
-        $sql = "SELECT username FROM " . TABLE_USERS . " WHERE user_email = '$mail'";
+        $sql = "SELECT * FROM " . TABLE_USERS . " WHERE user_email = '$mail'";
         if (!$result = $db->sql_query($sql)) {
             message_die(SQL_ERROR, "Can't get user", '', __LINE__, __FILE__, $sql);
         }
@@ -199,6 +224,53 @@ class User {
 
         //E-mail not found.
         return null;
+    }
+
+    //
+    // REMOTE IDENTITY PROVIDERS
+    //
+
+    /**
+     * Gets user from remote identity provider identifiant
+     *
+     * @param $authType The authentication method type
+     * @param $remoteUserId The remote user idenfifiant
+     * @return User the user matching the specified identity provider and identifiant; null if no user were found.
+     */
+    public static function getUserFromRemoteIdentity ($authType, $remoteUserId) {
+        global $db;
+
+        $authType = $db->sql_escape($authType);
+        $remoteUserId = $db->sql_escape($remoteUserId);
+        $sql = "SELECT user_id FROM " . TABLE_USERS_AUTH . "    WHERE "
+             . "auth_type = '$authType' AND auth_identity = '$remoteUserId'";
+        if (!$result = $db->sql_query($sql)) {
+            message_die(SQL_ERROR, "Can't get user", '', __LINE__, __FILE__, $sql);
+        }
+
+        if ($row = $db->sql_fetchrow($result)) {
+            return User::get($row['user_id']);
+        }
+
+        return null;
+    }
+
+    /**
+     * Sets user's remote identity provider identifiant
+     *
+     * @param $authType The authentication method type
+     * @param $remoteUserId The remote user idenfifiant
+     * */
+    public function setRemoteIdentity ($authType, $remoteUserId, $properties = null) {
+        global $db;
+        $authType = $db->sql_escape($authType);
+        $remoteUserId = $db->sql_escape($remoteUserId);
+        $properties = ($properties === NULL) ? 'NULL' : "'" . $db->sql_escape($properties) . "'";
+        $sql = "INSERT INTO " . TABLE_USERS_AUTH . " (auth_type, auth_identity, auth_properties, user_id) "
+             . "VALUES ('$authType', '$remoteUserId', $properties, $this->id)";
+        if (!$db->sql_query($sql)) {
+             message_die(SQL_ERROR, "Can't set user remote identity provider information", '', __LINE__, __FILE__, $sql);
+         }
     }
 
     //
@@ -295,7 +367,6 @@ class User {
         }
     }
 
-
     /**
      * Gets the groups where an user has access to.
      *
@@ -306,7 +377,7 @@ class User {
         global $db;
         $sql = "SELECT group_id FROM " . TABLE_UGROUPS_MEMBERS . " WHERE user_id = " . $user_id;
         if (!$result = $db->sql_query($sql)) {
-            message_die(SQL_ERROR, "Can't get user", '', __LINE__, __FILE__, $sql);
+            message_die(SQL_ERROR, "Can't get user groups", '', __LINE__, __FILE__, $sql);
         }
         $gids = array();
         while ($row = $db->sql_fetchrow($result)) {

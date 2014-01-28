@@ -28,3 +28,18 @@ interface ObjectDeserializable {
      */
     public static function loadFromObject ($data);
 }
+
+
+/**
+ * ObjectDeserializableWithContext interface
+ */
+interface ObjectDeserializableWithContext {
+    /**
+     * Loads a specified class instance from a generic object. Typically used to deserialize a JSON document.
+     *
+     * @param object $data The object to deserialize
+     * @param object $context The site or application context
+     * @return object The deserialized instance
+     */
+    public static function loadFromObject ($data, $context);
+}

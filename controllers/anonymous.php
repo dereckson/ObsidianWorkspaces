@@ -125,16 +125,48 @@ switch ($url[0]) {
         break;
 
     default:
-        //Login form
-        if (array_key_exists('LastUsername', $_COOKIE)) {
-            $smarty->assign('username', $_COOKIE['LastUsername']);
-        }
-        if (array_key_exists('LastOpenID', $_COOKIE)) {
-            $smarty->assign('OpenID', $_COOKIE['LastOpenID']);
+        //Login
+        if ($context->workspace == null) {
+            $useInternalLogin = true;
+        } else {
+            $useInternalLogin = $context->workspace->configuration->allowInternalAuthentication;
+
+            $authenticationMethodsTemplateInformation = [];
+            $authenticationMethodsLoginErrors = [];
+            foreach ($context->workspace->configuration->authenticationMethods as $method) {
+                $authenticationMethodsNav[] = [
+                    'text' => (string)$method->loginMessage,
+                    'href' => $method->getAuthenticationLink()
+                ];
+                if ($method->loginError) {
+                    $authenticationMethodsLoginErrors[] = (string)$method->loginError;
+                }
+            }
+
+            $smarty->assign('ExternalAuthenticationMethodsNav', $authenticationMethodsNav);
+            $smarty->assign('ExternalLoginErrors', $authenticationMethodsLoginErrors);
+            $smarty->assign('WorkspaceName', $context->workspace->name);
         }
 
-        $smarty->assign('LoginError', $LoginError);
-        $smarty->assign('PostURL', $action = get_url() . implode('/', $context->url));
+        //Internal login form
+        if ($useInternalLogin) {
+            if (array_key_exists('LastUsername', $_COOKIE)) {
+                $smarty->assign('username', $_COOKIE['LastUsername']);
+            }
+            if (array_key_exists('LastOpenID', $_COOKIE)) {
+                $smarty->assign('OpenID', $_COOKIE['LastOpenID']);
+            }
+
+            $action  = $context->workspace ? get_url($context->workspace->code) : get_url();
+            $action .= '/';
+            $action .= implode('/', $context->url);
+
+            $smarty->assign('LoginError', $LoginError);
+            $smarty->assign('PostURL', $action);
+            $smarty->assign('PrintInternalLogin', true);
+        } else {
+            $smarty->assign('PrintInternalLogin', false);
+        }
         $template = 'login.tpl';
         break;
 }

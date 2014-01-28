@@ -62,10 +62,10 @@ class GivePermissionUserAction extends UserAction implements ObjectDeserializabl
     public static function loadFromObject ($data) {
         //Checks the object contains every mandatory data
         if (!property_exists($data, 'resource')) {
-            throw new InvalidArgumentException("A resource peroperty, with two mandatory type and id property is required.");
+            throw new InvalidArgumentException("A resource property, with two mandatory type and id property is required.");
         }
         if (!property_exists($data, 'permission')) {
-            throw new InvalidArgumentException("A permission peroperty, with a mandatory name property and a facultative flag property is required.");
+            throw new InvalidArgumentException("A permission property, with a mandatory name property and a facultative flag property is required.");
         }
         if (!property_exists($data->permission, 'name')) {
             throw new InvalidArgumentException("Permission name is required.");
@@ -79,12 +79,14 @@ class GivePermissionUserAction extends UserAction implements ObjectDeserializabl
 
         //Builds instance
         $instance = new GivePermissionUserAction();
-        $instance->resourceType = $data->resource->type;
+
+        $instance->resourceType = Permission::getResourceTypeLetterFromCode($data->resource->type);
         $instance->resourceIdentifier = $data->resource->id;
         $instance->permissionName = $data->permission->name;
         if (property_exists($data->permission, 'flag')) {
             $instance->permissionFlag = $data->permission->flag;
         }
+
         return $instance;
     }
 
@@ -95,7 +97,7 @@ class GivePermissionUserAction extends UserAction implements ObjectDeserializabl
      */
     public function jsonSerialize() {
         //TODO: if you wish strict code here, we need such a class.
-        $data->resource->type = $this->resourceType;
+        $data->resource->type = Permission::getResourceTypeCodeFromLetter($this->resourceType);
         $data->resource->id = $this->resourceIdentifier;
         $data->permission->name = $this->permissionName;
         $data->permission->flag = $this->permissionFlag;

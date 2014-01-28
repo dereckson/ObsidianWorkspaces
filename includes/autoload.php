@@ -31,13 +31,14 @@ function obsidian_autoload ($name) {
     if ($name == 'HomepageController') { require './controllers/home.php'; return true; }
 
     //Keruald and Obsidian Workspaces Libraries
-    if ($name == 'ObjectDeserializable') { require './includes/ObjectDeserializable.php'; return true; }
+    if ($name == 'ObjectDeserializable' || $name == 'ObjectDeserializableWithContext') { require './includes/ObjectDeserializable.php'; return true; }
 
     if ($name == 'Application') { require './includes/apps/Application.php'; return true; }
     if ($name == 'ApplicationConfiguration') { require './includes/apps/ApplicationConfiguration.php'; return true; }
     if ($name == 'ApplicationContext') { require './includes/apps/ApplicationContext.php'; return true; }
 
     if ($name == 'AddToGroupUserAction') { require './includes/auth/AddToGroupUserAction.php'; return true; }
+    if ($name == 'AuthenticationMethod') { require './includes/auth/AuthenticationMethod.php'; return true; }
     if ($name == 'GivePermissionUserAction') { require './includes/auth/GivePermissionUserAction.php'; return true; }
     if ($name == 'UserAction') { require './includes/auth/UserAction.php'; return true; }
 
@@ -51,6 +52,7 @@ function obsidian_autoload ($name) {
 
     if ($name == 'Message') { require './includes/i18n/Message.php'; return true; }
 
+    if ($name == 'Permission') { require './includes/objects/Permission.php'; return true; }
     if ($name == 'User') { require './includes/objects/user.php'; return true; }
     if ($name == 'UserGroup') { require './includes/objects/usergroup.php'; return true; }
 

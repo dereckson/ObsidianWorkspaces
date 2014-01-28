@@ -47,6 +47,7 @@ class HomepageController extends Controller {
                 case 1:
                     //Autoselect workspace
                     $this->context->workspace = $workspaces[0];
+                    $this->context->workspace->loadConfiguration($this->context);
                     break;
 
                 default:

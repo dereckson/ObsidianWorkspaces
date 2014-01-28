@@ -16,7 +16,9 @@
  *
  */
 
-if ($_POST['LogIn']) {
+$action = array_key_exists('action', $_GET) ? $_GET['action'] : '';
+
+if (array_key_exists('LogIn', $_POST)) {
     //User have submitted login form
     $username = $db->sql_escape($_POST['username']);
     $sql = "SELECT user_password, user_id FROM " . TABLE_USERS . " WHERE username = '$username'";
@@ -37,7 +39,13 @@ if ($_POST['LogIn']) {
     } else {
         $LoginError = "Username not found.";
     }
-} elseif ($_POST['LogOut'] || $_GET['action'] == "user.logout") {
+} elseif (array_key_exists('LogOut', $_POST) || $action == "user.logout") {
     //User have submitted logout form or clicked a logout link
     Session::load()->user_logout();
+} elseif (array_key_exists('authenticationMethodId', $_GET)) {
+    //Call authentication method for more processing
+    $auth = AuthenticationMethod::getFromId($_GET['authenticationMethodId'], $context);
+    if ($auth) {
+        $auth->handleRequest();
+    }
 }

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>{#SiteTitle#}</title>
+    <title>{#SiteTitle#}{if $WorkspaceName} :: {$WorkspaceName}{/if}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="{#StaticContentURL#}/css/bootstrap.css" rel="stylesheet">
     <link href="{#StaticContentURL#}/favicon.ico" rel="shorcut icon" type="image/x-icon">
@@ -93,15 +93,24 @@
     #product:after {
         content: " ]";
     }
+
+    .external-auth-links {
+        list-style: none;
+    }
+
+    .external-auth-links > li + li {
+        margin-top: 1em;
+    }
     </style>
 </head>
 <body>
-    <p id="product">{#Product#}</p>
+    <p id="product">{if $WorkspaceName}<strong>{$WorkspaceName}</strong>{else}{#Product#}{/if}</p>
 
     <div class="container">
+{if $PrintInternalLogin}
         <div class="row">
-            <div class="col-md-4 col-md-offset-7">
-                <div class="panel panel-default">
+            <div class="col-md-5 col-md-offset-7">
+                <div class="panel panel-default" id="internal-login-panel">
                     <div class="panel-heading">
                         <span class="glyphicon glyphicon-lock"></span> {#SiteTitle#}</div>
                     <div class="panel-body">
@@ -148,6 +157,31 @@
                 </div>
             </div>
         </div>
+{/if}
+{if $ExternalAuthenticationMethodsNav}
+        <div class="row">
+            <div class="col-md-5 col-md-offset-7">
+                <div class="panel panel-default" id="internal-login-panel">
+                    <div class="panel-heading">
+                        <span class="glyphicon glyphicon-lock"></span> {#ExternalLogin#}</div>
+                    <div class="panel-body">
+                        <ul class="external-auth-links">
+{foreach $ExternalAuthenticationMethodsNav item=authLink}
+                            <li class="external-auth-link"><a href="{$authLink.href}">{$authLink.text}</a></li>
+{/foreach}
+                        </ul>
+                    </div>
+{if $ExternalLoginErrors}
+                    <div class="panel-footer">
+{foreach $ExternalLoginErrors item=externalLoginError}
+                        <p>{$externalLoginError}</p>
+{/foreach}
+                    </div>
+{/if}
+                </div>
+            </div>
+        </div>
+{/if}
     </div>
 
     <script src="https://code.jquery.com/jquery.js"></script>

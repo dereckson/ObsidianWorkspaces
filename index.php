@@ -24,22 +24,7 @@
 //Keruald and Obsidian Workspaces libraries
 include('includes/core.php');
 
-//New application context
-$context = new ApplicationContext();
-
-////////////////////////////////////////////////////////////////////////////////
-///
-/// Session
-///
-
-//Starts a new session or recovers current session
-$context->session = Session::load();
-
-//Handles login or logout
-include("includes/login.php");
-
-//Gets current user information
-$context->user = $context->session->get_logged_user();
+$session = Session::load();
 
 ////////////////////////////////////////////////////////////////////////////////
 ///
@@ -60,7 +45,6 @@ $smarty->cache_dir = $Config['Content']['Cache'];
 $smarty->config_dir = $current_dir;
 
 $smarty->config_vars['StaticContentURL'] = $Config['StaticContentURL'];
-$context->templateEngine = $smarty;
 
 //Loads language files
 initialize_lang();
@@ -68,22 +52,36 @@ lang_load('core.conf');
 
 ////////////////////////////////////////////////////////////////////////////////
 ///
-/// Serves the requested page
+/// Session and context
 ///
 
+//Prepares the site context
+$context = new ApplicationContext();
+$context->session = $session;;
 $context->url = get_current_url_fragments();
+$context->templateEngine = $smarty;
+
+if (Workspace::is_workspace($context->url[0])) {
+    $context->workspace = Workspace::fromCode(array_shift($context->url));
+    $context->workspace->loadConfiguration($context);
+}
+
+//Handles login or logout
+include("includes/login.php");
+
+//Gets current user information
+$context->user = $context->session->get_logged_user();
+
+////////////////////////////////////////////////////////////////////////////////
+///
+/// Serves the requested page
+///
 
 //If the user isn't logged in (is anonymous), prints login/invite page & dies.
 if ($context->user->id == ANONYMOUS_USER) {
     //Anonymous user
     include('controllers/anonymous.php');
     exit;
-}
-
-//Workspace
-if (Workspace::is_workspace($context->url[0])) {
-    $context->workspace = Workspace::fromCode(array_shift($context->url));
-    $context->workspace->loadConfiguration();
 }
 
 switch ($controller = $context->url[0]) {

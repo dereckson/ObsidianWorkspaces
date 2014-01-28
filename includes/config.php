@@ -34,11 +34,12 @@ $Config['sql']['database'] = 'obsidian';
 
 //SQL tables
 $prefix = '';
-define('TABLE_SESSIONS', $prefix . 'sessions');
-define('TABLE_USERS', $prefix . 'users');
 define('TABLE_PERMISSIONS', $prefix . 'permissions');
+define('TABLE_USERS', $prefix . 'users');
+define('TABLE_USERS_AUTH', $prefix . 'users_auth');
 define('TABLE_UGROUPS', $prefix . 'users_groups');
 define('TABLE_UGROUPS_MEMBERS', $prefix . 'users_groups_members');
+define('TABLE_SESSIONS', $prefix . 'sessions');
 define('TABLE_WORKSPACES', $prefix . 'workspaces');
 
 //TODO: you can add here your own tables and views

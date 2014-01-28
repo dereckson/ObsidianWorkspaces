@@ -128,8 +128,10 @@ class Workspace {
 
     /**
      * Loads configuration
+     *
+     * @param $context The site context
      */
-    public function loadConfiguration () {
+    public function loadConfiguration (Context $context) {
         global $Config;
 
         $file = $Config['Content']['Workspaces'] . '/' . $this->code . '/workspace.conf';
@@ -137,7 +139,7 @@ class Workspace {
             throw new Exception("Workspace configuration file doesn't exist");
         }
 
-        $this->configuration = WorkspaceConfiguration::loadFromFile($file);
+        $this->configuration = WorkspaceConfiguration::loadFromFile($file, $context);
     }
 
     /**
