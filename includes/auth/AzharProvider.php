@@ -21,7 +21,6 @@
   * Azhàr sends a document providing authentication and registration of new users.
   * It's signed by a shared secret key.
   */
-
 class AzharProvider extends AuthenticationMethod {
     /**
      * @var string Shared secret key
@@ -46,6 +45,7 @@ class AzharProvider extends AuthenticationMethod {
         $sessionKey = array_key_exists('sessionKey', $_GET) ? $GET['sessionKey'] : '';
 
         if ($action == "user.login.azhar.initialize") {
+            //Redirects user to Azhàr SSO service
             $callbackUrl = get_server_url() . get_url($this->context->workspace->code)
                          . '?action=user.login.azhar.success&authenticationMethodId=' . $this->id;
             $url = $this->url . '?mode=provider&key=' . $this->clientKey
