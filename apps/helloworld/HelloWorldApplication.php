@@ -41,7 +41,7 @@ class HelloWorldApplication extends Application {
         //Output Hello world
         echo "<p>Hello world!</p>"; //TODO: call an hello world view
 
-        //Servers footer
+        //Serves footer
         FooterController::Run($this->context);
     }
 }

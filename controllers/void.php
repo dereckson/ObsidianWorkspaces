@@ -26,5 +26,5 @@ HeaderController::run($context);
 
 //Doesn't serve any content;
 
-//Servers footer
+//Serves footer
 FooterController::run($context);

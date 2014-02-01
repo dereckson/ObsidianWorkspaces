@@ -62,7 +62,7 @@ class MediaWikiMirrorApplication extends Application {
         $content = $this->fix_links($content);
         echo $content;
 
-        //Servers footer
+        //Serves footer
         FooterController::Run($this->context);
     }
 }
