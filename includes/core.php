@@ -185,13 +185,25 @@ function is_guid ($expression) {
     return true;
 }
 
-/*
+/**
  * Gets file extension
  * @param string $file the file to get the extension
+* @return string the file extension
  */
 function get_extension ($file) {
     $dotPosition = strrpos($file, ".");
     return substr($file, $dotPosition + 1);
+}
+
+/**
+ * Gets file name
+ * @param string $file the file to get the extension
+ * @return string the file name
+ */
+function get_filename ($file) {
+    //TODO: clear directory
+    $dotPosition = strrpos($file, ".");
+    return substr($file, 0, $dotPosition);
 }
 
 /*

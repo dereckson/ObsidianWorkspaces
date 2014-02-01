@@ -25,8 +25,9 @@ class HomepageController extends Controller {
      */
     public function handleRequest () {
         $smarty = $this->context->templateEngine;
+        $workspace = $this->context->workspace;
 
-        if ($this->context->workspace == null) {
+        if ($workspace == null) {
             //We need a list of workspaces to allow user
             //to select the one he wishes to access.
             //The header has already grabbed it for us.
@@ -47,6 +48,7 @@ class HomepageController extends Controller {
                 case 1:
                     //Autoselect workspace
                     $this->context->workspace = $workspaces[0];
+                    $workspace = $workspaces[0];
                     $this->context->workspace->loadConfiguration($this->context);
                     break;
 
@@ -57,9 +59,17 @@ class HomepageController extends Controller {
             }
         }
 
-        if ($this->context->workspace != null) {
-            $smarty->assign('PAGE_TITLE', $this->context->workspace->name);
+        if ($workspace != null) {
+            $smarty->assign('PAGE_TITLE', $workspace->name);
             $template = "home_workspace.tpl";
+
+            if (count($workspace->configuration->disclaimers)) {
+                $disclaimers = [];
+                foreach ($workspace->configuration->disclaimers as $disclaimer) {
+                    $disclaimers[] = Disclaimer::get($disclaimer);
+                }
+                $smarty->assign('disclaimers', $disclaimers);
+            }
         }
 
         //Serves header

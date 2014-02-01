@@ -32,6 +32,11 @@ class WorkspaceConfiguration implements ObjectDeserializableWithContext {
     public $authenticationMethods = [];
 
     /**
+     * @var Array disclaimers (each element a string)
+     */
+    public $disclaimers = [];
+
+    /**
      * Determines if internal Obsidian Workspaces authentication can be used to login on this workspace URL
      *
      * @return boolean True if an user not logged in Obsidian Workspaces going to a workspace URL should be offered to login through Obsidian ; otherwise, false.
@@ -115,6 +120,10 @@ class WorkspaceConfiguration implements ObjectDeserializableWithContext {
                 $authenticationMethod->context = $context;
                 $instance->authenticationMethods[] = $authenticationMethod;
             }
+        }
+
+        if (property_exists($data, 'disclaimers')) {
+            $instance->disclaimers = $data->disclaimers;
         }
 
         return $instance;

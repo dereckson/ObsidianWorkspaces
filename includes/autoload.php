@@ -52,7 +52,9 @@ function obsidian_autoload ($name) {
     if ($name == 'RunnableWithContext') { require './includes/controller/RunnableWithContext.php'; return true; }
 
     if ($name == 'Message') { require './includes/i18n/Message.php'; return true; }
+    if ($name == 'TextFileMessage') { require './includes/i18n/TextFileMessage.php'; return true; }
 
+    if ($name == 'Disclaimer') { require './includes/objects/Disclaimer.php'; return true; }
     if ($name == 'Permission') { require './includes/objects/Permission.php'; return true; }
     if ($name == 'User') { require './includes/objects/user.php'; return true; }
     if ($name == 'UserGroup') { require './includes/objects/usergroup.php'; return true; }
