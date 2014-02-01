@@ -17,6 +17,9 @@
  */
 function obsidian_autoload ($name) {
     //Applications
+    if ($name == 'DocumentsApplication') { require './apps/documents/DocumentsApplication.php'; return true; }
+    if ($name == 'DocumentsApplicationConfiguration') { require './apps/documents/DocumentsApplicationConfiguration.php'; return true; }
+
     if ($name == 'HelloWorldApplication') { require './apps/helloworld/HelloWorldApplication.php'; return true; }
 
     if ($name == 'MediaWikiMirrorApplication') { require './apps/mediawikimirror/MediaWikiMirrorApplication.php'; return true; }
