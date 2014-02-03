@@ -6,17 +6,21 @@
  *   \ / |_) , ) | |_/ | | | | \|
  *    ~  ~    ~  ~ ~   ~ ~ ~ ~  ~
  *
- * Classes auto loader
+ * Classes and interfaces auto loader
  *
  * @package     ObsidianWorkspaces
  * @filesource
  */
 
 /**
- * This SPL autoloader method is called when a class or an interface can't be loaded
+ * This SPL autoloader method is called when a class or an interface can't be loaded.
  */
 function obsidian_autoload ($name) {
-    //Applications
+
+    ///
+    /// Applications
+    ///
+
     if ($name == 'DocumentsApplication') { require './apps/documents/DocumentsApplication.php'; return true; }
     if ($name == 'DocumentsApplicationConfiguration') { require './apps/documents/DocumentsApplicationConfiguration.php'; return true; }
 
@@ -28,13 +32,20 @@ function obsidian_autoload ($name) {
     if ($name == 'StaticContentApplication') { require './apps/staticcontent/StaticContentApplication.php'; return true; }
     if ($name == 'StaticContentApplicationConfiguration') { require './apps/staticcontent/StaticContentApplicationConfiguration.php'; return true; }
 
-    //Core controllers
-    if ($name == 'HeaderController') { require './controllers/header.php'; return true; }
+    ///
+    /// Core controllers
+    ///
+
     if ($name == 'FooterController') { require './controllers/footer.php'; return true; }
+    if ($name == 'HeaderController') { require './controllers/header.php'; return true; }
     if ($name == 'HomepageController') { require './controllers/home.php'; return true; }
 
-    //Keruald and Obsidian Workspaces Libraries
-    if ($name == 'ObjectDeserializable' || $name == 'ObjectDeserializableWithContext') { require './includes/ObjectDeserializable.php'; return true; }
+    ///
+    /// Keruald and Obsidian Workspaces libraries
+    ///
+
+    if ($name == 'ObjectDeserializable') { require './includes/ObjectDeserializable.php'; return true; }
+    if ($name == 'ObjectDeserializableWithContext') { require './includes/ObjectDeserializable.php'; return true; }
 
     if ($name == 'Application') { require './includes/apps/Application.php'; return true; }
     if ($name == 'ApplicationConfiguration') { require './includes/apps/ApplicationConfiguration.php'; return true; }
