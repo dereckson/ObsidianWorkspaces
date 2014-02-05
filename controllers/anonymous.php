@@ -157,8 +157,7 @@ switch ($url[0]) {
                 $smarty->assign('OpenID', $_COOKIE['LastOpenID']);
             }
 
-            $action  = $context->workspace ? get_url($context->workspace->code) : get_url();
-            $action .= '/';
+            $action  = $context->workspace ? get_url($context->workspace->code) . '/' : get_url();
             $action .= implode('/', $context->url);
 
             $smarty->assign('LoginError', $LoginError);
