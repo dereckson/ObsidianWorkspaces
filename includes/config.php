@@ -142,6 +142,95 @@ $Config['StaticContentURL'] = '';
 $Config['Content']['Cache'] = 'content/cache';
 $Config['Content']['Help'] = 'content/help';
 $Config['Content']['Workspaces'] = 'content/workspaces';
+$Config['Content']['Disclaimers'] = 'content/disclaimers';
+
+/*
+ * The following settings configure your document storage engine.
+ *
+ * To use MongoDB:
+ *
+ *     $Config['DocumentStorage'] = [
+ *         'Type' => 'MongoDB',
+ *         'Host' => 'mymongoinstance.domain.tld',
+ *         'Port' => 27017,
+ *         'Database' => 'obsidian'
+ *     ];
+ *
+ * To use MongoDB, and authenticate with a username and a password:
+ *
+ *     $Config['DocumentStorage'] = [
+ *         'Type' => 'MongoDB',
+ *         'Host' => 'mymongoinstance.domain.tld',
+ *         'Port' => 27017,
+ *         'Database' => 'obsidian',
+ *         'Username' => 'yourusername',
+ *         'Password' => 'yourpassword'
+ *     ];
+ *
+ * To connect to MongoDB with SSL, use the same syanx and add a SSL context as 'SSL' parameter.
+ * Documentation about SSL context is located at the following PHP documentation URL:
+ * http://www.php.net/manual/en/context.ssl.php
+ *
+ *     $Config['DocumentStorage'] = [
+ *         'Type' => 'MongoDB',
+ *         'Host' => 'mymongoinstance.domain.tld',
+ *         'Port' => 27017,
+ *         'Database' => 'obsidian',
+ *         'SSL' => [
+ *             'cafile' => '/path/to/CAcertificate.crt',
+ *             'local_cert' => '/path/to/yourcertificate.pem',
+ *             'verify_peer' => true,
+ *             'allow_self_signed' => false,
+ *             'CN_match' => 'the server certificate expected CN'
+ *         ]
+ *     ];
+ *
+ *
+ * If you don't want to deploy a MongoDB server, you can use either MySQL
+ * or SQLite 3 if you need concurrency, either plain text files if you're
+ * the only user as a fallback.
+ *
+ *
+ * For MySQL, it uses the same connection as the main application.
+ *
+ *     $Config['DocumentStorage'] = [
+ *         'Type' => 'MySQL',
+ *         'Table' => $prefix . 'collections',
+ *     ];
+ *
+ * Engine will automatically intialize the database if the file hasn't been found.
+ *
+ * You can also store the table in another database with the db.table syntax:
+ *
+ *     $Config['DocumentStorage'] = [
+ *         'Type' => 'MySQL',
+ *         'Table' => 'obsidian_data.collections',
+ *     ];
+ *
+ *
+ * To use SQLite 3:
+ *
+ *     $Config['DocumentStorage'] = [
+ *         'Type' => 'SQLite',
+ *         'File' => 'content/collections.db',
+ *     ];
+ *
+ * Engine will automatically intialize the database if the file hasn't been found.
+ *
+ *
+ * To use file storage, create a folder and gives it as path parameter:
+ *
+ *     $Config['DocumentStorage'] = [
+ *         'Type' => 'Files',
+ *         'Path' => 'content/collections',
+ *     ];
+ *
+ */
+$Config['DocumentStorage'] = [
+    'Type' => 'MongoDB',
+    'Host' => 'localhost',
+    'Port' => 27017
+];
 
 //ImageMagick paths
 //Be careful on Windows platform convert could match the NTFS convert command.
