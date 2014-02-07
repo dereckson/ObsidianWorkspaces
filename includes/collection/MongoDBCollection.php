@@ -131,7 +131,7 @@ class MongoDBCollection extends Collection {
     /**
      * Initializes a new instance of MongoCollection
      *
-     * @param string $id the collection  identifiant
+     * @param string $id the collection identifiant
      */
     public function __construct ($id) {
         $this->id = $id;
