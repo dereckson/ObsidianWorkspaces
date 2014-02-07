@@ -37,6 +37,11 @@ class WorkspaceConfiguration implements ObjectDeserializableWithContext {
     public $disclaimers = [];
 
     /**
+     * @var Array collections (each key a string to the collection name, each value a string to the collection document type)
+     */
+    public $collections = [];
+
+    /**
      * Determines if internal Obsidian Workspaces authentication can be used to login on this workspace URL
      *
      * @return boolean True if an user not logged in Obsidian Workspaces going to a workspace URL should be offered to login through Obsidian ; otherwise, false.
@@ -126,7 +131,38 @@ class WorkspaceConfiguration implements ObjectDeserializableWithContext {
             $instance->disclaimers = $data->disclaimers;
         }
 
+        if (property_exists($data, 'collections')) {
+            foreach ($data->collections as $collection) {
+                if (!property_exists($collection, 'name')) {
+                    throw new Exception("A collection has been declared without name in the workspace configuration.");
+                }
+                $name = $collection->name;
+                if (!property_exists($collection, 'global') || !$collection->global) {
+                    $name = WorkspaceConfiguration::getCollectionNameWithPrefix($context->workspace, $name);
+                }
+                if (property_exists($collection, 'documentType')) {
+                    $type = $collection->documentType;
+                    if (!class_exists($type)) {
+                        throw new Exception("CollectionDocument children class doesn't exist: $type. If you've just added authentication code, update includes/autoload.php file to register your new classes.");
+                    }
+                } else {
+                    $type = null;
+                }
+                $instance->collections[$name] = $type;
+            }
+        }
         return $instance;
+    }
+
+    /**
+     * Gets the full name of a collection, with the workspace prefix
+     *
+     * @param $workspace The current workspace
+     * @param $workspace The collection name
+     * @return string The full name of the collection
+     */
+    public static function getCollectionNameWithPrefix (Workspace $workspace, $name) {
+        return $workspace->code . '-' . $name;
     }
 
     /**

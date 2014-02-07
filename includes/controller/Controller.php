@@ -20,7 +20,7 @@
  *
  * This class describes a controller
  */
-class Controller implements RunnableWithContext {
+abstract class Controller implements RunnableWithContext {
     /**
      * @var string the application name
      */
@@ -32,11 +32,22 @@ class Controller implements RunnableWithContext {
     public $context;
 
     /**
+     * Initializes the controller resources
+     */
+    public function initialize () { }
+
+    /**
+     * Handles a web request
+     */
+    public abstract function handleRequest();
+
+    /**
      * Initializes a new instance of the controller with the specified context and handle request
      */
     public static function Run (Context $context) {
         $controller = new static;
         $controller->context = $context;
+        $controller->initialize();
         $controller->handleRequest();
     }
 }

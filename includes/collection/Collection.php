@@ -21,6 +21,10 @@
  * This abstract class repreesnts a collection of documents
  */
 abstract class Collection {
+    ///
+    /// Common properties
+    ///
+
     /**
      * @var string The collection identifiant
      */
@@ -30,6 +34,39 @@ abstract class Collection {
      * @var string the name of the document collection class to use
      */
     public $documentType = 'CollectionDocument';
+
+    ///
+    /// Factory
+    ///
+
+    /**
+     * Loads a new instance of the collection
+     *
+     * @param string $id The collection identifiant
+     * @param string $documentType The type, inheriting from CollectionDocumt  to use for ollection's documents
+     * @return Collection The collection, of the type specified in the storage configuration
+     */
+    public static function load ($id, $documentType = null) {
+        global $Config;
+
+        if (!array_key_exists(('DocumentStorage'), $Config)) {
+            throw new Exception("Configuration required parameter missing: DocumentStorage");
+        }
+        if (!array_key_exists(('Type'), $Config['DocumentStorage'])) {
+            throw new Exception("Configuration required parameter missing in DocumentStorage array: Type");
+        }
+        $collectionClass = $Config['DocumentStorage']['Type'] . 'Collection';
+        if (!class_exists($collectionClass)) {
+            throw new Exception("Storage class not found: $collectionClass");
+        }
+
+        $instance = new $collectionClass($id);
+        if ($documentType !== null) {
+            $instance->documentType = $documentType;
+        }
+        return $instance;
+    }
+
 
     ///
     /// CRUD features

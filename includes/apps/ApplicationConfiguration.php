@@ -39,6 +39,11 @@ class ApplicationConfiguration implements ObjectDeserializable {
     public $icon;
 
     /**
+     * @var array The collections to use. Keys ares collections roles, values collections names.
+     */
+    public $useCollections = [];
+
+    /**
      * Loads a WorkspaceConfiguration instance from an object
      *
      * @param object $data The object to deserialize
@@ -49,10 +54,19 @@ class ApplicationConfiguration implements ObjectDeserializable {
 
         //Applications array
         foreach ($data as $key => $value) {
-            if ($key == "nav") {
-                $instance->nav = new Message($value);
-            } else {
-                $instance->$key = $value;
+            switch ($key) {
+                case 'nav':
+                    $instance->nav = new Message($value);
+                    break;
+
+                case 'useCollections':
+                    foreach ($data->useCollections as $role => $name) {
+                        $instance->useCollections[$role] = $name;
+                    }
+                    break;
+
+                default:
+                    $instance->$key = $value;
             }
         }
 
