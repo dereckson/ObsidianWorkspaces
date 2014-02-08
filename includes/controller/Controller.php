@@ -44,7 +44,7 @@ abstract class Controller implements RunnableWithContext {
     /**
      * Initializes a new instance of the controller with the specified context and handle request
      */
-    public static function Run (Context $context) {
+    public static function run (Context $context) {
         $controller = new static;
         $controller->context = $context;
         $controller->initialize();

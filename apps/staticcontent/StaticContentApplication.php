@@ -51,9 +51,9 @@ class StaticContentApplication extends Application {
                 case "html":
                 case "htm":
                     $smarty->assign('PAGE_TITLE', $title);
-                    HeaderController::Run($this->context);
+                    HeaderController::run($this->context);
                     include($path);
-                    FooterController::Run($this->context);
+                    FooterController::run($this->context);
                     break;
 
                 case "jpg": case "png": case "gif": case "svg": case "ico":

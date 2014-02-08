@@ -37,5 +37,5 @@ abstract class UserAction {
     /**
      * Executes the user action
      */
-    abstract public function Run ();
+    abstract public function run ();
 }

@@ -88,7 +88,7 @@ abstract class AuthenticationMethod implements ObjectDeserializable {
     protected function runCreateUserActions () {
         foreach ($this->createUserActions as $action) {
             $action->targetUser = $this->localUser;
-            $action->Run();
+            $action->run();
         }
     }
 

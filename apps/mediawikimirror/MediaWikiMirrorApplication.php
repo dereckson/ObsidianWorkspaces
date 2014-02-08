@@ -46,7 +46,7 @@ class MediaWikiMirrorApplication extends Application {
 
         //Serves header
         $smarty->assign('PAGE_TITLE', $title);
-        HeaderController::Run($this->context);
+        HeaderController::run($this->context);
 
         //Output Hello world
         $url = $this->getRenderUrl();
@@ -63,6 +63,6 @@ class MediaWikiMirrorApplication extends Application {
         echo $content;
 
         //Serves footer
-        FooterController::Run($this->context);
+        FooterController::run($this->context);
     }
 }

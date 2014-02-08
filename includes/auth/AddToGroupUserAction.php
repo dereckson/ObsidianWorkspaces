@@ -33,7 +33,7 @@ class AddToGroupUserAction extends UserAction implements ObjectDeserializable {
     /**
      * Executes the user action
      */
-    public function Run () {
+    public function run () {
         if ($this->targetUser->isMemberOfGroup($this->group)) {
             if ($this->isAdmin) {
                 //Promotes to admin if needed

@@ -24,14 +24,14 @@ $file = $Config['Content']['Help'] . '/' . ($context->url[1] ? $context->url[1] 
 if (file_exists($file)) {
     //Header
     $smarty->assign('controller_custom_nav', 'nav_help.tpl');
-    HeaderController::Run($context);
+    HeaderController::run($context);
 
     //Help page
     $smarty->assign('help_file', $file);
     $smarty->display('help.tpl');
 
     //Footer
-    FooterController::Run($context);
+    FooterController::run($context);
 } else {
     define('ERROR_PAGE', 404);
     include("controllers/errorpage.php");

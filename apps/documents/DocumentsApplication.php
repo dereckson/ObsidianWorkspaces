@@ -99,12 +99,12 @@ class DocumentsApplication extends Application {
 
         //Serves header
         $smarty->assign('PAGE_TITLE', "Documents");
-        HeaderController::Run($this->context);
+        HeaderController::run($this->context);
 
         //Serves body
         $smarty->display('apps/documents/' . $template);
 
         //Serves footer
-        FooterController::Run($this->context);
+        FooterController::run($this->context);
     }
 }

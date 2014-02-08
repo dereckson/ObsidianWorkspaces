@@ -36,12 +36,12 @@ class HelloWorldApplication extends Application {
 
         //Serves header
         $smarty->assign('PAGE_TITLE', $title);
-        HeaderController::Run($this->context);
+        HeaderController::run($this->context);
 
         //Output Hello world
         echo "<p>Hello world!</p>"; //TODO: call an hello world view
 
         //Serves footer
-        FooterController::Run($this->context);
+        FooterController::run($this->context);
     }
 }

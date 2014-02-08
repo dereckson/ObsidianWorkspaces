@@ -43,7 +43,7 @@ class GivePermissionUserAction extends UserAction implements ObjectDeserializabl
     /**
      * Executes the user action
      */
-    public function Run () {
+    public function run () {
         if (!$id = get_resource_id($this->resourceType, $this->resourceIdentifier)) {
             throw new Exception("Can't get identifier from resource " . $this->resourceType . " " . $this->resourceIdentifier);
         }
