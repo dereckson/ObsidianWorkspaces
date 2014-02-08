@@ -73,12 +73,20 @@ trait CRUDTestTrait {
      * @covers ::get
      * @covers ::set
      * @covers ::delete
+     * @covers ::count
+     * @covers ::getAll
      */
     public function testCRUD () {
         global $Config;
         $Config = static::getConfig();
 
-        //Add
+        //::count
+        $this->assertEquals(
+            0, $this->collection->count(),
+            "The test collection isn't empty. Check the last test run cleaned correctly the resources."
+        );
+
+        //::add
         $this->collection->add($this->redBook);
         $this->assertNotEmpty(
             $this->redBook->id,
@@ -90,7 +98,10 @@ trait CRUDTestTrait {
             "After a document has been added, the is has been modified."
         );
 
-        //Exists
+        //:ccount
+        $this->assertEquals(1, $this->collection->count());
+
+        //::exists
         $this->assertFalse(
             $this->collection->exists($this->blueBook),
             "A non added document has been marked existing."
@@ -100,7 +111,7 @@ trait CRUDTestTrait {
             "An added document hasn't been found as existing."
         );
 
-        //Update
+        //::update
         $this->redBook->author = 'Iain M. Banks';
         $this->collection->update($this->redBook);
         $this->assertEquals(
@@ -109,12 +120,16 @@ trait CRUDTestTrait {
             "The document ID has been modified during an update operation. It should stay the same. Old id: redBook. New id: " . $this->redBook->id
         );
 
-        //Get - wwen our collection uses the generic CollectionDocument class
+        //::count
+        $this->assertEquals(1, $this->collection->count()
+        );
+
+        //::get - when our collection uses the generic CollectionDocument class
         $newDocument = $this->collection->get($this->redBook->id);
         $this->assertInstanceOf('CollectionDocument', $newDocument);
         $this->assertNotInstanceOf('BookDocument', $newDocument);
 
-        //Get - when our collection uses a proper CollectionDocument descendant
+        //::set - when our collection uses a proper CollectionDocument descendant
         $this->collection->documentType = 'BookDocument';
         $newBook = $this->collection->get($this->redBook->id);
         $this->assertInstanceOf('BookDocument', $newBook);
@@ -125,7 +140,7 @@ trait CRUDTestTrait {
         $this->assertEquals('Iain M. Banks', $newBook->author);
         $this->assertEquals('redBook', $newBook->id);
 
-        //Set
+        //::set - an existing document as parameter
         $previousId = $this->redBook->id;
         $this->collection->set($this->redBook);
         $this->assertEquals(
@@ -133,7 +148,12 @@ trait CRUDTestTrait {
             $this->redBook->id,
             "The document ID has been modified during a set operation on an already added dcoument. It should stay the same. Old id: $previousId. New id: " . $this->redBook->id
         );
-        $this->collection->add($this->blueBook);
+
+        //::count
+        $this->assertEquals(1, $this->collection->count());
+
+        //::set - a new document as parameter
+        $this->collection->set($this->blueBook);
         $this->assertNotEmpty(
             $this->blueBook->id,
             "After a document has been added, the expected behavior is the id property is filled with the generated identifiant."
@@ -143,6 +163,40 @@ trait CRUDTestTrait {
             "An added document with set hasn't been found as existing."
         );
 
+        //::count
+        $this->assertEquals(2, $this->collection->count());
+
+        //::getAll
+        $documents = $this->collection->getAll();
+        $count = 0;
+        foreach ($documents as $document) {
+            switch ($document->id) {
+                case $this->blueBook->id:
+                    $this->assertInstanceOf('BookDocument', $document);
+                    $this->assertObjectHasAttribute('title', $document);
+                    $this->assertObjectHasAttribute('author', $document);
+                    $this->assertObjectHasAttribute('id', $document);
+                    $this->assertEquals('Foundation', $document->title);
+                    $this->assertEquals('Isaac Asimov', $document->author);
+                    break;
+
+                case 'redBook':
+                    $this->assertInstanceOf('BookDocument', $document);
+                    $this->assertObjectHasAttribute('title', $document);
+                    $this->assertObjectHasAttribute('author', $document);
+                    $this->assertObjectHasAttribute('id', $document);
+                    $this->assertEquals('Matter', $document->title);
+                    $this->assertEquals('Iain M. Banks', $document->author);
+                    break;
+
+                default:
+                    $this->fail('A document with an id nor redBook, the blueBook generated id has been returned.');
+            }
+            $count++;
+        }
+        $this->assertEquals(2, $count);
+
+        //::delete
         $this->collection->delete($this->blueBook->id);
         $this->assertFalse(
             $this->collection->exists($this->blueBook),
@@ -152,5 +206,16 @@ trait CRUDTestTrait {
             $this->collection->exists($this->redBook),
             "An unexpected document has been deleted."
         );
+
+        //::count
+        $this->assertEquals(1, $this->collection->count());
+
+        //::delete, ::count
+        $this->collection->delete($this->redBook->id);
+        $this->assertEquals(0, $this->collection->count());
+
+        //::getAll
+        $documents = $this->collection->getAll();
+        $this->assertCount(0, $documents, "We expected each collection document would have been deleted.");
     }
 }

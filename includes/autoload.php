@@ -67,6 +67,7 @@ function obsidian_autoload ($name) {
     if ($name == 'CollectionDocument') { require $dir . '/includes/collection/CollectionDocument.php'; return true; }
     if ($name == 'FilesCollection') { require $dir . '/includes/collection/FilesCollection.php'; return true; }
     if ($name == 'MongoDBCollection') { require $dir . '/includes/collection/MongoDBCollection.php'; return true; }
+    if ($name == 'MongoDBCollectionIterator') { require $dir . '/includes/collection/MongoDBCollectionIterator.php'; return true; }
 
     if ($name == 'Context') { require $dir . '/includes/controller/Context.php'; return true; }
     if ($name == 'Controller') { require $dir . '/includes/controller/Controller.php'; return true; }

@@ -113,6 +113,20 @@ abstract class Collection {
     public abstract function get ($documentId);
 
     /**
+     * Gets a count of the documents in the collection
+     *
+     * @return int The number of documents
+     */
+    public abstract function count ();
+
+    /**
+     * Gets all the documents from the collection
+     *
+     * @return Traversable An iterator to the documents, each item an instance of CollectionDocument
+     */
+    public abstract function getAll ();
+
+    /**
      * Adds or updates a document in the collection
      *
      * @param CollectionDocument $document The document to set

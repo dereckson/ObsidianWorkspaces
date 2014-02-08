@@ -28,7 +28,7 @@ class MongoDBCollection extends Collection {
     /**
      * @var MongoCollection the Mongo collection
      */
-    private $mongoCollection;
+    public $mongoCollection;
 
     ///
     /// Singleton pattern to get or initialize the MongoClient instance
@@ -229,10 +229,35 @@ class MongoDBCollection extends Collection {
         $data = $this->mongoCollection->findOne(
             [ '_id' => $documentId ]
         );
+        return $this->getDocumentFromArray($data);
+    }
+
+    /**
+     * Gets a document of the relevant collection documents type from an array.
+     */
+    public function getDocumentFromArray($documentArray) {
         $type = $this->documentType;
         if (!class_exists($type)) {
-            throw new Exception("Can't create an instance of $type. If the class exists, did you registered a SPL autoloader or updated includes/autoload.php?");
+            throw new Exception("Can't create an instance of $type. If the class exists, did you register a SPL autoloader or updated includes/autoload.php?");
         }
-        return $type::loadFromObject($data);
+        return $type::loadFromObject($documentArray);
+    }
+
+    /**
+     * Gets a count of the documents in the collection
+     *
+     * @return int The number of documents
+     */
+    public function count () {
+        return $this->mongoCollection->count();
+    }
+
+    /**
+     * Gets all the documents from the collection
+     *
+     * @return Iterator An iterator to the documents, each item an instance of CollectionDocument
+     */
+    public function getAll () {
+        return new MongoDBCollectionIterator($this);
     }
 }

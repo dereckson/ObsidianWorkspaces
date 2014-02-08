@@ -26,7 +26,7 @@ class FilesCollection extends Collection {
     ///
 
     /**
-     * Gets the path to the folder where the specified collection id is stored.
+     * Gets the path to the folder where the specified collection documents are stored.
      *
      * @param string $collectionId The collection identifiant
      * @return string The path to the specified collection folder
@@ -47,7 +47,7 @@ class FilesCollection extends Collection {
     }
 
     /**
-     * Gets the path to the folder where the specified collection id is stored.
+     * Gets the path to the file where the specified document is stored.
      *
      * @param string $documentId The document identifiant
      * @return string The path to the specified document file
@@ -56,6 +56,15 @@ class FilesCollection extends Collection {
         return static::getCollectionPath($this->id) . DIRECTORY_SEPARATOR . $documentId . '.json';
     }
     
+    /**
+     * Gets the path to the folder where the current collection is stored.
+     *
+     * @return string The path to the specified collection folder
+     */
+    public function getCurrentCollectionPath () {
+        return static::getCollectionPath($this->id);
+    }
+
     ///
     /// Constructor
     ///
@@ -147,7 +156,7 @@ class FilesCollection extends Collection {
     public function get ($documentId) {
         $type = $this->documentType;
         if (!class_exists($type)) {
-            throw new Exception("Can't create an instance of $type. If the class exists, did you registered a SPL autoloader or updated includes/autoload.php?");
+            throw new Exception("Can't create an instance of $type. If the class exists, did you register a SPL autoloader or updated includes/autoload.php?");
         }
 
         $filename = $this->getDocumentPath($documentId);
@@ -168,5 +177,55 @@ class FilesCollection extends Collection {
         $filename = $this->getDocumentPath($document->id);
         $data = json_encode($document);
         file_put_contents($filename, $data);
+    }
+
+    /**
+     * Gets a count of the documents in the collection
+     *
+     * @return int The number of documents
+     */
+    public function count () {
+        $dir = $this->getCurrentCollectionPath();
+        $count = 0;
+        $files = scandir($dir);
+        foreach ($files as $file) {
+            if (get_extension($file) == 'json') {
+                $count++;
+            }
+        }
+        return $count;
+    }
+
+    /**
+     * Gets all the documents from the collection
+     *
+     * @return Generator An iterator to the documents, each item an instance of CollectionDocument
+     */
+    public function getAll () {
+        $dir = $this->getCurrentCollectionPath();
+        $files = scandir($dir);
+        foreach ($files as $file) {
+            if (get_extension($file) == 'json') {
+                $documentId = get_filename($file);
+                yield $this->get($documentId);
+            }
+        }
+    }
+
+    /**
+     * Gets documents list
+     *
+     * @return array The documents list
+     */
+    public function getDocumentsList () {
+        $dir = $this->getFilePath('');
+        $files = scandir($dir);
+        $documents = [];
+        foreach ($files as $file) {
+            if (get_extension($file) == 'json') {
+                $documents[] = get_filename($file);
+            }
+        }
+        return $documents;
     }
 }

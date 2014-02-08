@@ -16,6 +16,7 @@
  */
 
 require_once('CRUDTestTrait.php');
+require('../includes/GlobalFunctions.php');
 
 /**
  * Tests FilesCollection class
@@ -167,6 +168,9 @@ class FilesCollectionTest extends PHPUnit_Framework_TestCase {
             'collections/greenBook2.json',
             $filename
         );
+
+        //Cleans up, so CRUD test starts with an empty collection
+        unlink('/tmp/obsidiancollections/quux/greenBook.json');
     }
 
     ///
@@ -177,9 +181,7 @@ class FilesCollectionTest extends PHPUnit_Framework_TestCase {
      * Tears down resources when tests are done
      */
     public static function tearDownAfterClass () {
-        //Removes created files and directories
-        unlink('/tmp/obsidiancollections/quux/greenBook.json');
-        unlink('/tmp/obsidiancollections/quux/redBook.json');
+        //Removes created directories
         rmdir('/tmp/obsidiancollections/quux');
         rmdir('/tmp/obsidiancollections');}
 
