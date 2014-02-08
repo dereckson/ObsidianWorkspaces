@@ -109,7 +109,6 @@ switch ($controller = $context->url[0]) {
         }
 
         //Not a workspace, nor a controller toponomy
-        define('ERROR_PAGE', 404);
-        include("controllers/errorpage.php");
-        break;
+        ErrorPageController::show($context, 404);
+        exit;
 }

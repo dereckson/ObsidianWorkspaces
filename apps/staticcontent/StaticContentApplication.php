@@ -72,8 +72,8 @@ class StaticContentApplication extends Application {
                     echo "Can't serve $ext file";
             }
         } else {
-            define('ERROR_PAGE', 404);
-            include("controllers/errorpage.php");
+            ErrorPageController::show($context, 404);
+            exit;
         }
     }
 

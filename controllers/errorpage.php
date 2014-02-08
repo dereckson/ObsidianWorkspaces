@@ -16,21 +16,53 @@
  *
  */
 
-//
-// Common variables
-//
-$smarty->assign("URL_HOME", get_url());
+/**
+ * Error pages controller
+ */
+class ErrorPageController extends Controller {
+    /**
+     * @var int The HTTP error code
+     */
+    protected $errorCode;
 
-//
-// HTML output
-//
+    /**
+     * Shows an error page
+     *
+     * @param Context $context The application or site context
+     * @param $errorCode The HTTP error code
+     */
+    public static function show($context, $errorCode) {
+        static::load($context)
+            ->setErrorCode($errorCode)
+            ->handleRequest();
+    }
 
-switch (ERROR_PAGE) {
-    case 404:
-        header("HTTP/1.0 404 Not Found");
-        $smarty->display("errors/404.tpl");
-        break;
+    /**
+     * Sets HTTP error code
+     *
+     * @param $errorCode The HTTP error code
+     * @return ErrorPageController the current instance
+     */
+    public function setErrorCode ($errorCode) {
+        $this->errorCode = $errorCode;
+        return $this;
+    }
 
-    default:
-        die("Unknown error page: " . ERROR_PAGE);
+    /**
+     * Handles controller request
+     */
+    public function handleRequest () {
+        $smarty = $this->context->templateEngine;
+        $smarty->assign("URL_HOME", get_url());
+
+        switch ($this->errorCode) {
+            case 404:
+                header("HTTP/1.0 404 Not Found");
+                $smarty->display("errors/404.tpl");
+                break;
+
+            default:
+                die("Unknown error page: " . $this->errorCode);
+        }
+    }
 }

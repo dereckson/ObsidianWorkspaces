@@ -37,6 +37,7 @@ function obsidian_autoload ($name) {
     /// Core controllers
     ///
 
+    if ($name == 'ErrorPageController') { require $dir . '/controllers/errorpage.php'; return true; }
     if ($name == 'FooterController') { require $dir . '/controllers/footer.php'; return true; }
     if ($name == 'HeaderController') { require $dir . '/controllers/header.php'; return true; }
     if ($name == 'HomepageController') { require $dir . '/controllers/home.php'; return true; }
