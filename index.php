@@ -87,7 +87,7 @@ if ($context->user->id == ANONYMOUS_USER) {
 switch ($controller = $context->url[0]) {
     case '':
         //Calls homepage controller
-        HomepageController::Run($context);
+        HomepageController::run($context);
         break;
 
     case 'help':
@@ -101,10 +101,10 @@ switch ($controller = $context->url[0]) {
         $workspaceConfig = $context->workspace->configuration;
         $applicationConfiguration = NULL;
         if ($workspaceConfig != NULL && $workspaceConfig->hasControllerBind($controller, $applicationConfiguration)) {
-            //Run controller
+            //Runs controller
             $controllerClass = $applicationConfiguration->name;
             $appContext = ApplicationContext::loadFromContext($context, $applicationConfiguration);
-            $controllerClass::Run($appContext);
+            $controllerClass::run($appContext);
             break;
         }
 
