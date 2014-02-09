@@ -6,7 +6,7 @@
  *   \ / |_) , ) | |_/ | | | | \|
  *    ~  ~    ~  ~ ~   ~ ~ ~ ~  ~
  *
- * MongoDB colletction iterator class
+ * MongoDB collection iterator class
  *
  * @package     ObsidianWorkspaces
  * @subpackage  Collection
@@ -45,14 +45,18 @@ class MongoDBCollectionIterator implements Iterator {
     }
 
     /**
-     * Returns the current element
+     * Returns a collection document from the current result
+     * @return CollectionDocument the current result's document
      */
     public function current () {
-        return $this->collection->getDocumentFromArray($this->cursor->current());
+        return $this->collection->getDocumentFromArray(
+            $this->cursor->current()
+        );
     }
 
     /**
      * Returns the key of the current element
+     * @return string the current result's _id
      */
     public function key () {
         return $this->cursor->key();
@@ -74,6 +78,7 @@ class MongoDBCollectionIterator implements Iterator {
 
     /**
      * Checks if current position is valid
+     * @return boolean true if the current position is valid ; otherwise, false
      */
     public function valid () {
         return $this->cursor->valid();
