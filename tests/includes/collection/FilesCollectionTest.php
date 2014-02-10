@@ -161,7 +161,7 @@ class FilesCollectionTest extends PHPUnit_Framework_TestCase {
         $filename = $this->collection->getDocumentPath('greenBook');
 
         $this->assertJsonFileEqualsJsonFile(
-            'collections/greenBook1.json',
+            'includes/collection/greenBook1.json',
             $filename
         );
 
@@ -169,7 +169,7 @@ class FilesCollectionTest extends PHPUnit_Framework_TestCase {
         $this->collection->update($book);
 
         $this->assertJsonFileEqualsJsonFile(
-            'collections/greenBook2.json',
+            'includes/collection/greenBook2.json',
             $filename
         );
 
@@ -187,6 +187,7 @@ class FilesCollectionTest extends PHPUnit_Framework_TestCase {
     public static function tearDownAfterClass () {
         //Removes created directories
         rmdir(UNITTESTING_FILESCOLLECTION_PATH . '/quux');
-        rmdir(UNITTESTING_FILESCOLLECTION_PATH);}
+        rmdir(UNITTESTING_FILESCOLLECTION_PATH);
+    }
 
 }
