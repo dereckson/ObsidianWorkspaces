@@ -218,8 +218,11 @@ function get_page_url () {
  * @return string the server URL
  */
 function get_server_url () {
-	switch ($port = $_SERVER['SERVER_PORT']) {
-		case '80':
+    if (php_sapi_name() == 'cli') {
+        return '';
+    }
+    switch ($port = $_SERVER['SERVER_PORT']) {
+        case '80':
             return "http://$_SERVER[SERVER_NAME]";
 
         case '443':
@@ -227,7 +230,7 @@ function get_server_url () {
 
         default:
             return "http://$_SERVER[SERVER_NAME]:$_SERVER[SERVER_PORT]";
-	}
+    }
 }
 
 /*
