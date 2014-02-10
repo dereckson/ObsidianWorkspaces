@@ -93,7 +93,7 @@ class Language implements LoadableWithContext {
      *
      * This information is contained in the session, or if not yet defined,
      * it's to determine according the user's browser preferences.
-     * @see find_lang
+     * @see findLanguage
      */
     public static function initialize () {
         //If $_SESSION['lang'] doesn't exist yet, find a common language
@@ -109,7 +109,7 @@ class Language implements LoadableWithContext {
 
     /**
      * Gets a common lang spoken by the site and the user's browser
-     * @see Language::get_http_accept_languages
+     * @see Language::getHttpAcceptLanguages
      *
      * @return string the language
      */
@@ -206,7 +206,7 @@ class Language implements LoadableWithContext {
 
         //Loads wanted file (if it exists and a language have been defined)
         if (defined('LANG') && LANG != '$fallback' && file_exists('lang/' . LANG . '/' . $file)) {
-            $smarty->configLoad('lang/' . LANG . '/' . $file, $sections);
+            $this->templateEngine->configLoad('lang/' . LANG . '/' . $file, $sections);
         }
     }
 
