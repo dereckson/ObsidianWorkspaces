@@ -133,7 +133,7 @@ abstract class AuthenticationMethod implements ObjectDeserializable {
 
         if ($this->localUser === null) {
             if (!$this->canCreateUser) {
-                $this->loginError = lang_get("ExternalLoginCantCreateAccount");
+                $this->loginError = Language::get("ExternalLoginCantCreateAccount");
                 return false;
             } else {
                 $this->createUser();
@@ -215,7 +215,7 @@ abstract class AuthenticationMethod implements ObjectDeserializable {
         if (property_exists($data, 'loginMessage')) {
             $instance->loginMessage = new Message($data->loginMessage);
         } else {
-            $instance->loginMessage = new Message(lang_get("SignIn"));
+            $instance->loginMessage = new Message(Language::get("SignIn"));
         }
 
         if (property_exists($data, 'createUser')) {

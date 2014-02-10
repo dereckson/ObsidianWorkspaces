@@ -27,6 +27,11 @@ class Context {
     public $workspace;
 
     /**
+     * @var array the configuration
+     */
+    public $config;
+
+    /**
      * @var User the user currently logged in
      */
     public $user;
@@ -45,4 +50,41 @@ class Context {
      * @var Smarty the template engine
      */
     public $templateEngine;
+
+    ///
+    /// Helper methods
+    ///
+
+    /**
+     * Gets application root directory
+     *
+     * @return string the application root directory
+     */
+    public function getApplicationRootDirectory() {
+        return getcwd();
+    }
+
+    ///
+    /// Templates
+    ///
+
+    /**
+     * Initializes the template engine
+     */
+    public function initializeTemplateEngine () {
+        require('includes/smarty/Smarty.class.php');
+        define('SMARTY_SPL_AUTOLOAD', 1);
+
+        $smarty = new Smarty();
+
+        $current_dir = static::getApplicationRootDirectory();
+        $smarty->template_dir = $current_dir . '/skins/' . THEME;
+        $smarty->cache_dir = $this->config['Content']['Cache'];
+        $smarty->compile_dir = $smarty->cache_dir . '/compiled';
+        $smarty->config_dir = $current_dir;
+
+        $smarty->config_vars['StaticContentURL'] = $this->config['StaticContentURL'];
+
+        $this->templateEngine = $smarty;
+    }
 }

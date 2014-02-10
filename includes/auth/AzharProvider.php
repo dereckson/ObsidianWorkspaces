@@ -58,7 +58,7 @@ class AzharProvider extends AuthenticationMethod {
             $reply = $this->fetchInformation();
 
             if (!$this->isDocumentLegit($reply)) {
-                $this ->loginError = lang_get('ExternalLoginNotLegitReply');
+                $this ->loginError = Language::get('ExternalLoginNotLegitReply');
                 return;
             }
 
@@ -73,13 +73,13 @@ class AzharProvider extends AuthenticationMethod {
                 switch ($reply->code) {
                     case 'NO_USER_VISIT':
                     case 'NOT_LOGGED_IN':
-                        $this ->loginError = lang_get('ExternalLoginNotRemotelyLoggedIn');
+                        $this ->loginError = Language::get('ExternalLoginNotRemotelyLoggedIn');
                         return;
                 }
             } elseif ($reply->status == "ERROR_BETWEEN_US") {
                 switch ($reply->code) {
                     case 'SESSION_BADSECRET':
-                        $this->loginError = sprintf(lang_get('ExternalLoginTechnicalDifficulty'), $reply->code);
+                        $this->loginError = sprintf(Language::get('ExternalLoginTechnicalDifficulty'), $reply->code);
                         return;
                 }
             }

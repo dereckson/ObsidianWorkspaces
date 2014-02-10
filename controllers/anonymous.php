@@ -39,19 +39,19 @@ switch ($url[0]) {
             $invite = new Invite($_POST['invite_code']);
             if ($invite->lastError != '') {
                 //Not existant invite.
-                $smarty->assign('NOTIFY', lang_get("IncorrectInviteCode"));
+                $smarty->assign('NOTIFY', Language::get("IncorrectInviteCode"));
             } elseif ($invite->is_claimed()) {
                 //The invitation have already claimed by someone else.
-                $smarty->assign('NOTIFY', lang_get("InviteCodeAlreadyClaimed"));
+                $smarty->assign('NOTIFY', Language::get("InviteCodeAlreadyClaimed"));
             } else {
                 //Checks if the given information is correct
                 //We ignore bad mails. All we really need is a login and a pass.
                 //We fill our array $errors with all the errors
                 $errors = array();
                 if (!$_POST['username']) {
-                    $errors[] = lang_get('MissingUsername');
+                    $errors[] = Language::get('MissingUsername');
                 } elseif (!User::is_available_login($_POST['username'])) {
-                    $errors[] =  lang_get('LoginUnavailable');
+                    $errors[] =  Language::get('LoginUnavailable');
                 }
 
                 if (User::get_username_from_email($_POST['email']) !== false) {
@@ -59,7 +59,7 @@ switch ($url[0]) {
                 }
 
                 if (!$_POST['passwd']) {
-                    $errors[] = lang_get('MissingPassword');
+                    $errors[] = Language::get('MissingPassword');
                 }
 
                 if (count($errors)) {
@@ -84,14 +84,14 @@ switch ($url[0]) {
                     $message = new Message();
                     $message->from = 0;
                     $message->to = $invite->from_perso_id;
-                    $message->text =  sprintf(lang_get('InviteHaveBeenClaimed'), $invite->code);
+                    $message->text =  sprintf(Language::get('InviteHaveBeenClaimed'), $invite->code);
                     $message->send();
 
                     //Logs in user
                     login($user->id, $user->name);
 
                     //Prints confirm message
-                    $smarty->assign('WAP', lang_get("AccountCreated"));
+                    $smarty->assign('WAP', Language::get("AccountCreated"));
 
                     //Redirects users to homepage
                     header('refresh: 5; url=' . get_url());
@@ -116,7 +116,7 @@ switch ($url[0]) {
             if (preg_match("/^([A-Z]){3}([0-9]){3}$/i", $url[1])) {
                 $smarty->assign('invite_code', strtoupper($url[1]));
             } else {
-                $smarty->assign('NOTIFY', lang_get("IncorrectInviteCode"));
+                $smarty->assign('NOTIFY', Language::get("IncorrectInviteCode"));
             }
         }
 

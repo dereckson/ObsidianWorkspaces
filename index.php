@@ -33,23 +33,6 @@ $session = Session::load();
 
 define('THEME', 'bluegray');
 
-require('includes/smarty/Smarty.class.php');
-define('SMARTY_SPL_AUTOLOAD', 1);
-
-$smarty = new Smarty();
-$current_dir = dirname(__FILE__);
-$smarty->template_dir = $current_dir . '/skins/' . THEME;
-
-$smarty->compile_dir = $Config['Content']['Cache'] . '/compiled';
-$smarty->cache_dir = $Config['Content']['Cache'];
-$smarty->config_dir = $current_dir;
-
-$smarty->config_vars['StaticContentURL'] = $Config['StaticContentURL'];
-
-//Loads language files
-initialize_lang();
-lang_load('core.conf');
-
 ////////////////////////////////////////////////////////////////////////////////
 ///
 /// Session and context
@@ -59,7 +42,13 @@ lang_load('core.conf');
 $context = new ApplicationContext();
 $context->session = $session;;
 $context->url = get_current_url_fragments();
-$context->templateEngine = $smarty;
+$context->config = $Config;
+$context->initializeTemplateEngine();
+
+//Loads language files
+$smarty = $context->templateEngine;
+Language::initialize();
+Language::load($context)->configLoad('core.conf');
 
 if (Workspace::is_workspace($context->url[0])) {
     $context->workspace = Workspace::fromCode(array_shift($context->url));

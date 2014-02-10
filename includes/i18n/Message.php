@@ -15,8 +15,6 @@
  * @filesource
  */
 
-define('MESSAGE_FALLBACK_LANG', 'en');
-
 /**
  * Represents a localizable message
  */
@@ -42,7 +40,7 @@ class Message {
             }
         } elseif (is_string($expression)) {
             $this->localizations = [
-                MESSAGE_FALLBACK_LANG => $expression
+                Language::FALLBACK => $expression
             ];
         } else {
             throw new Exception("Expression must be a string or a l10n array");
@@ -60,8 +58,8 @@ class Message {
         }
 
         if (!defined('LANG') || !array_key_exists(LANG, $this->localizations)) {
-            if (array_key_exists(MESSAGE_FALLBACK_LANG, $this->localizations)) {
-                return $this->localizations[MESSAGE_FALLBACK_LANG];
+            if (array_key_exists(Language::FALLBACK, $this->localizations)) {
+                return $this->localizations[Language::FALLBACK];
             }
             return array_values($this->localizations)[0];
         }

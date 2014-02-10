@@ -70,7 +70,7 @@ class DocumentsApplication extends Application {
 
     public static function getDocumentType ($type) {
         $key = 'DocumentType' . ucfirst(strtolower($type));
-        return lang_get($key);
+        return Language::get($key);
     }
 
     /**

@@ -74,6 +74,7 @@ function obsidian_autoload ($name) {
     if ($name == 'Controller') { require $dir . '/includes/controller/Controller.php'; return true; }
     if ($name == 'RunnableWithContext') { require $dir . '/includes/controller/RunnableWithContext.php'; return true; }
 
+    if ($name == 'Language') { require $dir . '/includes/i18n/Language.php'; return true; }
     if ($name == 'Message') { require $dir . '/includes/i18n/Message.php'; return true; }
     if ($name == 'TextFileMessage') { require $dir . '/includes/i18n/TextFileMessage.php'; return true; }
 

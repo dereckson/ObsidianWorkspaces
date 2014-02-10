@@ -50,7 +50,7 @@ class Disclaimer {
             }
         } catch (Exception $ex) {
             $instance->title = ucfirst($id);
-            $instance->text = lang_get('NoSuchDisclaimer');
+            $instance->text = Language::get('NoSuchDisclaimer');
         }
 
         return $instance;

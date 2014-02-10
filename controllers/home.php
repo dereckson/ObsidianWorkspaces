@@ -41,7 +41,7 @@ class HomepageController extends Controller {
             switch (count($workspaces)) {
                 case 0:
                     //No workspace error message
-                    $smarty->assign('PAGE_TITLE', lang_get("Home"));
+                    $smarty->assign('PAGE_TITLE', Language::get("Home"));
                     $template = "home_noworkspace.tpl";
                     break;
 
@@ -54,7 +54,7 @@ class HomepageController extends Controller {
 
                 default:
                     //Select workspace template
-                    $smarty->assign('PAGE_TITLE', lang_get("PickWorkspace"));
+                    $smarty->assign('PAGE_TITLE', Language::get("PickWorkspace"));
                     $template = "home_pickworkspace.tpl";
             }
         }
