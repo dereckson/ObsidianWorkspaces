@@ -37,7 +37,7 @@ class FilesCollectionTest extends PHPUnit_Framework_TestCase {
         return [
             'DocumentStorage' => [
                 'Type' => 'Files',
-                'Path' => '/tmp/obsidiancollections'
+                'Path' => UNITTESTING_FILESCOLLECTION_PATH
             ]
         ];
     }
@@ -81,17 +81,21 @@ class FilesCollectionTest extends PHPUnit_Framework_TestCase {
         global $Config;
         $Config = self::getConfig();
 
+        $expectedPath = UNITTESTING_FILESCOLLECTION_PATH
+                      . DIRECTORY_SEPARATOR
+                      . 'quux';
+
         $this->assertEquals(
-            '/tmp/obsidiancollections/quux',
+            $expectedPath,
             FilesCollection::getCollectionPath('quux')
         );
 
-        $this->assertFileExists(
-            '/tmp/obsidiancollections/quux'
-        );
+        $this->assertFileExists($expectedPath);
 
+        $expectedPath .= DIRECTORY_SEPARATOR
+                      .  'foo.json';
         $this->assertEquals(
-            '/tmp/obsidiancollections/quux/foo.json',
+            $expectedPath,
             $this->collection->getDocumentPath('foo')
         );
     }
@@ -170,7 +174,7 @@ class FilesCollectionTest extends PHPUnit_Framework_TestCase {
         );
 
         //Cleans up, so CRUD test starts with an empty collection
-        unlink('/tmp/obsidiancollections/quux/greenBook.json');
+        unlink(UNITTESTING_FILESCOLLECTION_PATH . '/quux/greenBook.json');
     }
 
     ///
@@ -182,7 +186,7 @@ class FilesCollectionTest extends PHPUnit_Framework_TestCase {
      */
     public static function tearDownAfterClass () {
         //Removes created directories
-        rmdir('/tmp/obsidiancollections/quux');
-        rmdir('/tmp/obsidiancollections');}
+        rmdir(UNITTESTING_FILESCOLLECTION_PATH . '/quux');
+        rmdir(UNITTESTING_FILESCOLLECTION_PATH);}
 
 }

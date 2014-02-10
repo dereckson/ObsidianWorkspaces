@@ -32,13 +32,13 @@ class MongoDBCollectionTest extends PHPUnit_Framework_TestCase {
      *
      * @return array The configuration block
      */
-    public function getConfig () {
+    public static function getConfig () {
         return [
             'DocumentStorage' => [
                 'Type' => 'MongoDB',
-                'Host' => 'localhost',
-                'Port' => 27017,
-                'SSL' => []
+                'Host' => UNITTESTING_MONGODB_HOST,
+                'Port' => UNITTESTING_MONGODB_PORT,
+                'SSL' => UNITTESTING_MONGODB_SSL ? [] : null
             ]
         ];
     }
@@ -51,10 +51,10 @@ class MongoDBCollectionTest extends PHPUnit_Framework_TestCase {
     public function __construct (string $name = null) {
         parent::__construct($name);
 
-        $this->initializeDocuments();
-
         global $Config;
         $Config = static::getConfig();
+
+        $this->initializeDocuments();
 
         $this->collection = new MongoDBCollection('quux');
     }

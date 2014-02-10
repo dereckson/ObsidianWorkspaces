@@ -94,7 +94,7 @@ class MongoDBCollection extends Collection {
         global $Config;
 
         $connectionString  = self::getConnectionString();
-        if (isset($Config['DocumentStorage']) && array_key_exists('SSL', $Config['DocumentStorage'])) {
+        if (isset($Config['DocumentStorage']) && array_key_exists('SSL', $Config['DocumentStorage']) && $Config['DocumentStorage']['SSL'] !== null) {
             $context = stream_context_create(
                 [ 'ssl' => $Config['DocumentStorage']['SSL'] ]
             );

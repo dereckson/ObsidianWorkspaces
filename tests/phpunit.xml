@@ -1,0 +1,25 @@
+<phpunit
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="http://schema.phpunit.de/3.7/phpunit.xsd"
+
+    forceCoversAnnotation="true"
+>
+    <php>
+        <!-- MySQL -->
+        <const name="UNITTESTING_MYSQL_HOST" value="localhost" />
+        <const name="UNITTESTING_MYSQL_USERNAME" value="root" />
+        <const name="UNITTESTING_MYSQL_PASSWORD" value="" />
+        <const name="UNITTESTING_MYSQL_DATABASE" value="obsidian" />
+
+        <!-- SQLite -->
+        <const name="UNITTESTING_SQLITE_FILE" value="/tmp/collections.db" />
+
+        <!-- MongoDB -->
+        <const name="UNITTESTING_MONGODB_HOST" value="localhost" />
+        <const name="UNITTESTING_MONGODB_PORT" value="27017" />
+        <const name="UNITTESTING_MONGODB_SSL" value="true" />
+
+        <!-- FilesCollection -->
+        <const name="UNITTESTING_FILESCOLLECTION_PATH" value="/tmp/obsidiancollections" />
+    </php>
+</phpunit>
