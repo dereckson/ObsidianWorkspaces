@@ -25,7 +25,9 @@
 // Prepares the page
 //
 
-switch ($context->url[0]) {
+$urlFragment = count($context->url) ? $context->url[0] : '';
+
+switch ($urlFragment) {
     case 'invite':
         echo "You have been invited to use Obsidian. This feature is currently disabled. Please ask the person who invited you to contact our support desk to create your account.";
         /* Code from Zed
@@ -134,6 +136,7 @@ switch ($context->url[0]) {
 
             $authenticationMethodsTemplateInformation = [];
             $authenticationMethodsLoginErrors = [];
+            $authenticationMethodsNav = [];
             foreach ($context->workspace->configuration->authenticationMethods as $method) {
                 $authenticationMethodsNav[] = [
                     'text' => (string)$method->loginMessage,
@@ -144,7 +147,9 @@ switch ($context->url[0]) {
                 }
             }
 
-            $smarty->assign('ExternalAuthenticationMethodsNav', $authenticationMethodsNav);
+            if (count($authenticationMethodsNav)) {
+                $smarty->assign('ExternalAuthenticationMethodsNav', $authenticationMethodsNav);
+            }
             $smarty->assign('ExternalLoginErrors', $authenticationMethodsLoginErrors);
             $smarty->assign('WorkspaceName', $context->workspace->name);
         }
