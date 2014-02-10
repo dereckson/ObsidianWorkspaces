@@ -27,12 +27,12 @@ if (!file_exists($file)) {
 }
 
 //Header
-$smarty->assign('controller_custom_nav', 'nav_help.tpl');
+$context->templateEngine->assign('controller_custom_nav', 'nav_help.tpl');
 HeaderController::run($context);
 
 //Help page
-$smarty->assign('help_file', $file);
-$smarty->display('help.tpl');
+$context->templateEngine->assign('help_file', $file);
+$context->templateEngine->display('help.tpl');
 
 //Footer
 FooterController::run($context);

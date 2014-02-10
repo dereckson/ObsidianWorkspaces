@@ -46,7 +46,6 @@ $context->config = $Config;
 $context->initializeTemplateEngine();
 
 //Loads language files
-$smarty = $context->templateEngine;
 Language::initialize();
 Language::load($context)->configLoad('core.conf');
 

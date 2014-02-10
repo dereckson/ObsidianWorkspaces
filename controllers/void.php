@@ -21,7 +21,7 @@
 //
 
 //Serves header
-$smarty->assign('PAGE_TITLE', $title);
+$context->templateEngine->assign('PAGE_TITLE', $title);
 HeaderController::run($context);
 
 //Doesn't serve any content;

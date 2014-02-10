@@ -23,11 +23,11 @@ $template = 'reports_view';
 //
 
 //Serves header
-$smarty->assign('PAGE_TITLE', "Reports");
+$context->templateEngine->assign('PAGE_TITLE', "Reports");
 HeaderController::run($context);
 
 //Servers controller content
-$smarty->display("$template.tpl");
+$context->templateEngine->display("$template.tpl");
 
 //Serves footer
 FooterController::run($context);

@@ -125,6 +125,7 @@ switch ($url[0]) {
         break;
 
     default:
+        $smarty = $context->templateEngine;
         //Login
         if ($context->workspace == null) {
             $useInternalLogin = true;
