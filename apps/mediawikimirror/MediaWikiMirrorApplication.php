@@ -31,7 +31,13 @@ class MediaWikiMirrorApplication extends Application {
             "/index.php?action=render&title=". $this->context->configuration->page;
     }
 
-    public function fix_links ($content) {
+    /**
+     * Fixes links in the content
+     *
+     * @param string $content The page content
+     * @return string The page content, with updated links
+     */
+    public function fixLinks ($content) {
         $fullUrl = $this->context->configuration->url[0] . $this->context->configuration->url[1];
         $content = str_replace('<a href="' . $this->context->configuration->url[1], '<a href="' . $fullUrl, $content);
         $content = str_replace(' src="' . $this->context->configuration->url[1], ' src="' . $fullUrl, $content);
@@ -44,23 +50,19 @@ class MediaWikiMirrorApplication extends Application {
     public function handleRequest () {
         $smarty = $this->context->templateEngine;
 
+        //Gets content
+        $url = $this->getRenderUrl();
+        $title = $this->context->configuration->page;
+        $content = file_get_contents($url);
+        $content = $this->fixLinks($content);
+
         //Serves header
         $smarty->assign('PAGE_TITLE', $title);
         HeaderController::run($this->context);
 
-        //Output Hello world
-        $url = $this->getRenderUrl();
-        echo "
-<style>
-.mw-editsection {
-    display: block;
-    float: right;
-    font-size: 12pt;
-}
-</style>";
-        $content = file_get_contents($url);
-        $content = $this->fix_links($content);
-        echo $content;
+        //Serves body
+        $smarty->assign('Content', $content);
+        $smarty->display('apps/mediawikimirror/page.tpl');
 
         //Serves footer
         FooterController::run($this->context);
