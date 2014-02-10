@@ -29,7 +29,7 @@ class HeaderController extends Controller {
 
         //HTML output
         $smarty = $this->context->templateEngine;
-        $smarty->assign('current_username', $context->user->name);
+        $smarty->assign('current_username', $this->context->user->name);
         $smarty->assign('workspaces', $workspaces);
         $smarty->assign('workspaces_count', count($workspaces));
 

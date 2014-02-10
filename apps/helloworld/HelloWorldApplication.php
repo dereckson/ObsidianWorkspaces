@@ -35,7 +35,7 @@ class HelloWorldApplication extends Application {
         $smarty = $this->context->templateEngine;
 
         //Serves header
-        $smarty->assign('PAGE_TITLE', $title);
+        $smarty->assign('PAGE_TITLE', 'Hello world from Obsidian');
         HeaderController::run($this->context);
 
         //Output Hello world

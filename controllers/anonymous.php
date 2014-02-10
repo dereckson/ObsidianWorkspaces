@@ -25,7 +25,7 @@
 // Prepares the page
 //
 
-switch ($url[0]) {
+switch ($context->url[0]) {
     case 'invite':
         echo "You have been invited to use Obsidian. This feature is currently disabled. Please ask the person who invited you to contact our support desk to create your account.";
         /* Code from Zed
@@ -161,7 +161,9 @@ switch ($url[0]) {
             $action  = $context->workspace ? get_url($context->workspace->code) . '/' : get_url();
             $action .= implode('/', $context->url);
 
-            $smarty->assign('LoginError', $LoginError);
+            if (isset($LoginError)) {
+                $smarty->assign('LoginError', $LoginError);
+            }
             $smarty->assign('PostURL', $action);
             $smarty->assign('PrintInternalLogin', true);
         } else {

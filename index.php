@@ -65,7 +65,8 @@ if ($context->user->id == ANONYMOUS_USER) {
     exit;
 }
 
-switch ($controller = $context->url[0]) {
+$controller = count($context->url) > 0 ? $context->url[0] : '';
+switch ($controller) {
     case '':
         //Calls homepage controller
         HomepageController::run($context);

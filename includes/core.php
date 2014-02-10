@@ -22,8 +22,8 @@
 ///                                                                          ///
 ////////////////////////////////////////////////////////////////////////////////
 
-//Reports all errors, help notices
-error_reporting(E_ALL & ~E_NOTICE);
+//Reports all errors
+error_reporting(E_ALL);
 
 //Loads global functions
 include_once("GlobalFunctions.php"); //Global functions

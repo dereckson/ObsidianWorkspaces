@@ -19,7 +19,9 @@
 //
 // HTML output
 //
-$file = $Config['Content']['Help'] . '/' . ($context->url[1] ? $context->url[1] : 'index') . '.html';
+$file  = $Config['Content']['Help'] . DIRECTORY_SEPARATOR;
+$file .= (count($context->url) > 1) ? $context->url[1] : 'index';
+$file .= '.html';
 
 if (!file_exists($file)) {
     ErrorPageController::show($context, 404);
