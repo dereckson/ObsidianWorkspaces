@@ -6,7 +6,7 @@
  *   \ / |_) , ) | |_/ | | | | \|
  *    ~  ~    ~  ~ ~   ~ ~ ~ ~  ~
  *
- * ObjectDeserializable interface
+ * ObjectDeserializable and ObjectDeserializableWithContext interfaces
  *
  * @package     ObsidianWorkspaces
  * @subpackage  Keruald
