@@ -42,7 +42,7 @@ class AzharProvider extends AuthenticationMethod {
      */
     public function handleRequest () {
         $action = array_key_exists('action', $_GET) ? $_GET['action'] : '';
-        $sessionKey = array_key_exists('sessionKey', $_GET) ? $GET['sessionKey'] : '';
+        $sessionKey = array_key_exists('sessionKey', $_GET) ? $_GET['sessionKey'] : '';
 
         if ($action == "user.login.azhar.initialize") {
             //Redirects user to Azhàr SSO service
