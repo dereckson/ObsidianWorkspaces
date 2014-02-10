@@ -21,7 +21,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-{if $current_workspace}
+{if isset($current_workspace)}
                 <a class="navbar-brand" href="{get_url($current_workspace->code)}">{$current_workspace->name}</a>
 {else}
                 <a class="navbar-brand" href="{get_url()}">{#SiteTitle#}</a>
@@ -61,7 +61,7 @@
 {/if}
                 <!-- Other right navigation actions -->
                 <li>
-{if $current_workspace}
+{if isset($current_workspace)}
                         <a href="{get_url($current_workspace->code)}?action=user.logout">
 {else}
                         <a href="{get_url()}?action=user.logout">
@@ -73,7 +73,7 @@
             </ul>
         </nav>
 
-{if $controller_custom_nav }
+{if isset($controller_custom_nav) }
 {include file=$controller_custom_nav}
 {else}
 {include file='nav_main.tpl'}

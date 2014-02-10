@@ -11,7 +11,7 @@
                             </span>
                         </div>
                     </li>
-{if $current_workspace}
+{if isset($current_workspace)}
                 <li><a href="{get_url($current_workspace->code)}"><i class="fa fa-dashboard fa-fw"></i> {#Home#}</a></li>
 {else}
                 <li><a href="{get_url()}"><i class="fa fa-dashboard fa-fw"></i> {#Home#}</a></li>

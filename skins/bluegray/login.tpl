@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>{#SiteTitle#}{if $WorkspaceName} :: {$WorkspaceName}{/if}</title>
+    <title>{#SiteTitle#}{if isset($WorkspaceName)} :: {$WorkspaceName}{/if}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="{#StaticContentURL#}/css/bootstrap.css" rel="stylesheet">
     <link href="{#StaticContentURL#}/favicon.ico" rel="shorcut icon" type="image/x-icon">
@@ -104,10 +104,10 @@
     </style>
 </head>
 <body>
-    <p id="product">{if $WorkspaceName}<strong>{$WorkspaceName}</strong>{else}{#Product#}{/if}</p>
+    <p id="product">{if isset($WorkspaceName)}<strong>{$WorkspaceName}</strong>{else}{#Product#}{/if}</p>
 
     <div class="container">
-{if $PrintInternalLogin}
+{if isset($PrintInternalLogin)}
         <div class="row">
             <div class="col-md-5 col-md-offset-7">
                 <div class="panel panel-default" id="internal-login-panel">
@@ -119,7 +119,7 @@
                             <label for="username" class="col-sm-3 control-label">
                                 {#Login#}</label>
                             <div class="col-sm-9">
-                                <input name="username" type="text" class="form-control" id="username" value="{$username}" required>
+                                <input name="username" type="text" class="form-control" id="username" value="{if isset($username)}{$username}{/if}" required>
                             </div>
                         </div>
                         <div class="form-group">
@@ -148,7 +148,7 @@
                         </div>
                         </form>
                     </div>
-{if $LoginError}
+{if isset($LoginError)}
                     <div class="panel-footer">
                         <p>{$LoginError}</p>
                         <p><strong>{#LostPassword#}</strong> Contact your CTP support agent.</p>
@@ -158,7 +158,7 @@
             </div>
         </div>
 {/if}
-{if $ExternalAuthenticationMethodsNav}
+{if isset($ExternalAuthenticationMethodsNav)}
         <div class="row">
             <div class="col-md-5 col-md-offset-7">
                 <div class="panel panel-default" id="internal-login-panel">
@@ -171,7 +171,7 @@
 {/foreach}
                         </ul>
                     </div>
-{if $ExternalLoginErrors}
+{if isset($ExternalLoginErrors)})
                     <div class="panel-footer">
 {foreach $ExternalLoginErrors item=externalLoginError}
                         <p>{$externalLoginError}</p>

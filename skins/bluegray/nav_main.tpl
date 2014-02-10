@@ -11,7 +11,7 @@
                             </span>
                         </div>
                     </li>
-{if $current_workspace}
+{if isset($current_workspace)}
                 <li><a href="{get_url($current_workspace->code)}"><i class="fa fa-dashboard fa-fw"></i> {#Home#}</a></li>
 {foreach from=$current_workspace_nav item=nav}
                 <li><a href="{get_url($current_workspace->code, $nav.url)}"><i class="fa {if $nav.icon}fa-{$nav.icon}{else}fa-circle-o{/if} fa-fw"></i> {$nav.link}</a></li>
