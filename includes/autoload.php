@@ -46,6 +46,7 @@ function obsidian_autoload ($name) {
     /// Keruald and Obsidian Workspaces libraries
     ///
 
+    if ($name == 'Events') { require $dir . '/includes/Events.php'; return true; }
     if ($name == 'LoadableWithContext') { require $dir . '/includes/LoadableWithContext.php'; return true; }
     if ($name == 'ObjectDeserializable') { require $dir . '/includes/ObjectDeserializable.php'; return true; }
     if ($name == 'ObjectDeserializableWithContext') { require $dir . '/includes/ObjectDeserializable.php'; return true; }
@@ -73,6 +74,12 @@ function obsidian_autoload ($name) {
     if ($name == 'Context') { require $dir . '/includes/controller/Context.php'; return true; }
     if ($name == 'Controller') { require $dir . '/includes/controller/Controller.php'; return true; }
     if ($name == 'RunnableWithContext') { require $dir . '/includes/controller/RunnableWithContext.php'; return true; }
+
+    if ($name == 'Database') { require $dir . '/includes/database/Database.php'; return true; }
+    if ($name == 'DatabaseException') { require $dir . '/includes/database/DatabaseException.php'; return true; }
+    if ($name == 'DatabaseResult') { require $dir . '/includes/database/DatabaseResult.php'; return true; }
+    if ($name == 'MySQLDatabase') { require $dir . '/includes/database/MySQLDatabase.php'; return true; }
+    if ($name == 'MySQLDatabaseResult') { require $dir . '/includes/database/MySQLDatabaseResult.php'; return true; }
 
     if ($name == 'Language') { require $dir . '/includes/i18n/Language.php'; return true; }
     if ($name == 'Message') { require $dir . '/includes/i18n/Message.php'; return true; }
