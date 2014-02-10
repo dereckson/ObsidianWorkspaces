@@ -46,6 +46,7 @@ class MongoDBCollectionIterator implements Iterator {
 
     /**
      * Returns a collection document from the current result
+     *
      * @return CollectionDocument the current result's document
      */
     public function current () {
@@ -56,6 +57,7 @@ class MongoDBCollectionIterator implements Iterator {
 
     /**
      * Returns the key of the current element
+     *
      * @return string the current result's _id
      */
     public function key () {
@@ -78,6 +80,7 @@ class MongoDBCollectionIterator implements Iterator {
 
     /**
      * Checks if current position is valid
+     *
      * @return boolean true if the current position is valid ; otherwise, false
      */
     public function valid () {
