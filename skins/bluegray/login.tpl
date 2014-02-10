@@ -171,7 +171,7 @@
 {/foreach}
                         </ul>
                     </div>
-{if isset($ExternalLoginErrors)})
+{if isset($ExternalLoginErrors)}
                     <div class="panel-footer">
 {foreach $ExternalLoginErrors item=externalLoginError}
                         <p>{$externalLoginError}</p>
