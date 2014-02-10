@@ -70,15 +70,16 @@ class Context {
 
     /**
      * Initializes the template engine
+     *
+     * @param string $theme the theme for the templates
      */
-    public function initializeTemplateEngine () {
+    public function initializeTemplateEngine ($theme) {
         require('includes/smarty/Smarty.class.php');
-        define('SMARTY_SPL_AUTOLOAD', 1);
 
         $smarty = new Smarty();
 
         $current_dir = static::getApplicationRootDirectory();
-        $smarty->template_dir = $current_dir . '/skins/' . THEME;
+        $smarty->template_dir = "$current_dir/skins/$theme";
         $smarty->cache_dir = $this->config['Content']['Cache'];
         $smarty->compile_dir = $smarty->cache_dir . '/compiled';
         $smarty->config_dir = $current_dir;

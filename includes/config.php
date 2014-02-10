@@ -62,6 +62,9 @@ $Config['SecretKey'] = 'Replace this by a secret key, like AdYN}"p/+D.U]M^MC&-Q~
 //When reading files, buffer size
 define('BUFFER_SIZE', 4096);
 
+//Site theme
+$Config['Theme'] = 'bluegray';
+
 ////////////////////////////////////////////////////////////////////////////////
 ///                                                                          ///
 /// III. Script URLs                                                         ///

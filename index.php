@@ -28,13 +28,6 @@ $session = Session::load();
 
 ////////////////////////////////////////////////////////////////////////////////
 ///
-/// Template/L10n engine
-///
-
-define('THEME', 'bluegray');
-
-////////////////////////////////////////////////////////////////////////////////
-///
 /// Session and context
 ///
 
@@ -43,7 +36,7 @@ $context = new ApplicationContext();
 $context->session = $session;;
 $context->url = get_current_url_fragments();
 $context->config = $Config;
-$context->initializeTemplateEngine();
+$context->initializeTemplateEngine($context->config['Theme']);
 
 //Loads language files
 Language::initialize();
