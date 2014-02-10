@@ -46,6 +46,7 @@ function obsidian_autoload ($name) {
     /// Keruald and Obsidian Workspaces libraries
     ///
 
+    if ($name == 'LoadableWithContext') { require $dir . '/includes/LoadableWithContext.php'; return true; }
     if ($name == 'ObjectDeserializable') { require $dir . '/includes/ObjectDeserializable.php'; return true; }
     if ($name == 'ObjectDeserializableWithContext') { require $dir . '/includes/ObjectDeserializable.php'; return true; }
 
