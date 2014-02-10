@@ -132,7 +132,7 @@ class Language implements LoadableWithContext {
             //If it matches, returns first result
             $intersect = array_intersect($userlangs, $langs);
             if (count($intersect)) {
-                return $intersect[0];
+                return array_shift($intersect);
             }
 
             //Now it's okay with Opera and Firefox but Internet Explorer will
@@ -144,7 +144,7 @@ class Language implements LoadableWithContext {
             }
             $intersect = array_intersect($userlangs2, $langs);
             if (count($intersect)) {
-                return $intersect[0];
+                return array_shift($intersect);
             }
         }
     }
