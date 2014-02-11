@@ -26,7 +26,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 //SQL configuration
-$Config['sql']['product'] = 'MySQL';    //Only MySQL is currently implemented
+$Config['sql']['engine'] = 'MySQL';    //Only MySQL is currently implemented
 $Config['sql']['host'] = 'localhost';
 $Config['sql']['username'] = 'obsidian';
 $Config['sql']['password'] = 'obsidian';

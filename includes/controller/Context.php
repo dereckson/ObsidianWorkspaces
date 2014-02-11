@@ -27,6 +27,11 @@ class Context {
     public $workspace;
 
     /**
+     * @var Database the database instance
+     */
+    public $db;
+
+    /**
      * @var array the configuration
      */
     public $config;

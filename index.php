@@ -24,24 +24,19 @@
 //Keruald and Obsidian Workspaces libraries
 include('includes/core.php');
 
-$session = Session::load();
-
-////////////////////////////////////////////////////////////////////////////////
-///
-/// Session and context
-///
-
 //Prepares the site context
-$context = new ApplicationContext();
-$context->session = $session;;
-$context->url = get_current_url_fragments();
+$context = new Context();
 $context->config = $Config;
+$context->db = $db = Database::load($context);
+$context->session = Session::load();
+$context->url = get_current_url_fragments();
 $context->initializeTemplateEngine($context->config['Theme']);
 
 //Loads language files
 Language::initialize();
 Language::load($context)->configLoad('core.conf');
 
+//Loads workspace
 if (Workspace::is_workspace($context->url[0])) {
     $context->workspace = Workspace::fromCode(array_shift($context->url));
     $context->workspace->loadConfiguration($context);
