@@ -34,11 +34,19 @@ class HeaderController extends Controller {
         $smarty->assign('workspaces_count', count($workspaces));
 
         if ($this->context->workspace !== null) {
-            $smarty->assign('current_workspace', $this->context->workspace);
+            $workspace = $this->context->workspace;
+
+            $smarty->assign('current_workspace', $workspace);
+
+            //Gets custom header
+            if ($workspace->configuration->header != '') {
+                $customHeader = file_get_contents($workspace->configuration->header);
+                $smarty->assign('custom_workspace_header', $customHeader);
+            }
 
             //Gets navigation
             $nav = [];
-            $binds = $this->context->workspace->configuration->getControllersBinds();
+            $binds = $workspace->configuration->getControllersBinds();
             foreach ($binds as $applicationConfig) {
                 if ($applicationConfig->nav !== null) {
                     $nav[] = [

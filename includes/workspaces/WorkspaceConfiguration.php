@@ -49,6 +49,16 @@ class WorkspaceConfiguration implements ObjectDeserializableWithContext {
     public $allowInternalAuthentication = true;
 
     /**
+     * @var string The overall custom header to prepend to the header site
+     */
+    public $header = '';
+
+    /**
+     * @var string The overall custom footer to append to the footer site
+     */
+    public $footer = '';
+
+    /**
      * Get applications controllers binds for this workspace
      */
     public function getControllersBinds () {
@@ -151,6 +161,17 @@ class WorkspaceConfiguration implements ObjectDeserializableWithContext {
                 $instance->collections[$name] = $type;
             }
         }
+
+        //Header string
+        if (property_exists($data, 'header')) {
+            $instance->header = $data->header;
+        }
+
+        //Footer string
+        if (property_exists($data, 'footer')) {
+            $instance->footer = $data->footer;
+        }
+
         return $instance;
     }
 

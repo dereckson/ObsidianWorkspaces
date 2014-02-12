@@ -25,7 +25,24 @@ class FooterController extends Controller {
      * Handles controller request
      */
     public function handleRequest () {
-        $this->context->templateEngine->display('footer.tpl');
+        $smarty = $this->context->templateEngine;
+
+        if ($this->context->workspace !== null) {
+            $workspace = $this->context->workspace;
+
+            //Gets custom footer
+            if ($workspace->configuration->footer != '') {
+                try {
+                    $customFooter = file_get_contents($workspace->configuration->footer);
+                    $smarty->assign('custom_workspace_footer', $customFooter);
+                } catch (ErrorException $ex) {
+                    //TODO: log the $ex->getMessage() or a generic message we can't open $workspace->configuration->footer
+                    //The error code is easy to recover: HTTP request failed! HTTP/1.1 404 Not Found
+                }
+            }
+        }
+
+        $smarty->display('footer.tpl');
     }
 
 }

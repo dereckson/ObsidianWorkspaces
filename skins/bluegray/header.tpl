@@ -12,6 +12,11 @@
 </head>
 <body>
     <a href="#content" class="sr-only">{#SkipNavigation#}</a>
+{if isset($custom_workspace_header)}
+
+    <!-- Workspace header-->
+{$custom_workspace_header}
+{/if}
     <div id="wrapper">
         <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
             <div class="navbar-header">
