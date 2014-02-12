@@ -217,7 +217,11 @@ class Language implements LoadableWithContext {
      * @return string The value in the configuration file
      */
     private function getConfigVar ($key) {
-        $configValue = $this->templateEngine->config_vars[$key];
-        return $configValue ? $configValue : "#$key#";
+        if (array_key_exists($key, $this->templateEngine->config_vars)) {
+            return $this->templateEngine->config_vars[$key];
+        }
+
+        trigger_error("The l10n key '$key' doesn't exist.", E_USER_NOTICE);
+        return "#$key#";
     }
 }
