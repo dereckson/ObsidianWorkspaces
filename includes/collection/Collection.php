@@ -18,7 +18,7 @@
 /**
  * Collection class
  *
- * This abstract class repreesnts a collection of documents
+ * This abstract class represents a collection of documents
  */
 abstract class Collection {
     ///

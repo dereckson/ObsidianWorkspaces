@@ -18,7 +18,7 @@
 /**
  * Files Collection class
  *
- * This class repreesnts a collection of documents, stored on the filesystem.
+ * This class represents a collection of documents, stored on the filesystem.
  */
 class FilesCollection extends Collection {
     ///

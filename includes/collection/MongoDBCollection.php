@@ -22,7 +22,7 @@ define('MONGO_DEFAULT_DATABASE', 'obsidian');
 /**
  * MongoDB Collection class
  *
- * This class repreesnts a collection of documents, stored on MongoDB.
+ * This class represents a collection of documents, stored on MongoDB.
  */
 class MongoDBCollection extends Collection {
     /**

@@ -18,7 +18,7 @@
  /**
  * Collection document class
  *
- * This class repreesnts a document, inside a collection.
+ * This class represents a document, inside a collection.
  */
 class CollectionDocument implements JsonSerializable, ObjectDeserializable {
     /**
