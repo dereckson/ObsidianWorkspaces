@@ -115,6 +115,7 @@ class WorkspaceConfiguration implements ObjectDeserializableWithContext {
             }
         }
 
+        //Login array
         if (property_exists($data, 'login')) {
             $instance->allowInternalAuthentication = false;
             foreach ($data->login as $authData) {
@@ -137,10 +138,12 @@ class WorkspaceConfiguration implements ObjectDeserializableWithContext {
             }
         }
 
+        //Disclaimers array
         if (property_exists($data, 'disclaimers')) {
             $instance->disclaimers = $data->disclaimers;
         }
 
+        //Collections array
         if (property_exists($data, 'collections')) {
             foreach ($data->collections as $collection) {
                 if (!property_exists($collection, 'name')) {
