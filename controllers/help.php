@@ -19,6 +19,7 @@
 //
 // HTML output
 //
+
 $file  = $Config['Content']['Help'] . DIRECTORY_SEPARATOR;
 $file .= (count($context->url) > 1) ? $context->url[1] : 'index';
 $file .= '.html';
@@ -29,6 +30,7 @@ if (!file_exists($file)) {
 }
 
 //Header
+$context->templateEngine->assign('PAGE_TITLE', Language::get('Help'));
 $context->templateEngine->assign('controller_custom_nav', 'nav_help.tpl');
 HeaderController::run($context);
 
