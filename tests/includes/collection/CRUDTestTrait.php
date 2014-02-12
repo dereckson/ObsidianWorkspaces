@@ -67,6 +67,17 @@ trait CRUDTestTrait {
     }
 
     /**
+     * Tests if the constructor correctly initializes the id property
+     *
+     * @covers ::_construct()
+     */
+    public function testId () {
+        $this->assertEquals('quux', $this->collection->id, "The collection constructor should have initialized the Collection::id property.");
+    }
+
+    /**
+     * Tests CRUD methods
+     *
      * @covers ::add
      * @covers ::exists
      * @covers ::update
@@ -90,12 +101,12 @@ trait CRUDTestTrait {
         $this->collection->add($this->redBook);
         $this->assertNotEmpty(
             $this->redBook->id,
-            "After a document has been added, the is has been deleted."
+            "After a document has been added, the id has been deleted."
         );
         $this->assertEquals(
             'redBook',
             $this->redBook->id,
-            "After a document has been added, the is has been modified."
+            "After a document has been added, the id has been modified."
         );
 
         //:ccount
@@ -121,8 +132,7 @@ trait CRUDTestTrait {
         );
 
         //::count
-        $this->assertEquals(1, $this->collection->count()
-        );
+        $this->assertEquals(1, $this->collection->count());
 
         //::get - when our collection uses the generic CollectionDocument class
         $newDocument = $this->collection->get($this->redBook->id);
@@ -189,8 +199,12 @@ trait CRUDTestTrait {
                     $this->assertEquals('Iain M. Banks', $document->author);
                     break;
 
+                case '':
+                    $this->fail("An object without id has been returned by the getAll method.");
+                    break;
+
                 default:
-                    $this->fail('A document with an id nor redBook, the blueBook generated id has been returned.');
+                    $this->fail("A document with an id nor 'redBook', nor the blueBook generated id ('{$this->blueBook->id}') has been returned: $document->id.");
             }
             $count++;
         }

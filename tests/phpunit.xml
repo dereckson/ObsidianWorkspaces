@@ -10,6 +10,7 @@
         <const name="UNITTESTING_MYSQL_USERNAME" value="root" />
         <const name="UNITTESTING_MYSQL_PASSWORD" value="" />
         <const name="UNITTESTING_MYSQL_DATABASE" value="obsidian" />
+        <const name="UNITTESTING_MYSQL_TABLE" value="collections_unittesting" />
 
         <!-- SQLite -->
         <const name="UNITTESTING_SQLITE_FILE" value="/tmp/collections.db" />

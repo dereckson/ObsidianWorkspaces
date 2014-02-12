@@ -70,6 +70,9 @@ function obsidian_autoload ($name) {
     if ($name == 'FilesCollection') { require $dir . '/includes/collection/FilesCollection.php'; return true; }
     if ($name == 'MongoDBCollection') { require $dir . '/includes/collection/MongoDBCollection.php'; return true; }
     if ($name == 'MongoDBCollectionIterator') { require $dir . '/includes/collection/MongoDBCollectionIterator.php'; return true; }
+    if ($name == 'MySQLCollection') { require $dir . '/includes/collection/MySQLCollection.php'; return true; }
+    if ($name == 'SQLiteCollection') { require $dir . '/includes/collection/SQLiteCollection.php'; return true; }
+    if ($name == 'SQLCollection') { require $dir . '/includes/collection/SQLCollection.php'; return true; }
 
     if ($name == 'Context') { require $dir . '/includes/controller/Context.php'; return true; }
     if ($name == 'Controller') { require $dir . '/includes/controller/Controller.php'; return true; }
