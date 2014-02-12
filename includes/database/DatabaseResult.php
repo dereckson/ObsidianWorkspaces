@@ -16,6 +16,9 @@
  *
  */
 
+/**
+ * Represents a database result
+ */
 abstract class DatabaseResult implements IteratorAggregate {
     ///
     /// The methods to implement
@@ -32,7 +35,7 @@ abstract class DatabaseResult implements IteratorAggregate {
      * Fetches a row of the result
      *
      * @param DatabaseResult $result The query result
-     * @return array An associative array with the databae result
+     * @return array An associative array with the database result
      */
     public abstract function fetchRow ();
 }

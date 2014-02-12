@@ -26,6 +26,11 @@ class MySQLDatabaseResult extends DatabaseResult {
      */
     private $result;
 
+    /**
+     * @var int The type of result to return
+     */
+    private $resultType;
+
 
     ///
     /// Constructor
@@ -34,9 +39,11 @@ class MySQLDatabaseResult extends DatabaseResult {
      * Initializes a new instance of the MySQLDatabaseResult class
      *
      * @param resource $result the resource to the MySQL result
+     * @param int $resultType The result type (MYSQL_ASSOC, MYSQL_NUM, MYSQL_BOTH)
      */
-    public function MySQLDatabaseResult ($result) {
+    public function MySQLDatabaseResult ($result, $resultType = MYSQL_BOTH) {
         $this->result = $result;
+        $this->resultType = $resultType;
     }
 
     ///
@@ -59,7 +66,7 @@ class MySQLDatabaseResult extends DatabaseResult {
      * @return array An associative array with the databae result
      */
     public function fetchRow () {
-        return mysql_fetch_array($this->result);
+        return mysql_fetch_array($this->result, $this->resultType);
     }
 
     ///

@@ -74,13 +74,28 @@ class MySQLDatabase extends Database {
      * Executes a query
      *
      * @param string $query The query to execute
+     * @param int $resultType The result type (MYSQL_ASSOC, MYSQL_NUM, MYSQL_BOTH)
      * @return DatabaseResult The query result
      */
-    public function query ($query) {
-        if ($result = mysql_query($query, $this->id)) {
-            return new MySQLDatabaseResult($result);
+    public function query ($query, $resultType = MYSQL_BOTH) {
+        $result = mysql_query($query, $this->id);
+        if ($result) {
+            if (is_resource($result)) {
+                return new MySQLDatabaseResult($result, $resultType);
+            }
+            return new EmptyDatabaseResult();
         }
         $this->onQueryError($query);
+    }
+
+    /**
+     * Fetches a row of the result
+     *
+     * @param DatabaseResult $result The query result
+     * @return array An associative array with the databae result
+     */
+    public function fetchRow (DatabaseResult $result) {
+        return $result->fetchRow();
     }
 
     /**
