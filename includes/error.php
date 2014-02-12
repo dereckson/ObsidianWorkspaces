@@ -28,9 +28,10 @@ define ("SQL_ERROR",      65);
 define ("HACK_ERROR",     99);
 define ("GENERAL_ERROR", 117);
 
-/*
+/**
  * Prints human-readable information about a variable
  * wrapped in a general error and dies
+ *
  * @param mixed $mixed the variable to dump
  */
 function dieprint_r ($var, $title = '') {
@@ -40,8 +41,27 @@ function dieprint_r ($var, $title = '') {
     message_die(GENERAL_ERROR, '<pre>' . print_r($var, true) .'</pre>', $title);
 }
 
-/*
+/**
+ * A callback method for the error handler, which throws exceptions on errors
+ *
+ * @param int $errno the level of the error raised
+ * @param string $errstr the error message
+ * @param string $errfile the filename that the error was raised in
+ * @param int $errline the line number the error was raised at
+ * @param string $errcontext an array that points to the active symbol table at the point the error occurred
+ * @return boolean true when the error has been handled ; otherwise, false, to let the normal error handler continues.
+ */
+function throwExceptionErrorHandler ($errno, $errstr, $errfile, $errline, array $errcontext) {
+    if (error_reporting() === 0) {
+        return false;
+    }
+
+    throw new ErrorException($errstr, 0, $errno, $errfile, $errline);
+}
+
+/**
  * Prints an error message and dies
+ *
  * @param int $code A constant identifying the type of error (SQL_ERROR, HACK_ERROR or GENERAL_ERROR)
  * @param string $text the error description
  * @param string $text the error title

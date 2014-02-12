@@ -22,8 +22,12 @@
 ///                                                                          ///
 ////////////////////////////////////////////////////////////////////////////////
 
-//Reports all errors
+//Errors management
+include_once("error.php");
 error_reporting(E_ALL);
+
+$minorRecoverableErrors = E_NOTICE | E_USER_NOTICE | E_DEPRECATED | E_USER_DEPRECATED;
+set_error_handler('throwExceptionErrorHandler', E_ALL ^ $minorRecoverableErrors);
 
 //Loads global functions
 include_once("GlobalFunctions.php"); //Global functions
@@ -42,6 +46,5 @@ if (isset($_SERVER) && array_key_exists('OBSIDIAN_CONFIG', $_SERVER)) {
 }
 
 //Loads libraries
-include_once("error.php");              //Error management
 include_once("session.php");           //Sessions handler
 include_once("autoload.php");         //Autoloader for needed classes
