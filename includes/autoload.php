@@ -78,6 +78,7 @@ function obsidian_autoload ($name) {
     if ($name == 'Database') { require $dir . '/includes/database/Database.php'; return true; }
     if ($name == 'DatabaseException') { require $dir . '/includes/database/DatabaseException.php'; return true; }
     if ($name == 'DatabaseResult') { require $dir . '/includes/database/DatabaseResult.php'; return true; }
+    if ($name == 'EmptyDatabaseResult') { require $dir . '/includes/database/EmptyDatabaseResult.php'; return true; }
     if ($name == 'MySQLDatabase') { require $dir . '/includes/database/MySQLDatabase.php'; return true; }
     if ($name == 'MySQLDatabaseResult') { require $dir . '/includes/database/MySQLDatabaseResult.php'; return true; }
 
