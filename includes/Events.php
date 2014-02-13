@@ -21,31 +21,6 @@
   */
 class Events {
     /**
-     * Determines whether the specified variable is callable.
-     *
-     * @return boolean If the specified variable is callable, true ; otherwise, false.
-     */
-    public static function isCallableType ($callable) {
-        if (is_string($callable)) {
-            return true;
-        }
-
-        if ($callable instanceof Closure) {
-            return true;
-        }
-
-        if (is_array($callable)) {
-            return
-                count($callable) == 2
-            &&
-                (is_array($callable[0]) || is_object($callable[0]))
-            &&
-                is_string($callable[1])
-            ;
-        }
-    }
-
-    /**
      * Grabs the first exception among specified items.
      *
      * @param Travesable $items The items to check
@@ -69,7 +44,7 @@ class Events {
      */
     public static function call ($callables, $parameters = []) {
         foreach ($callables as $callable) {
-            if (!isCallableType($callable)) {
+            if (!is_callable($callable)) {
                 $ex = static::grabException($parameters);
                 throw new InvalidArgumentException("Callback for this method.", 0, $previousEx);
             }
