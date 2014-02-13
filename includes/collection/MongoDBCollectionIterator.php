@@ -32,7 +32,7 @@ class MongoDBCollectionIterator implements Iterator {
     /**
      * Initializes a new instance of the MongoDBCollectionIterator object
      *
-     * @param MongoDBCollection $collection The collection to itrate
+     * @param MongoDBCollection $collection The collection to iterate
      * @param MongoCursor $cursor The cursor to the results [optional]
      */
     public function __construct (MongoDBCollection $collection, MongoCursor $cursor = null) {
