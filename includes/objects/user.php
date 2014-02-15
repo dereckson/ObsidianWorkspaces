@@ -33,6 +33,11 @@ class User {
      */
     public static $hashtableById = [];
 
+    /**
+     * @var array|null An array of the workspaces the user has access to, each element an instance of the Workspace object. As long as the field hasn't been initialized by get_workspaces, null.
+     */
+    private $workspaces = null;
+
     /*
      * Initializes a new instance
      *
@@ -332,7 +337,10 @@ class User {
      * @return Array A list of workspaces
      */
     public function get_workspaces () {
-        return Workspace::get_user_workspaces($this->id);
+        if ($this->workspaces === null) {
+            $this->workspaces = Workspace::get_user_workspaces($this->id);
+        }
+        return $this->workspaces;
     }
 
     /**

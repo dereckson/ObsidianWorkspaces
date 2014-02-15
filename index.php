@@ -60,6 +60,11 @@ if ($context->user->id == ANONYMOUS_USER) {
     exit;
 }
 
+//If a workspace has been selected, ensures the current logged in user has access to it.
+if ($context->workspace && !$context->workspace->userCanAccess($context->user)) {
+    message_die(HACK_ERROR, "You don't have access to this workspace.", 'Access control');
+}
+
 $controller = count($context->url) > 0 ? $context->url[0] : '';
 switch ($controller) {
     case '':

@@ -127,6 +127,24 @@ class Workspace {
     }
 
     /**
+     * Determines if the specified user has access to the current workspace
+     *
+     * @param User the user to check
+     * @return boolean true if the user has access to the current workspace ; otherwise, false.
+     */
+    public function userCanAccess (User $user) {
+        if ($this->id === false || $this->id === null || $this->id === '') {
+            throw new LogicException("The workspace must has a valid id before to call userCanAccess.");
+        }
+        foreach ($user->get_workspaces() as $workspace) {
+            if ($workspace->id == $this->id) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
      * Loads configuration
      *
      * @param $context The site context
@@ -162,6 +180,7 @@ class Workspace {
                      WHERE p.target_resource_type = 'W' AND
                            p.target_resource_id = w.workspace_id AND
                            p.permission_name = 'accessLevel' AND
+                           p.permission_flag > 0 AND
                            ($clause)";
             if (!$result = $db->sql_query($sql)) {
                 message_die(SQL_ERROR, "Can't get user workspaces", '', __LINE__, __FILE__, $sql);
