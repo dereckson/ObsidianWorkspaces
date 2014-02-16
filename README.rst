@@ -33,7 +33,7 @@ http://phpunit.de/getting-started.html
 To run the tests:
 
     cd tests
-    phpunit .
+    make test
 
 
 Credits for third-party software components
