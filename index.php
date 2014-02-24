@@ -80,14 +80,16 @@ switch ($controller) {
 
     default:
         //Current workspace application controller?
-        $workspaceConfig = $context->workspace->configuration;
-        $applicationConfiguration = NULL;
-        if ($workspaceConfig != NULL && $workspaceConfig->hasControllerBind($controller, $applicationConfiguration)) {
-            //Runs controller
-            $controllerClass = $applicationConfiguration->name;
-            $appContext = ApplicationContext::loadFromContext($context, $applicationConfiguration);
-            $controllerClass::run($appContext);
-            break;
+        if ($context->workspace != null) {
+            $workspaceConfig =  $context->workspace->configuration;
+            $applicationConfiguration = null;
+            if ($workspaceConfig != null && $workspaceConfig->hasControllerBind($controller, $applicationConfiguration)) {
+                //Runs controller
+                $controllerClass = $applicationConfiguration->name;
+                $appContext = ApplicationContext::loadFromContext($context, $applicationConfiguration);
+                $controllerClass::run($appContext);
+                break;
+            }
         }
 
         //Not a workspace, nor a controller toponomy
