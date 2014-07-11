@@ -54,7 +54,7 @@ UI
 --
 
 * The front-end UI is based on SB Admin v2, part of Start Bootstrap, a project
-  maintained by Iron Summit Media Strategies to offerBootstrap-based templates.
+  maintained by Iron Summit Media Strategies to offer Bootstrap-based templates.
   This template is available under Apache License 2.0 license.
 
 * Bootstrap is a CSS responsive framework, licensed under Apache License 2.0.
