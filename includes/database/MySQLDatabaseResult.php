@@ -6,7 +6,7 @@
  *   \ / |_) , ) | |_/ | | | | \|
  *    ~  ~    ~  ~ ~   ~ ~ ~ ~  ~
  *
- * Database base class
+ * Database result for MySQL legacy extension class
  *
  * @package     ObsidianWorkspaces
  * @subpackage  Keruald
