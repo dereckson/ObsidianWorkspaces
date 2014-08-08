@@ -41,7 +41,7 @@ class MySQLDatabaseResult extends DatabaseResult {
      * @param resource $result the resource to the MySQL result
      * @param int $resultType The result type (MYSQL_ASSOC, MYSQL_NUM, MYSQL_BOTH)
      */
-    public function MySQLDatabaseResult ($result, $resultType = MYSQL_BOTH) {
+    public function __construct ($result, $resultType = MYSQL_BOTH) {
         $this->result = $result;
         $this->resultType = $resultType;
     }
