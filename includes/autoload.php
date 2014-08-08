@@ -84,6 +84,8 @@ function obsidian_autoload ($name) {
     if ($name == 'EmptyDatabaseResult') { require $dir . '/includes/database/EmptyDatabaseResult.php'; return true; }
     if ($name == 'MySQLDatabase') { require $dir . '/includes/database/MySQLDatabase.php'; return true; }
     if ($name == 'MySQLDatabaseResult') { require $dir . '/includes/database/MySQLDatabaseResult.php'; return true; }
+    if ($name == 'MySQLiDatabase') { require $dir . '/includes/database/MySQLiDatabase.php'; return true; }
+    if ($name == 'MySQLiDatabaseResult') { require $dir . '/includes/database/MySQLiDatabaseResult.php'; return true; }
 
     if ($name == 'Language') { require $dir . '/includes/i18n/Language.php'; return true; }
     if ($name == 'Message') { require $dir . '/includes/i18n/Message.php'; return true; }
