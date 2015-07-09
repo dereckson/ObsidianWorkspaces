@@ -193,9 +193,10 @@ class WorkspaceConfiguration implements ObjectDeserializableWithContext {
      * Loads a WorkspaceConfiguration instance deserializing a JSON file
      */
     public static function loadFromFile ($file, $context) {
-        return self::loadFromObject(
-            json_decode(file_get_contents($file)),
-            $context
-        );
+        $object = json_decode(file_get_contents($file));
+        if ($object === null) {
+            throw new Exception("Can't parse configuration file: " . json_last_error_msg());
+        }
+        return self::loadFromObject($object, $context);
     }
 }
