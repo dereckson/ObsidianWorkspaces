@@ -37,9 +37,13 @@ Language::initialize();
 Language::load($context)->configLoad('core.conf');
 
 //Loads workspace
-if (Workspace::is_workspace($context->url[0])) {
-    $context->workspace = Workspace::fromCode(array_shift($context->url));
-    $context->workspace->loadConfiguration($context);
+try {
+    if (Workspace::is_workspace($context->url[0])) {
+        $context->workspace = Workspace::fromCode(array_shift($context->url));
+        $context->workspace->loadConfiguration($context);
+    }
+} catch (Exception $ex) {
+    message_die(GENERAL_ERROR, $ex->getMessage(), Language::get('CantLoadWorkspace'));
 }
 
 //Handles login or logout

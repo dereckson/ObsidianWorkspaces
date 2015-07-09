@@ -154,7 +154,8 @@ class Workspace {
 
         $file = $Config['Content']['Workspaces'] . '/' . $this->code . '/workspace.conf';
         if (!file_exists($file)) {
-            throw new Exception("Workspace configuration file doesn't exist");
+            $exceptionMessage = sprintf(Language::get('NotConfiguredWorkspace'), $file);
+            throw new Exception($exceptionMessage);
         }
 
         $this->configuration = WorkspaceConfiguration::loadFromFile($file, $context);
