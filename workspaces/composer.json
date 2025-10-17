@@ -1,0 +1,25 @@
+{
+    "name": "waystone/workspaces",
+    "description": "Core interfaces for Obsidian Workspaces",
+    "type": "project",
+    "require": {
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^12.4",
+        "nasqueron/codestyle": "^0.1.2",
+        "squizlabs/php_codesniffer": "^4.0"
+    },
+    "license": "BSD-2-Clause",
+    "autoload": {
+        "psr-4": {
+            "Waystone\\Workspaces\\": "src/",
+            "Waystone\\Workspaces\\Tests\\": "tests/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Sébastien Santoro",
+            "email": "dereckson@espace-win.org"
+        }
+    ]
+}

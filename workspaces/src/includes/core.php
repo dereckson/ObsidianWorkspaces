@@ -16,6 +16,8 @@
  *
  */
 
+require_once(__DIR__ . "/../../vendor/autoload.php");
+
 ////////////////////////////////////////////////////////////////////////////////
 ///                                                                          ///
 /// Configures PHP and loads site-wide used libraries                        ///
