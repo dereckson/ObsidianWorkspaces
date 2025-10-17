@@ -1,0 +1,257 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://docbook.org/xml/5.0/rng/docbook.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<?xml-model href="http://docbook.org/xml/5.0/rng/docbook.rng" type="application/xml" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<book xmlns="http://docbook.org/ns/docbook"
+    xmlns:xl="http://www.w3.org/1999/xlink" version="5.0">
+    <info>
+        <title>Obsidian Workspaces Handbook</title>
+        <author>
+            <personname>
+                <firstname>Sébastien</firstname>
+                <surname>Santoro</surname>
+            </personname>
+            <email>dereckson@espace-win.org</email>
+        </author>
+    </info>
+    <preface>
+        <title>Preface</title>
+        <sect1>
+            <title>About Obsidian Workspaces</title>
+            <para>Obsidian Workspaces is an modular application and PHP framework to creates intranet, workspaces and collaborative sites.</para>
+            <para>It uses concepts like documents collections, applications and workspaces to allow to create with the minimum of configuration and few development CRUD interfaces and dashboards.</para>
+        </sect1>
+        <sect1>
+            <title>Intended audience</title>
+            <para>The handbook Obsidian Workspaces intended audience is the system administrator, developer or user.</para>
+            <para>It's divided in several parts each targeted to one of these three activities.</para>
+        </sect1>
+    </preface>
+    <part xml:id="administrator-guide" audience="system administrators">
+        <title>Workspaces administrator guide</title>
+        <chapter>
+            <title>Collections</title>
+            <sect1>
+                <title>Collections description</title>
+                <sect2>
+                    <title>A collection is a set of documents</title>
+                    <para>[...]</para>
+                </sect2>
+                <sect2>
+                    <title>A collection could be stored in several ways, and is independant of the storage strategy.</title>
+                    <para>[...]</para>
+                </sect2>
+                <sect2>
+                    <title>Terminology equivalents</title>
+                    <para>The Obsidian Workspaces collection is the equivalent of a SharePoint list. Each collection document could be consided as matching a content type.</para>
+                </sect2>
+            </sect1>
+            <sect1>
+                <title>Configuration</title>
+                <sect2>
+                    <title>Add a collection to a workspace application</title>
+                    <sect3>
+                        <title>Workspace collections block sample</title>
+                        <para>This configuration snippet declares two collection, <emphasis
+                            role="italic">library_books</emphasis> and <emphasis role="italic"
+                                >library_periodics</emphasis>, both using the
+                                <classname>BookDocument</classname> documen
+                            type.<programlisting language="json">"collections": [
+    {
+        "name": "library_books",
+        "documentType": "BookDocument"
+    },
+    {
+        "name": "library_periodics",
+        "documentType": "BookDocument"
+    }
+]</programlisting></para>
+                    </sect3>
+                    <sect3>
+                        <title>Workspace applications block sample</title>
+                        <para>To tell an application to use collections:
+                            <programlisting language="json">
+        {
+            "name": "MyLibraryApplication",
+            [...]
+            "useCollections": {
+                "books": "library_books",
+                "periodics": "library_periodics"
+            }
+        }
+                        </programlisting>
+                        </para>
+                    </sect3>
+                </sect2>
+            </sect1>
+            <sect1>
+                <title>Naming prefix</title>
+                <para>By default, your collection name is automatically prepended by the workspace
+                    code, with a dash as separator.</para>
+                <para>For example, if you define a <emphasis role="italic">books</emphasis>
+                    collection in the workspace <emphasis role="italic">library</emphasis>, the
+                    collection name will be <emphasis role="italic">library-books</emphasis>.</para>
+                <para>If you wish to use a collection accross different workspaces, you need to define the <varname>global</varname> property, and set it as true.</para>
+            </sect1>
+            <sect1>
+                <title>Naming conventions</title>
+                <para>Depending of the storage engine, the collection name could be stored: <itemizedlist>
+                        <listitem>
+                            <para>as the value of a relational database collection_id text
+                                field</para>
+                        </listitem>
+                        <listitem>
+                            <para>as the name of a MongoDB collection</para>
+                        </listitem>
+                        <listitem>
+                            <para>as the name of a filesystem directory</para>
+                        </listitem>
+                    </itemizedlist></para>
+                <para>An efficient naming strategy is to only use A-Z a-z latin non accentuated
+                    letters, 0-9 arab digits, dashes and underscore, and to start the collection
+                    name by a letter. For example <emphasis role="italic">books</emphasis>,
+                        <emphasis role="italic">Books</emphasis>, <emphasis role="italic"
+                        >books-2037</emphasis> are good collection names.</para>
+                <para>But you aren't restricted to adhere to this suggested scheme. Obsidian
+                    supports arbitrary UTF-8 string for collection names, with some extra
+                    limitations according the storage engine you pick.</para>
+                <para>If you wish your collection name to works without issue with every storage
+                    engine, this implies some constraints on the characters you can use to name your collections:<itemizedlist>
+                        <listitem>
+                            <para>The MongoDB restrictions on collections names:
+                                <itemizedlist>
+                                    <listitem>
+                                        <para>it can't contain a <keycap>$</keycap></para>
+                                    </listitem>
+                                    <listitem>
+                                        <para>it can't contain the null (\0) character</para>
+                                    </listitem>
+                                    <listitem>
+                                        <para>it must start by <keycap>_</keycap> or a letter</para>
+                                    </listitem>
+                                    <listitem>
+                                        <para>it can't start with system</para>
+                                    </listitem>
+                                    <listitem>
+                                        <para>the namespace (database name, a dot, and collection
+                                            name) length is limited to 123 bytes (123 ASCII
+                                            characters, but UTF-8 characters could so fill more
+                                            quicker) ; databases name are limited to 63 characters
+                                            and you have to add the workspace code prefix, so try to
+                                            fit in 31 characters. </para>
+                                    </listitem>
+                                </itemizedlist></para>
+                        </listitem>
+                        <listitem>
+                            <para>The filesystem restrictions on collections names:
+                                <itemizedlist>
+                                    <listitem>
+                                        <para>on Windows, collection names are limited to 255
+                                            characters, including the appended workspace
+                                            prefix
+                                            <citation><xref role="bib" linkend="bib.manuals.MSDN.aa365247" endterm="bib.manuals.MSDN.aa365247.abbrev"/></citation>
+                                        </para>
+                                    </listitem>
+                                    <listitem>
+                                        <para>on Windows, for NTFS partitions, control characters
+                                            and / ? &lt; &gt; \ : * | ”  are forbidden; FAT
+                                            furthermore forbids ^ ; names can't end by a space or a
+                                            by a dot</para>
+                                    </listitem>
+                                    <listitem>
+                                        <para>on UNIX, any character could be used, but avoid
+                                            /</para>
+                                    </listitem>
+                                    <listitem>
+                                        <para>on Mac OS X, you can't use the :, it's the legacy Mac
+                                            OS directory separator</para>
+                                    </listitem>
+                                    <listitem>
+                                        <para>it must start by <keycap>_</keycap> or a letter</para>
+                                    </listitem>
+                                    <listitem>
+                                        <para>it can't start with system</para>
+                                    </listitem>
+                                </itemizedlist>
+                            </para>
+                        </listitem>
+                    </itemizedlist></para>
+            </sect1>
+        </chapter>
+    </part>
+    <part xml:id="developer-guide" audience="developers">
+        <title>Developer guide</title>
+        <chapter>
+            <title>Application walkthrough</title>
+            <sect1>
+                <title>Introduction</title>
+                <para>This application were built on the top of the Keruald MVC starter kit, so you can read the following document to have an overview of what happens in the application:
+                    <link xl:href="http://devio.us/~dereckson/software/keruald/Application%20entry%20point%20walkthrough.pdf">Keruald start process — Application entry point walkthrough</link></para>
+                <para>[This is a placeholder for further notes, for example about the configuration files load, and the workspaces configuration file reading workflow]</para>
+            </sect1>
+        </chapter>
+        <chapter>
+            <title>Extend the core</title>
+            <sect1>
+                <title>Create an engine storage</title>
+                <para>[This is a placeholder for further notes to add an engine storage class. Meanwhile, look the existing code in includes/collection folder]</para>
+            </sect1>
+            <sect1>
+                <title>Authentication</title>
+                <sect2>
+                    <title>Create a remote identity provider</title>
+                    <para></para>
+                    <sect3>
+                        <title>Use the remote identity provider</title>
+                        <para>The authentication is scoped by workspace</para>
+                        <para>The workspaces administrator guide describes how to configure an authentication provider.</para>
+                    </sect3>
+                </sect2>
+                <sect2>
+                    <title>Create an user action</title>
+                    <para>Obsidian Workspaces allows to automatically run actions when an user logs in, typically from an external source.</para>
+                </sect2>
+            </sect1>
+        </chapter>
+        <chapter>
+            <title>Code conventions</title>
+            <sect1>
+                <title>Whitespaces</title>
+                <para>Indentation isn't done with tabulations, but with 4 whitespaces per level.</para>
+                <para>We follow the UNIX convention and use \n to return.</para>
+                <para>No whitespace should be present at the end of a line.</para>
+                <para>Each file should be ended by a new line.</para>
+            </sect1>
+            <sect1>
+                <title>PHP code</title>
+                <para>Brackets starts on the line.</para>
+                <para>Format your code the more clearer and easy to read way, following our bracked opened on the block declaration line style.</para>
+                <para>Don't end files by ?>, it avoids to introduce extra whitespaces in the page output.</para>
+            </sect1>
+            <sect1>
+                <title>L10n files</title>
+                <para>CamelCase is used for the keys, generally concatening the English sentence without articles.</para>
+            </sect1>
+        </chapter>
+    </part>
+    <part xml:id="annexes">
+    <title>Annexes</title>
+        <bibliography>
+            <bibliodiv>
+                <title>Software manuals and references</title>
+                <biblioentry xml:id="bib.manuals.MongoDB.references-limits">
+                    <abbrev xml:id="bib.manuals.MSDN.MongoDB.references-limits.abbrev">MongoDB Manual, Limits</abbrev>
+                    <citetitle pubwork="article"><link xl:href="http://docs.mongodb.org/manual/reference/limits/">MongoDB Limits and Thresholds</link></citetitle>
+                    <citetitle pubwork="book">MongoDB Manual</citetitle>
+                    <publishername>MongoDB</publishername>
+                </biblioentry>
+                <biblioentry xml:id="bib.manuals.MSDN.aa365247">
+                    <abbrev xml:id="bib.manuals.MSDN.aa365247.abbrev">MSDN aa365247(VS.85)</abbrev>
+                    <citetitle pubwork="article"><link xl:href="http://msdn.microsoft.com/en-us/library/aa365247%28VS.85%29.aspx">Naming Files, Paths, and Namespaces</link></citetitle>
+                    <citetitle pubwork="series">MSDN Library</citetitle>
+                    <publishername>Microsoft</publishername>
+                    <date>2013-05-12</date>
+                </biblioentry>
+            </bibliodiv>
+        </bibliography>
+    </part>
+</book>
