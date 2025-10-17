@@ -41,7 +41,7 @@ function get_userid ($username) {
  * @param $identifier resource identifier
  * @return mixed the resource ID (as integer), or NULL if unknown
  */
-function get_resource_id ($resource_type, $identifier) {
+function resolve_resource_id ($resource_type, $identifier) {
     //Trivial cases: already an ID, null or void ID
     if (is_numeric($identifier)) {
         return $identifier;
