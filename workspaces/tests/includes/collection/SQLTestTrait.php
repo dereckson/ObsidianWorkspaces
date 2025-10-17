@@ -15,7 +15,7 @@
  * @filesource
  */
 
-require_once('../includes/autoload.php');
+require_once('../src/includes/autoload.php');
 
 /**
  * The tests for our SQL storage engines, to ensure the schema is created correctly.

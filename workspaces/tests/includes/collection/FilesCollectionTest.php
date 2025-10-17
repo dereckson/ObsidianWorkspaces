@@ -16,7 +16,7 @@
  */
 
 require_once('CRUDTestTrait.php');
-require('../includes/GlobalFunctions.php');
+require('../src/includes/GlobalFunctions.php');
 
 /**
  * Tests FilesCollection class

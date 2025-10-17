@@ -15,7 +15,7 @@
  * @filesource
  */
 
-require '../includes/database/DatabaseException.php';
+require '../src/includes/database/DatabaseException.php';
 
 /**
  * Tests DatabaseException class

@@ -15,7 +15,7 @@
  * @filesource
  */
 
-require_once('../includes/autoload.php');
+require_once('../src/includes/autoload.php');
 
 /**
  * A CollectionDocument class, for our tests.

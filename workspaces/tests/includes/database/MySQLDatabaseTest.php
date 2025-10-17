@@ -15,7 +15,7 @@
  * @filesource
  */
 
-//require '../includes/database/MysqlDatabase.php';
+//require '../src/includes/database/MysqlDatabase.php';
 
 /**
  * Tests DatabaseTest
