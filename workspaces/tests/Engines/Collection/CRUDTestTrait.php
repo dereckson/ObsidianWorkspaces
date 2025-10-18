@@ -15,30 +15,9 @@
  * @filesource
  */
 
-require_once('../src/includes/autoload.php');
+namespace Waystone\Workspaces\Tests\Engines\Collection;
 
-/**
- * A CollectionDocument class, for our tests.
- */
-class BookDocument extends CollectionDocument {
-    /**
-     * @var string The book title
-     */
-    public $title;
-
-    /**
-     * @var string The book author
-     */
-    public $author;
-
-    /**
-     * Initializes a new instance of the BookDocument object
-     */
-    public function __construct ($author = null, $title = null) {
-        if ($title !== null) $this->title = $title;
-        if ($author !== null) $this->author = $author;
-   }
-}
+use CollectionDocument;
 
 /**
  * The tests for our basic, non storage engine specific CRUD features
@@ -136,16 +115,16 @@ trait CRUDTestTrait {
 
         //::get - when our collection uses the generic CollectionDocument class
         $newDocument = $this->collection->get($this->redBook->id);
-        $this->assertInstanceOf('CollectionDocument', $newDocument);
-        $this->assertNotInstanceOf('BookDocument', $newDocument);
+        $this->assertInstanceOf(CollectionDocument::class, $newDocument);
+        $this->assertNotInstanceOf(BookDocument::class, $newDocument);
 
         //::set - when our collection uses a proper CollectionDocument descendant
-        $this->collection->documentType = 'BookDocument';
+        $this->collection->documentType = BookDocument::class;
         $newBook = $this->collection->get($this->redBook->id);
-        $this->assertInstanceOf('BookDocument', $newBook);
-        $this->assertObjectHasAttribute('title', $newBook);
-        $this->assertObjectHasAttribute('author', $newBook);
-        $this->assertObjectHasAttribute('id', $newBook);
+        $this->assertInstanceOf(BookDocument::class, $newBook);
+        $this->assertObjectHasProperty('title', $newBook);
+        $this->assertObjectHasProperty('author', $newBook);
+        $this->assertObjectHasProperty('id', $newBook);
         $this->assertEquals('Matter', $newBook->title);
         $this->assertEquals('Iain M. Banks', $newBook->author);
         $this->assertEquals('redBook', $newBook->id);
@@ -182,19 +161,19 @@ trait CRUDTestTrait {
         foreach ($documents as $document) {
             switch ($document->id) {
                 case $this->blueBook->id:
-                    $this->assertInstanceOf('BookDocument', $document);
-                    $this->assertObjectHasAttribute('title', $document);
-                    $this->assertObjectHasAttribute('author', $document);
-                    $this->assertObjectHasAttribute('id', $document);
+                    $this->assertInstanceOf(BookDocument::class, $document);
+                    $this->assertObjectHasProperty('title', $document);
+                    $this->assertObjectHasProperty('author', $document);
+                    $this->assertObjectHasProperty('id', $document);
                     $this->assertEquals('Foundation', $document->title);
                     $this->assertEquals('Isaac Asimov', $document->author);
                     break;
 
                 case 'redBook':
-                    $this->assertInstanceOf('BookDocument', $document);
-                    $this->assertObjectHasAttribute('title', $document);
-                    $this->assertObjectHasAttribute('author', $document);
-                    $this->assertObjectHasAttribute('id', $document);
+                    $this->assertInstanceOf(BookDocument::class, $document);
+                    $this->assertObjectHasProperty('title', $document);
+                    $this->assertObjectHasProperty('author', $document);
+                    $this->assertObjectHasProperty('id', $document);
                     $this->assertEquals('Matter', $document->title);
                     $this->assertEquals('Iain M. Banks', $document->author);
                     break;
@@ -230,6 +209,7 @@ trait CRUDTestTrait {
 
         //::getAll
         $documents = $this->collection->getAll();
-        $this->assertCount(0, $documents, "We expected each collection document would have been deleted.");
+        $count = iterator_count($documents);
+        $this->assertEquals(0, $count, "We expected each collection document would have been deleted.");
     }
 }

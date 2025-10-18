@@ -15,12 +15,14 @@
  * @filesource
  */
 
+use PHPUnit\Framework\TestCase;
+
 //require '../src/includes/database/MysqlDatabase.php';
 
 /**
  * Tests DatabaseTest
  */
-class MySQLDatabaseTest extends PHPUnit_Framework_TestCase {
+class MySQLDatabaseTest extends TestCase {
     /**
      * @var MysqlDatabase
      */
@@ -29,7 +31,7 @@ class MySQLDatabaseTest extends PHPUnit_Framework_TestCase {
     /**
      * Creates the objects against which we will test.
      */
-    public function setUp () {
+    public function setUp () : void {
         $this->db = new MySQLDatabase(
             UNITTESTING_MYSQL_HOST,
             UNITTESTING_MYSQL_USERNAME,
@@ -40,8 +42,6 @@ class MySQLDatabaseTest extends PHPUnit_Framework_TestCase {
 
     /**
      * Tests string escape
-     *
-     * @covers SQLiteCollection::escape
      */
     public function testEscape () {
         $toEscapeExpressions = [

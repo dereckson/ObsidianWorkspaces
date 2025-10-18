@@ -15,14 +15,18 @@
  * @filesource
  */
 
-require_once('CRUDTestTrait.php');
-require_once('SQLTestTrait.php');
+namespace Waystone\Workspaces\Tests\Engines\Collection;
+
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
+
+use SQLiteCollection;
 
 /**
  * Tests SQLiteCollection class
- * @coversDefaultClass SQLiteCollection
  */
-class SQLiteCollectionTest extends PHPUnit_Framework_TestCase {
+#[CoversClass(SQLiteCollection::class)]
+class SQLiteCollectionTest extends TestCase {
     ///
     /// Traits
     ///
@@ -57,14 +61,7 @@ class SQLiteCollectionTest extends PHPUnit_Framework_TestCase {
         ];
     }
 
-    /**
-     * Initializes a new instance of the PHPUnit_Framework_TestCase class
-     *
-     * @param string $name The test case name
-     */
-    public function __construct (string $name = null) {
-        parent::__construct($name);
-
+    public function setUp () : void {
         $this->initializeDocuments();
 
         global $Config;
@@ -76,13 +73,8 @@ class SQLiteCollectionTest extends PHPUnit_Framework_TestCase {
     ///
     /// Tests specific to SQLiteCollection
     ///
-
     /**
      * Tests the client related methods
-     *
-     * @covers SQLiteCollection::getClient
-     * @covers SQLiteCollection::initializeClient
-     * @covers SQLiteCollection::initializeCollectionsTable
      */
     public function testClient () {
         global $Config;
@@ -118,8 +110,6 @@ class SQLiteCollectionTest extends PHPUnit_Framework_TestCase {
 
     /**
      * Tests string escapement
-     *
-     * @covers SQLiteCollection::escape
      */
     public function testEscape () {
         $toEscapeExpressions = [
@@ -146,9 +136,6 @@ class SQLiteCollectionTest extends PHPUnit_Framework_TestCase {
         }
     }
 
-    /**
-     * @covers SQLiteCollection::isStatement
-     */
     public function testStatements () {
         $sqlQueries = [
             "SELECT foo FROM bar",
@@ -181,7 +168,7 @@ class SQLiteCollectionTest extends PHPUnit_Framework_TestCase {
     /**
      * Clears resources created for this test
      */
-    public static function tearDownAfterClass () {
+    public static function tearDownAfterClass () : void {
         unlink(UNITTESTING_SQLITE_FILE);
     }
 }

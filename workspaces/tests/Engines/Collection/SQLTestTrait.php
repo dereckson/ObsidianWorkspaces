@@ -15,7 +15,9 @@
  * @filesource
  */
 
-require_once('../src/includes/autoload.php');
+namespace Waystone\Workspaces\Tests\Engines\Collection;
+
+require_once(__DIR__ . '/../../../src/includes/autoload.php');
 
 /**
  * The tests for our SQL storage engines, to ensure the schema is created correctly.

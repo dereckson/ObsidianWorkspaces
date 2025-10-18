@@ -15,14 +15,18 @@
  * @filesource
  */
 
-require_once('CRUDTestTrait.php');
-require_once('SQLTestTrait.php');
+namespace Waystone\Workspaces\Tests\Engines\Collection;
+
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
+
+use MySQLCollection;
 
 /**
  * Tests MySQLCollection class
- * @coversDefaultClass MySQLCollection
  */
-class MySQLCollectionTest extends PHPUnit_Framework_TestCase {
+#[CoversClass(MySQLCollection::class)]
+class MySQLCollectionTest extends TestCase {
     ///
     /// Traits
     ///
@@ -60,7 +64,7 @@ class MySQLCollectionTest extends PHPUnit_Framework_TestCase {
     /**
      * Initializes the resources needed for thist test.
      */
-    public function setUp () {
+    public function setUp () : void {
         $db = new MySQLDatabase(
             UNITTESTING_MYSQL_HOST,
             UNITTESTING_MYSQL_USERNAME,
@@ -78,8 +82,6 @@ class MySQLCollectionTest extends PHPUnit_Framework_TestCase {
 
     /**
      * Tests the property table is correctly set
-     *
-     * @covers MySQLCollection::construct
      */
     public function testTable () {
         $this->assertEquals(UNITTESTING_MYSQL_TABLE, $this->collection->table, "The collection constructor should have initialized the MySQLCollection::table property.");
@@ -87,8 +89,6 @@ class MySQLCollectionTest extends PHPUnit_Framework_TestCase {
 
     /**
      * Tests if the ready constant has been correctly defined
-     *
-     * @covers MySQLCollection::initializeCollectionsTable
      */
     public function testReadyConstant () {
         $this->assertTrue(
@@ -105,8 +105,6 @@ class MySQLCollectionTest extends PHPUnit_Framework_TestCase {
 
     /**
      * Tests if strings are correctly escaped
-     *
-     * @covers MySQLCollection::escape
      */
     public function testEscape () {
         $toEscapeExpressions = [

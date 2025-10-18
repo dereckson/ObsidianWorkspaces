@@ -15,13 +15,18 @@
  * @filesource
  */
 
-require_once('CRUDTestTrait.php');
+namespace Waystone\Workspaces\Tests\Engines\Collection;
+
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
+
+use MongoDBCollection;
 
 /**
  * Tests MongoDBCollection class
- * @coversDefaultClass MongoDBCollection
  */
-class MongoDBCollectionTest extends PHPUnit_Framework_TestCase {
+#[CoversClass(MongoDBCollection::class)]
+class MongoDBCollectionTest extends TestCase {
     /**
      * @var string Our collection
      */
@@ -43,14 +48,7 @@ class MongoDBCollectionTest extends PHPUnit_Framework_TestCase {
         ];
     }
 
-    /**
-     * Initializes a new instance of the PHPUnit_Framework_TestCase class
-     *
-     * @param string $name The test case name
-     */
-    public function __construct (string $name = null) {
-        parent::__construct($name);
-
+    public function setUp () : void {
         global $Config;
         $Config = static::getConfig();
 

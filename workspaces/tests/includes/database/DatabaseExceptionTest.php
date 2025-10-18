@@ -15,16 +15,14 @@
  * @filesource
  */
 
-require '../src/includes/database/DatabaseException.php';
+use PHPUnit\Framework\TestCase;
+
+require_once(__DIR__ . '/../../../src/includes/database/DatabaseException.php');
 
 /**
  * Tests DatabaseException class
  */
-class DatabaseExceptionTest extends PHPUnit_Framework_TestCase {
-    /**
-     * @covers DatabaseException::__construct
-     * @covers DatabaseException::getQuery
-     */
+class DatabaseExceptionTest extends TestCase {
     public function testGetQuery () {
         $sql = 'SELECT 1+';
         $ex = new DatabaseException($sql, 'Syntax error', 1064);

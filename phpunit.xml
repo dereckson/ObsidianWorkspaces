@@ -1,11 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <phpunit
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/11.4/phpunit.xsd"
-    bootstrap="bootstrap.php"
-
-    displayDetailsOnTestsThatTriggerDeprecations="true"
-    displayDetailsOnPhpunitDeprecations="true"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/11.4/phpunit.xsd"
+        bootstrap="vendor/autoload.php"
+        displayDetailsOnTestsThatTriggerDeprecations="true"
+        displayDetailsOnPhpunitDeprecations="true"
+        cacheDirectory=".phpunit.cache"
+        stopOnFailure="false"
 >
+
+    <testsuites>
+        <testsuite name="Unit tests for waystone/workspaces">
+            <directory suffix="Test.php">workspaces/tests/</directory>
+        </testsuite>
+    </testsuites>
+
+    <source>
+        <include>
+            <directory suffix=".php">workspaces/src/</directory>
+        </include>
+    </source>
+
     <php>
         <!-- MySQL -->
         <const name="UNITTESTING_MYSQL_HOST" value="localhost" />

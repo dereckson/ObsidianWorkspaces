@@ -15,14 +15,23 @@
  * @filesource
  */
 
-require_once('CRUDTestTrait.php');
-require('../src/includes/GlobalFunctions.php');
+namespace Waystone\Workspaces\Tests\Engines\Collection;
+
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
+
+use FilesCollection;
+
+use Exception;
+
+require_once(__DIR__ . '/../../../src//includes/GlobalFunctions.php');
 
 /**
  * Tests FilesCollection class
- * @coversDefaultClass FilesCollection
  */
-class FilesCollectionTest extends PHPUnit_Framework_TestCase {
+#[CoversClass(FilesCollection::class)]
+class FilesCollectionTest extends TestCase {
+
     /**
      * @var string Our collection
      */
@@ -42,14 +51,7 @@ class FilesCollectionTest extends PHPUnit_Framework_TestCase {
         ];
     }
 
-    /**
-     * Initializes a new instance of the PHPUnit_Framework_TestCase class
-     *
-     * @param string $name The test case name
-     */
-    public function __construct (string $name = null) {
-        parent::__construct($name);
-
+    protected function setUp () : void {
         $this->initializeDocuments();
 
         global $Config;
@@ -57,14 +59,9 @@ class FilesCollectionTest extends PHPUnit_Framework_TestCase {
         $this->collection = new FilesCollection('quux');
     }
 
-
     ///
     /// Specific tests for this particular Collection class
     ///
-
-    /**
-     * @covers FilesCollection::__construct
-     */
     public function testConstructor () {
         global $Config;
         $Config = self::getConfig();
@@ -73,17 +70,13 @@ class FilesCollectionTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals('quux', $collection->id);
     }
 
-    /**
-     * @covers FilesCollection::getCollectionPath
-     * @covers FilesCollection::getDocumentPath
-     */
     public function testPaths () {
         global $Config;
         $Config = self::getConfig();
 
         $expectedPath = UNITTESTING_FILESCOLLECTION_PATH
-                      . DIRECTORY_SEPARATOR
-                      . 'quux';
+                        . DIRECTORY_SEPARATOR
+                        . 'quux';
 
         $this->assertEquals(
             $expectedPath,
@@ -93,50 +86,38 @@ class FilesCollectionTest extends PHPUnit_Framework_TestCase {
         $this->assertFileExists($expectedPath);
 
         $expectedPath .= DIRECTORY_SEPARATOR
-                      .  'foo.json';
+                         .  'foo.json';
         $this->assertEquals(
             $expectedPath,
             $this->collection->getDocumentPath('foo')
         );
     }
 
-    /**
-     * @covers FilesCollection::getCollectionPath
-     */
     public function testConfigurationMissingException () {
         //Note: @expectedException isn't allowed in PHPUnit to test the generic Exception class.
 
         global $Config;
         $oldConfigDocumentStorage = $Config['DocumentStorage'];
         $Config['DocumentStorage'] = []; //Path isn't defined
-        try {
-            FilesCollection::getCollectionPath('quux');
-        } catch (Exception $ex) {
-            $Config['DocumentStorage'] = $oldConfigDocumentStorage;
-            return;
-        }
-        $this->fail('An expected exception has not been raised.');
+
+        $this>$this->expectException(Exception::class);
+        FilesCollection::getCollectionPath('quux');
+
+        $Config['DocumentStorage'] = $oldConfigDocumentStorage;
     }
 
-    /**
-     * @covers FilesCollection::getCollectionPath
-     */
     public function testCantCreateDirectoryException () {
-        //Note: @expectedException isn't allowed in PHPUnit to test the generic Exception class.
-
         global $Config;
         $oldConfigDocumentStorage = $Config['DocumentStorage'];
         $Config['DocumentStorage'] = [
             'Type' => 'Files',
             'Path' => '/root/obsidiancollections',
         ];
-        try {
-            FilesCollection::getCollectionPath('quux');
-        } catch (Exception $ex) {
-            $Config['DocumentStorage'] = $oldConfigDocumentStorage;
-            return;
-        }
-        $this->fail("An expected exception has not been raised. If you're logged as root, you can safely delete /root/obsidiancollections folder and ignore this test. By the way, are you sure to trust a tests sequence creating and deleting files to run them as root?");
+
+        $this->expectException(Exception::class);
+        FilesCollection::getCollectionPath('quux');
+
+        $Config['DocumentStorage'] = $oldConfigDocumentStorage;
     }
 
     ///
@@ -145,10 +126,6 @@ class FilesCollectionTest extends PHPUnit_Framework_TestCase {
 
     use CRUDTestTrait;
 
-    /**
-     * @covers FilesCollection::add
-     * @covers FilesCollection::update
-     */
     public function testFileContent () {
         global $Config;
         $Config = self::getConfig();
@@ -184,7 +161,7 @@ class FilesCollectionTest extends PHPUnit_Framework_TestCase {
     /**
      * Tears down resources when tests are done
      */
-    public static function tearDownAfterClass () {
+    public static function tearDownAfterClass () : void {
         //Removes created directories
         rmdir(UNITTESTING_FILESCOLLECTION_PATH . '/quux');
         rmdir(UNITTESTING_FILESCOLLECTION_PATH);
