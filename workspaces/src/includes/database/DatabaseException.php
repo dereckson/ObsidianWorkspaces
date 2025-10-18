@@ -33,9 +33,9 @@ class DatabaseException extends RuntimeException {
      * @param string|null $query The query executed. Null if the exception occured outside a query.
      * @param string $message The message to throw.
      * @param int $code The code.
-     * @param Exception $previous The previous exception used for the exception chaining.
+     * @param ?Exception $previous The previous exception used for the exception chaining.
      */
-    public function __construct ($query = null, $message = '', $code = 0, Exception $previous = null) {
+    public function __construct ($query = null, $message = '', $code = 0, ?Exception $previous = null) {
         $this->query = $query;
         parent::__construct($message, $code, $previous);
     }

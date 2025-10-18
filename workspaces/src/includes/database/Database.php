@@ -29,10 +29,10 @@ abstract class Database implements LoadableWithContext {
     /**
      * Loads a new instance of the relevant Database object
      *
-     * @param Context $context The application context
+     * @param ?Context $context The application context
      * @return Database The database instance
      */
-    public static function load (Context $context = null) {
+    public static function load (?Context $context = null) {
         if (self::$instance === null ) {
             if (!isset($context->config['sql']['engine'])) {
                 throw new InvalidArgumentException("To load a database, you need to add in your configuration a parameter block like:

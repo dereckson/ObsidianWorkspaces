@@ -58,7 +58,7 @@ class MySQLCollection extends SQLCollection {
      *
      * @param string $id the collection identifiant
      */
-    public function __construct ($id, MySQLDatabase $client = null, $table = '') {
+    public function __construct ($id, ?MySQLDatabase $client = null, $table = '') {
         global $Config;
 
         if ($client === null) {

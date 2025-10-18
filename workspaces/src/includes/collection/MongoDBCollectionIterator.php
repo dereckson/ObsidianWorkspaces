@@ -33,9 +33,9 @@ class MongoDBCollectionIterator implements Iterator {
      * Initializes a new instance of the MongoDBCollectionIterator object
      *
      * @param MongoDBCollection $collection The collection to iterate
-     * @param MongoCursor $cursor The cursor to the results [optional]
+     * @param ?MongoCursor $cursor The cursor to the results [optional]
      */
-    public function __construct (MongoDBCollection $collection, MongoCursor $cursor = null) {
+    public function __construct (MongoDBCollection $collection, ?MongoCursor $cursor = null) {
         $this->collection = $collection;
         if ($cursor === null) {
             $this->cursor = $collection->mongoCollection->find();

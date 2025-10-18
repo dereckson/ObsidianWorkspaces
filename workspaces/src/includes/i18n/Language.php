@@ -57,10 +57,10 @@ class Language implements LoadableWithContext {
     /**
      * Loads an instance of the class
      *
-     * @param Context $context The context
+     * @param ?Context $context The context
      * @return Language An instance of the Language class
      */
-    public static function Load (Context $context = null) {
+    public static function Load (?Context $context = null) {
         if (static::$instance === null) {
             //Initializes an instance
             if ($context === null) {
