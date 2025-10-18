@@ -145,16 +145,15 @@
                             <para>The filesystem restrictions on collections names:
                                 <itemizedlist>
                                     <listitem>
-                                        <para>on Windows, collection names are limited to 255
-                                            characters, including the appended workspace
+                                        <para>on Windows, collection names are limited to 260
+                                            characters, 255 on NTFS partitions, including the appended workspace
                                             prefix
                                             <citation><xref role="bib" linkend="bib.manuals.MSDN.aa365247" endterm="bib.manuals.MSDN.aa365247.abbrev"/></citation>
                                         </para>
                                     </listitem>
                                     <listitem>
                                         <para>on Windows, for NTFS partitions, control characters
-                                            and / ? &lt; &gt; \ : * | ”  are forbidden; FAT
-                                            furthermore forbids ^ ; names can't end by a space or a
+                                            and / ? &lt; &gt; \ : * | "  are forbidden; names can't end by a space or a
                                             by a dot</para>
                                     </listitem>
                                     <listitem>
@@ -162,8 +161,8 @@
                                             /</para>
                                     </listitem>
                                     <listitem>
-                                        <para>on Mac OS X, you can't use the :, it's the legacy Mac
-                                            OS directory separator</para>
+                                        <para>on macOS, you can't use the :, it's the legacy Mac OS
+                                            directory separator</para>
                                     </listitem>
                                     <listitem>
                                         <para>it must start by <keycap>_</keycap> or a letter</para>
@@ -239,17 +238,22 @@
             <bibliodiv>
                 <title>Software manuals and references</title>
                 <biblioentry xml:id="bib.manuals.MongoDB.references-limits">
-                    <abbrev xml:id="bib.manuals.MSDN.MongoDB.references-limits.abbrev">MongoDB Manual, Limits</abbrev>
-                    <citetitle pubwork="article"><link xl:href="http://docs.mongodb.org/manual/reference/limits/">MongoDB Limits and Thresholds</link></citetitle>
+                    <abbrev xml:id="bib.manuals.MSDN.MongoDB.references-limits.abbrev">MongoDB
+                        Manual, Limits</abbrev>
+                    <citetitle pubwork="article"><link
+                            xl:href="https://www.mongodb.com/docs/manual/reference/limits/">MongoDB
+                            Limits and Thresholds</link></citetitle>
                     <citetitle pubwork="book">MongoDB Manual</citetitle>
                     <publishername>MongoDB</publishername>
                 </biblioentry>
                 <biblioentry xml:id="bib.manuals.MSDN.aa365247">
                     <abbrev xml:id="bib.manuals.MSDN.aa365247.abbrev">MSDN aa365247(VS.85)</abbrev>
-                    <citetitle pubwork="article"><link xl:href="http://msdn.microsoft.com/en-us/library/aa365247%28VS.85%29.aspx">Naming Files, Paths, and Namespaces</link></citetitle>
+                    <citetitle pubwork="article"><link
+                            xl:href="https://learn.microsoft.com/en-us/windows/win32/fileio/naming-a-file"
+                            >Naming Files, Paths, and Namespaces</link></citetitle>
                     <citetitle pubwork="series">MSDN Library</citetitle>
                     <publishername>Microsoft</publishername>
-                    <date>2013-05-12</date>
+                    <date>2024-08-28</date>
                 </biblioentry>
             </bibliodiv>
         </bibliography>
