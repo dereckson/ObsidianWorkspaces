@@ -5,3 +5,6 @@ vendor/
 # PHPUnit
 .phpunit.result.cache
 .phpunit.cache/
+
+# DocBook
+docs/**/out/
