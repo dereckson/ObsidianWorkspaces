@@ -16,13 +16,13 @@
  *
  */
 
-require_once(__DIR__ . "/../../vendor/autoload.php");
-
 ////////////////////////////////////////////////////////////////////////////////
 ///                                                                          ///
 /// Configures PHP and loads site-wide used libraries                        ///
 ///                                                                          ///
 ////////////////////////////////////////////////////////////////////////////////
+
+require_once("autoload_vendor.php");
 
 //Errors management
 include_once("error.php");
