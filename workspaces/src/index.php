@@ -16,18 +16,21 @@
  *
  */
 
+use Keruald\Database\Database;
+
 ////////////////////////////////////////////////////////////////////////////////
 ///
 /// Initialization
 ///
 
 //Keruald and Obsidian Workspaces libraries
+
 include('includes/core.php');
 
 //Prepares the site context
 $context = new Context();
 $context->config = $Config;
-$context->db = $db = Database::load($context);
+$context->db = $db = Database::load($Config["sql"]);
 $context->session = Session::load();
 $context->url = get_current_url_fragments();
 $context->initializeTemplateEngine($context->config['Theme']);

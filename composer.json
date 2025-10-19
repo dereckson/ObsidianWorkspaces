@@ -16,6 +16,10 @@
             "email": "dereckson@espace-win.org"
         }
     ],
+    "require": {
+        "keruald/database": "0.5.0",
+        "keruald/omnitools": "0.15.0"
+    },
     "require-dev": {
         "nasqueron/codestyle": "^0.1.2",
         "phpunit/phpunit": "^12.4",

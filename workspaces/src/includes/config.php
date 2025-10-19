@@ -19,6 +19,8 @@
  *
  */
 
+use Keruald\Database\Engines\MySQLiEngine;
+
 ////////////////////////////////////////////////////////////////////////////////
 ///                                                                          ///
 /// I. SQL configuration                                                     ///
@@ -26,7 +28,8 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 //SQL configuration
-$Config['sql']['engine'] = 'MySQL';    //Only MySQL is currently implemented
+
+$Config['sql']['engine'] = MySQLiEngine::class;
 $Config['sql']['host'] = 'localhost';
 $Config['sql']['username'] = 'obsidian';
 $Config['sql']['password'] = 'obsidian';
