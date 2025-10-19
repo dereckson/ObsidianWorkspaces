@@ -19,7 +19,8 @@
     "require": {
         "keruald/database": "0.5.0",
         "keruald/omnitools": "0.15.0",
-        "smarty/smarty": "^5.6.0"
+        "smarty/smarty": "^5.6.0",
+        "ext-mysqli": "*"
     },
     "require-dev": {
         "nasqueron/codestyle": "^0.1.2",

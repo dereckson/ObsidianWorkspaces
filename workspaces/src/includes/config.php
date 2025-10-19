@@ -34,6 +34,7 @@ $Config['sql']['host'] = 'localhost';
 $Config['sql']['username'] = 'obsidian';
 $Config['sql']['password'] = 'obsidian';
 $Config['sql']['database'] = 'obsidian';
+$Config['sql']['fetch_mode'] = MYSQLI_BOTH;
 
 //SQL tables
 $prefix = '';
