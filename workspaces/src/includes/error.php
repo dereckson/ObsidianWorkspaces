@@ -44,14 +44,16 @@ function dieprint_r ($var, $title = '') {
 /**
  * A callback method for the error handler, which throws exceptions on errors
  *
- * @param int $errno the level of the error raised
- * @param string $errstr the error message
+ * @param int    $errno   the level of the error raised
+ * @param string $errstr  the error message
  * @param string $errfile the filename that the error was raised in
- * @param int $errline the line number the error was raised at
- * @param string $errcontext an array that points to the active symbol table at the point the error occurred
- * @return boolean true when the error has been handled ; otherwise, false, to let the normal error handler continues.
+ * @param int    $errline the line number the error was raised at
+ *
+ * @return boolean true when the error has been handled ; otherwise, false,
+ *                 to let the normal error handler continues.
+ * @throws \ErrorException
  */
-function throwExceptionErrorHandler ($errno, $errstr, $errfile, $errline, array $errcontext) {
+function throwExceptionErrorHandler (int $errno, string $errstr, string $errfile, int $errline) : bool {
     if (error_reporting() === 0) {
         return false;
     }
