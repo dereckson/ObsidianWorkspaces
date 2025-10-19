@@ -17,7 +17,7 @@
  */
 
 /**
- * User action to add an user into a group
+ * User action to add a user into a group
  */
 class AddToGroupUserAction extends UserAction implements ObjectDeserializable {
     /**

@@ -99,7 +99,7 @@ switch ($controller) {
             }
         }
 
-        //Not a workspace, nor a controller toponomy
+        //Not a workspace, nor a controller toponym
         ErrorPageController::show($context, 404);
         exit;
 }

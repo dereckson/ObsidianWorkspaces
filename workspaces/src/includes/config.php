@@ -173,7 +173,7 @@ $Config['Content']['Disclaimers'] = 'content/disclaimers';
  *         'Password' => 'yourpassword'
  *     ];
  *
- * To connect to MongoDB with SSL, use the same syanx and add a SSL context as 'SSL' parameter.
+ * To connect to MongoDB with SSL, use the same syntax and add a SSL context as 'SSL' parameter.
  * Documentation about SSL context is located at the following PHP documentation URL:
  * http://www.php.net/manual/en/context.ssl.php
  *
@@ -269,7 +269,7 @@ define('CACHE_DIR', 'cache');
  *
  * To disable cache:
  *    - $Config['cache']['engine'] = 'void';
- *    (or don't write nothing at all)
+ *    (or omit the cache key)
  */
 $Config['cache']['engine'] = 'void';
 

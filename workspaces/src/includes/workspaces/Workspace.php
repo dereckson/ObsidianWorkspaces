@@ -78,7 +78,7 @@ class Workspace {
         $sql = "SELECT * FROM " . TABLE_WORKSPACES . " WHERE workspace_code = '" . $code . "'";
         if (!$result = $db->sql_query($sql)) message_die(SQL_ERROR, "Unable to query workspaces", '', __LINE__, __FILE__, $sql);
         if (!$row = $db->sql_fetchrow($result)) {
-            throw new Exception("Workspace unkwown: " . $code);
+            throw new Exception("Workspace unknown: " . $code);
         }
 
         $workspace = new Workspace();
@@ -95,7 +95,7 @@ class Workspace {
         $sql = "SELECT * FROM " . TABLE_WORKSPACES . " WHERE workspace_id = '" . $id . "'";
         if (!$result = $db->sql_query($sql)) message_die(SQL_ERROR, "Unable to query workspaces", '', __LINE__, __FILE__, $sql);
         if (!$row = $db->sql_fetchrow($result)) {
-            $this->lastError = "Workspace unkwown: " . $this->id;
+            $this->lastError = "Workspace unknown: " . $this->id;
             return false;
         }
         $this->load_from_row($row);

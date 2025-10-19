@@ -58,7 +58,7 @@ abstract class AuthenticationMethod implements ObjectDeserializable {
     public $canCreateUser = false;
 
     /**
-     * @var Array Actions to execute if an user is created, eacth instance a member of UserAction
+     * @var Array Actions to execute if a user is created, each instance a member of UserAction
      */
     public $createUserActions = [];
 
@@ -95,7 +95,7 @@ abstract class AuthenticationMethod implements ObjectDeserializable {
     /**
      * Finds user from available data
      *
-     * @return User the user if an user has been found; otherwise, false.
+     * @return User the user if a user has been found; otherwise, false.
      */
     private function findUser () {
         if ($this->remoteUserId != '') {
@@ -120,7 +120,7 @@ abstract class AuthenticationMethod implements ObjectDeserializable {
      * @return boolean true if user has been successfully logged in; otherwise, false.
      */
     public function signInOrCreateUser () {
-        // At this stage, if we don't already have an user instance,
+        // At this stage, if we don't already have a user instance,
         // we're fetching it by remote user id or mail.
         //
         // If no result is returned, we're creating a new user if needed.
@@ -138,7 +138,7 @@ abstract class AuthenticationMethod implements ObjectDeserializable {
             } else {
                 $this->createUser();
                 if ($this->localUser === null) {
-                    throw new Exception("Can't sign in: after correct remote authentication, an error occured creating locally a new user.");
+                    throw new Exception("Can't sign in: after correct remote authentication, an error occurred creating locally a new user.");
                 }
             }
         }
@@ -157,7 +157,7 @@ abstract class AuthenticationMethod implements ObjectDeserializable {
     }
 
     /**
-     * Creates a new user based on the authentication provisionning information
+     * Creates a new user based on the authentication provisioning information
      *
      * @return User The user created
      */

@@ -85,7 +85,7 @@ class MySQLCollection extends SQLCollection {
     ///
 
     /**
-     * Initialiazes collections table
+     * Initializes collections table
      */
     protected function initializeCollectionsTable () {
         if (defined('COLLECTIONS_MYSQL_DATABASE_READY') && COLLECTIONS_MYSQL_DATABASE_READY) {
@@ -112,7 +112,7 @@ class MySQLCollection extends SQLCollection {
      * Executes a SQL query
      *
      * @param string $sql The SQL query
-     * @return mixed If the query doesn't return any result, null. If the query return a row with one field, the scalar value. Otheriwse, an aossciative array, the fields as keys, the row as values.
+     * @return mixed If the query doesn't return any result, null. If the query return a row with one field, the scalar value. Otherwise, an associative array, the fields as keys, the row as values.
      */
     public function query ($sql) {
         if ($sql == "") {

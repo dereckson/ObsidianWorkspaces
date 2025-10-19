@@ -215,14 +215,14 @@ class Session {
      * This method is to be called when an event implies a session destroy
      */
     public function clean () {
-        //Destroies $_SESSION array values, help ID
+        //Destroys $_SESSION array values, help ID
         foreach ($_SESSION as $key => $value) {
             if ($key != 'ID') unset($_SESSION[$key]);
         }
     }
 
     /**
-     * Updates the session in an user login context
+     * Updates the session in a user login context
      *
      * @param string $user_id the user ID
      */
@@ -238,7 +238,7 @@ class Session {
     }
 
     /**
-     * Updates the session in an user logout context
+     * Updates the session in a user logout context
      */
     public function user_logout () {
         global $db;

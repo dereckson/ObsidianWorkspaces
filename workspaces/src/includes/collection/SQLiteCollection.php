@@ -78,7 +78,7 @@ class SQLiteCollection extends SQLCollection {
     ///
 
     /**
-     * Initializaes collections table
+     * Initializes collections table
      */
     protected function initializeCollectionsTable () {
         if (defined('COLLECTIONS_SQLITE_DATABASE_READY') && COLLECTIONS_SQLITE_DATABASE_READY) {

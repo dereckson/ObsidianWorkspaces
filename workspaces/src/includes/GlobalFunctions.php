@@ -260,7 +260,7 @@ function get_current_url () {
 
     if (array_key_exists('REDIRECT_URL', $_SERVER)) {
         //With mod_rewrite, we can use REDIRECT_URL
-        //We takes the end of the URL, ie *FROM* $len position
+        //We take the end of the URL, ie *FROM* $len position
         return substr(get_server_url() . $_SERVER["REDIRECT_URL"], $len);
     }
 
@@ -268,7 +268,7 @@ function get_current_url () {
     //If you need to edit here, use $_SERVER['REQUEST_URI']
     //but you need to discard $_SERVER['QUERY_STRING']
 
-    //We takes the end of the URL, ie *FROM* $len position
+    //We take the end of the URL, ie *FROM* $len position
     $url = substr(get_server_url() . $_SERVER["REQUEST_URI"], $len);
 
     //But if there are a query string (?action=... we need to discard it)
@@ -296,7 +296,7 @@ function get_current_url_fragments () {
 ////////////////////////////////////////////////////////////////////////////////
 
 /*
- * Gets an hash value to check the integrity of URLs in /do.php calls
+ * Gets a hash value to check the integrity of URLs in /do.php calls
  * @param Array $args the args to compute the hash
  * @return the hash paramater for your xmlHttpRequest url
  */

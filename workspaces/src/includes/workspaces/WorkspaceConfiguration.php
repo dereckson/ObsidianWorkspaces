@@ -44,7 +44,7 @@ class WorkspaceConfiguration implements ObjectDeserializableWithContext {
     /**
      * Determines if internal Obsidian Workspaces authentication can be used to login on this workspace URL
      *
-     * @return boolean True if an user not logged in Obsidian Workspaces going to a workspace URL should be offered to login through Obsidian ; otherwise, false.
+     * @return boolean True if a user not logged in Obsidian Workspaces going to a workspace URL should be offered to login through Obsidian ; otherwise, false.
      */
     public $allowInternalAuthentication = true;
 
@@ -70,7 +70,7 @@ class WorkspaceConfiguration implements ObjectDeserializableWithContext {
     }
 
     /**
-     * Determines if the URL fragment matches a controller binded to it.
+     * Determines if the URL fragment matches a controller bound to it.
      *
      * @param ApplicationConfiguration $applicationConfiguration The application configuration
      * @return boolean true if the URL fragment matches an application controller's bind

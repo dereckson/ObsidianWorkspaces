@@ -43,7 +43,7 @@ class Cache {
      *
      * The class cache to use will be Cache + (preference engine, capitalized)
      *
-     * This method will creates an instance of the specified object,
+     * This method will create an instance of the specified object,
      * calling the load static method from this object class.
      *
      * Example:

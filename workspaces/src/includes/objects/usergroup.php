@@ -67,7 +67,7 @@ class UserGroup {
         $sql = "SELECT * FROM " . TABLE_UGROUPS . " WHERE group_id = '" . $id . "'";
         if (!$result = $db->sql_query($sql)) message_die(SQL_ERROR, "Unable to query users_groups", '', __LINE__, __FILE__, $sql);
         if (!$row = $db->sql_fetchrow($result)) {
-            $this->lastError = "UserGroup unkwown: " . $this->id;
+            $this->lastError = "UserGroup unknown: " . $this->id;
             return false;
         }
         $this->load_from_row($row);
@@ -86,7 +86,7 @@ class UserGroup {
         $sql = "SELECT * FROM " . TABLE_UGROUPS . " WHERE group_code = '" . $code . "'";
         if (!$result = $db->sql_query($sql)) message_die(SQL_ERROR, "Unable to query group", '', __LINE__, __FILE__, $sql);
         if (!$row = $db->sql_fetchrow($result)) {
-            throw new Exception("Group unkwown: " . $code);
+            throw new Exception("Group unknown: " . $code);
         }
 
         $instance = new static();

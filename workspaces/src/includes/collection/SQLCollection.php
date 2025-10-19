@@ -28,7 +28,7 @@ abstract class SQLCollection extends Collection {
      * Executes a SQL query
      *
      * @param string $sql The SQL query
-     * @return mixed If the query doesn't return any null, nothing. If the query return a row with one field, the scalar value. Otheriwse, an aossciative array, the fields as keys, the row as values.
+     * @return mixed If the query doesn't return any null, nothing. If the query return a row with one field, the scalar value. Otherwise, an associative array, the fields as keys, the row as values.
      */
     public abstract function query ($sql);
 

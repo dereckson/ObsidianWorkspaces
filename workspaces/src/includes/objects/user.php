@@ -85,7 +85,7 @@ class User {
         $sql = "SELECT * FROM " . TABLE_USERS . " WHERE user_id = '" . $this->id . "'";
         if ( !($result = $db->sql_query($sql)) ) message_die(SQL_ERROR, "Unable to query users", '', __LINE__, __FILE__, $sql);
         if (!$row = $db->sql_fetchrow($result)) {
-            $this->lastError = "User unkwown: " . $this->id;
+            $this->lastError = "User unknown: " . $this->id;
             return false;
         }
 
@@ -183,7 +183,7 @@ class User {
      * Checks if a login is available
      *
      * @param string $login the login to check
-     * @return boolean true if the login is avaiable; otherwise, false.
+     * @return boolean true if the login is available; otherwise, false.
      */
     public static function is_available_login ($login) {
         global $db;
@@ -239,7 +239,7 @@ class User {
      * Gets user from remote identity provider identifiant
      *
      * @param $authType The authentication method type
-     * @param $remoteUserId The remote user idenfifiant
+     * @param $remoteUserId The remote user identifier
      * @return User the user matching the specified identity provider and identifiant; null if no user were found.
      */
     public static function getUserFromRemoteIdentity ($authType, $remoteUserId) {
@@ -264,7 +264,7 @@ class User {
      * Sets user's remote identity provider identifiant
      *
      * @param $authType The authentication method type
-     * @param $remoteUserId The remote user idenfifiant
+     * @param $remoteUserId The remote user identifier
      * */
     public function setRemoteIdentity ($authType, $remoteUserId, $properties = null) {
         global $db;
@@ -332,7 +332,7 @@ class User {
     }
 
     /**
-     * Gets workspaces this user has accces to.
+     * Gets workspaces this user has access to.
      *
      * @return Array A list of workspaces
      */
@@ -376,7 +376,7 @@ class User {
     }
 
     /**
-     * Gets the groups where an user has access to.
+     * Gets the groups where a user has access to.
      *
      * @param int $user_id the user to get the groups list
      * @return array an array containing group_id, matching groups the specified user has access to.

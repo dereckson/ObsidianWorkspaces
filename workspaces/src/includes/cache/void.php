@@ -19,7 +19,7 @@
 /**
  * "blackhole" void cache
  *
- * This class doesn't cache information, it'a void wrapper
+ * This class doesn't cache information, it's a void wrapper
  *  get will always return null
  *  set and delete do nothing
  *
