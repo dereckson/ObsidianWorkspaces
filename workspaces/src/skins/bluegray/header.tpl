@@ -27,9 +27,9 @@
                     <span class="icon-bar"></span>
                 </button>
 {if isset($current_workspace)}
-                <a class="navbar-brand" href="{get_url($current_workspace->code)}">{$current_workspace->name}</a>
+                <a class="navbar-brand" href="{$current_workspace_url}">{$current_workspace->name}</a>
 {else}
-                <a class="navbar-brand" href="{get_url()}">{#SiteTitle#}</a>
+                <a class="navbar-brand" href="{$root_url}">{#SiteTitle#}</a>
 {/if}
             </div>
 
@@ -67,9 +67,9 @@
                 <!-- Other right navigation actions -->
                 <li>
 {if isset($current_workspace)}
-                        <a href="{get_url($current_workspace->code)}?action=user.logout">
+                        <a href="{$current_workspace_url}?action=user.logout">
 {else}
-                        <a href="{get_url()}?action=user.logout">
+                        <a href="{$root_url}?action=user.logout">
 {/if}
 
                         <i class="fa fa-sign-out fa-fw"></i> {#Logout#}

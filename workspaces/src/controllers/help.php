@@ -31,6 +31,7 @@ if (!file_exists($file)) {
 
 //Header
 $context->templateEngine->assign('PAGE_TITLE', Language::get('Help'));
+$context->templateEngine->assign('help_url', get_url("help"));
 $context->templateEngine->assign('controller_custom_nav', 'nav_help.tpl');
 HeaderController::run($context);
 

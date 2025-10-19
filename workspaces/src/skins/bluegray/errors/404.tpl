@@ -15,7 +15,7 @@
         <h1>This page can’t be found.</h1>
         <h2>We’re looking if your page could be found on the top of an Alaska mountain.</h2>
         <p>Meanwhile, try to <a href="#" onClick="window.history.back();">go back to the
-        previous page</a> or to <a href="{get_url()}">return to the
+        previous page</a> or to <a href="{$URL_HOME}">return to the
         homepage</a>.</p>
     </div>
   </body>

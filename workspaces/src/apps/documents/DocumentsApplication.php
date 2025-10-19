@@ -86,6 +86,10 @@ class DocumentsApplication extends Application {
             //Prints the list of the documents
             $documents = $this->getDocumentsList();
             $smarty->assign('documents', $documents);
+            $smarty->assign(
+                "docs_url",
+                get_url($this->context->workspace->code, "docs")
+            );
             $template = 'documents_list.tpl';
         } else {
             //Prints a document

@@ -12,14 +12,14 @@
                         </div>
                     </li>
 {if isset($current_workspace)}
-                <li><a href="{get_url($current_workspace->code)}"><i class="fa fa-dashboard fa-fw"></i> {#Home#}</a></li>
+                <li><a href="{$current_workspace_url}"><i class="fa fa-dashboard fa-fw"></i> {#Home#}</a></li>
 {foreach from=$current_workspace_nav item=nav}
-                <li><a href="{get_url($current_workspace->code, $nav.url)}"><i class="fa {if $nav.icon}fa-{$nav.icon}{else}fa-circle-o{/if} fa-fw"></i> {$nav.link}</a></li>
+                <li><a href="{$current_workspace_url}/{$nav.url}"><i class="fa {if $nav.icon}fa-{$nav.icon}{else}fa-circle-o{/if} fa-fw"></i> {$nav.link}</a></li>
 {/foreach}
-                <li><a href="{get_url($current_workspace->code, 'help')}"><i class="fa fa-question fa-fw"></i> {#Help#}</a></li>
+                <li><a href="{$current_workspace_url}/help"><i class="fa fa-question fa-fw"></i> {#Help#}</a></li>
 {else}
-                <li><a href="{get_url()}"><i class="fa fa-dashboard fa-fw"></i> {#Home#}</a></li>
-                <li><a href="{get_url('help')}"><i class="fa fa-question fa-fw"></i> {#Help#}</a></li>
+                <li><a href="{$root_url}"><i class="fa fa-dashboard fa-fw"></i> {#Home#}</a></li>
+                <li><a href="{$root_url}/help"><i class="fa fa-question fa-fw"></i> {#Help#}</a></li>
 {/if}
                 </ul>
             </div>

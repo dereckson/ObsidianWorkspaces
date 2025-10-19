@@ -2,8 +2,8 @@
     <h1 class="page-header">Documents</h1>
 {if $documents}
     <ul id="documents">
-{foreach $documents item=document}
-        <li class="document"><a href="{get_url($current_workspace->code, 'docs', $document)}">{$document}</a></li>
+{foreach from=$documents item=document}
+        <li class="document"><a href="{$docs_url}/{$document}">{$document}</a></li>
 {/foreach}
     </ul>
 {else}

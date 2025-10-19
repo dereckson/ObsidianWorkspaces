@@ -33,10 +33,14 @@ class HeaderController extends Controller {
         $smarty->assign('workspaces', $workspaces);
         $smarty->assign('workspaces_count', count($workspaces));
 
-        if ($this->context->workspace !== null) {
+        if ($this->context->workspace === null) {
+            $smarty->assign('root_url', get_url());
+        } else {
             $workspace = $this->context->workspace;
+            $workspace_url = get_url($workspace->code);
 
             $smarty->assign('current_workspace', $workspace);
+            $smarty->assign('current_workspace_url', $workspace_url);
 
             //Gets custom header
             if ($workspace->configuration->header != '') {

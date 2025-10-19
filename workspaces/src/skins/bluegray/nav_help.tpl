@@ -12,22 +12,22 @@
                         </div>
                     </li>
 {if isset($current_workspace)}
-                <li><a href="{get_url($current_workspace->code)}"><i class="fa fa-dashboard fa-fw"></i> {#Home#}</a></li>
+                <li><a href="{$current_workspace_url}"><i class="fa fa-dashboard fa-fw"></i> {#Home#}</a></li>
 {else}
-                <li><a href="{get_url()}"><i class="fa fa-dashboard fa-fw"></i> {#Home#}</a></li>
+                <li><a href="{$root_url}"><i class="fa fa-dashboard fa-fw"></i> {#Home#}</a></li>
 {/if}
                     <li>
                         <a href="#"><i class="fa fa-question fa-fw"></i> Support & services<span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level">
-                            <li><a href="{get_url('help', 'new-workspace')}">Create a new workspace</a></li>
-                            <li><a href="{get_url('help', 'support')}">Technical support</a></li>
+                            <li><a href="{$help_url}/new-workspace">Create a new workspace</a></li>
+                            <li><a href="{$help_url}/support">Technical support</a></li>
                         </ul>
                     </li>
                     <li>
                         <a href="#"><i class="fa fa-info fa-fw"></i> About Obsidian Workspaces<span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level">
-                                <li><a href="{get_url('help', 'about')}">About</a></li>
-                                <li><a href="{get_url('help', 'credits')}">Credits</a></li>
+                                <li><a href="{$help_url}/about">About</a></li>
+                                <li><a href="{$help_url}/credits">Credits</a></li>
                             </ul>
                     </li>
                 </ul>
