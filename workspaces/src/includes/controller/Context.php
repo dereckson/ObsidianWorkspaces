@@ -15,6 +15,8 @@
  * @filesource
  */
 
+use Smarty\Smarty;
+
 /**
  * Context class
  *
@@ -78,18 +80,19 @@ class Context {
      *
      * @param string $theme the theme for the templates
      */
-    public function initializeTemplateEngine ($theme) {
-        require('includes/smarty/Smarty.class.php');
-
+    public function initializeTemplateEngine (string $theme) : void {
         $smarty = new Smarty();
 
         $current_dir = static::getApplicationRootDirectory();
-        $smarty->template_dir = "$current_dir/skins/$theme";
-        $smarty->cache_dir = $this->config['Content']['Cache'];
-        $smarty->compile_dir = $smarty->cache_dir . '/compiled';
-        $smarty->config_dir = $current_dir;
+        $smarty
+            ->setTemplateDir("$current_dir/skins/$theme")
+            ->setCacheDir($this->config["Content"]["Cache"])
+            ->setCompileDir($this->config["Content"]["Cache"] . "/compiled")
+            ->setConfigDir($current_dir);
 
-        $smarty->config_vars['StaticContentURL'] = $this->config['StaticContentURL'];
+        $smarty->config_vars += [
+            "StaticContentURL" => $this->config["StaticContentURL"],
+        ];
 
         $this->templateEngine = $smarty;
     }
