@@ -74,10 +74,10 @@ class Workspace {
      */
     public static function fromCode ($code) {
         global $db;
-        $code = $db->sql_escape($code);
+        $code = $db->escape($code);
         $sql = "SELECT * FROM " . TABLE_WORKSPACES . " WHERE workspace_code = '" . $code . "'";
-        if (!$result = $db->sql_query($sql)) message_die(SQL_ERROR, "Unable to query workspaces", '', __LINE__, __FILE__, $sql);
-        if (!$row = $db->sql_fetchrow($result)) {
+        if (!$result = $db->query($sql)) message_die(SQL_ERROR, "Unable to query workspaces", '', __LINE__, __FILE__, $sql);
+        if (!$row = $db->fetchRow($result)) {
             throw new Exception("Workspace unknown: " . $code);
         }
 
@@ -91,10 +91,10 @@ class Workspace {
      */
     function load_from_database () {
         global $db;
-        $id = $db->sql_escape($this->id);
+        $id = $db->escape($this->id);
         $sql = "SELECT * FROM " . TABLE_WORKSPACES . " WHERE workspace_id = '" . $id . "'";
-        if (!$result = $db->sql_query($sql)) message_die(SQL_ERROR, "Unable to query workspaces", '', __LINE__, __FILE__, $sql);
-        if (!$row = $db->sql_fetchrow($result)) {
+        if (!$result = $db->query($sql)) message_die(SQL_ERROR, "Unable to query workspaces", '', __LINE__, __FILE__, $sql);
+        if (!$row = $db->fetchRow($result)) {
             $this->lastError = "Workspace unknown: " . $this->id;
             return false;
         }
@@ -108,21 +108,21 @@ class Workspace {
     function save_to_database () {
         global $db;
 
-        $id = $this->id ? "'" . $db->sql_escape($this->id) . "'" : 'NULL';
-        $code = $db->sql_escape($this->code);
-        $name = $db->sql_escape($this->name);
-        $created = $db->sql_escape($this->created);
-        $description = $db->sql_escape($this->description);
+        $id = $this->id ? "'" . $db->escape($this->id) . "'" : 'NULL';
+        $code = $db->escape($this->code);
+        $name = $db->escape($this->name);
+        $created = $db->escape($this->created);
+        $description = $db->escape($this->description);
 
         //Updates or inserts
         $sql = "REPLACE INTO " . TABLE_WORKSPACES . " (`workspace_id`, `workspace_code`, `workspace_name`, `workspace_created`, `workspace_description`) VALUES ('$id', '$code', '$name', '$created', '$description')";
-        if (!$db->sql_query($sql)) {
+        if (!$db->query($sql)) {
             message_die(SQL_ERROR, "Unable to save", '', __LINE__, __FILE__, $sql);
         }
 
         if (!$this->id) {
             //Gets new record id value
-            $this->id = $db->sql_nextid();
+            $this->id = $db->nextId();
         }
     }
 
@@ -183,13 +183,13 @@ class Workspace {
                            p.permission_name = 'accessLevel' AND
                            p.permission_flag > 0 AND
                            ($clause)";
-            if (!$result = $db->sql_query($sql)) {
+            if (!$result = $db->query($sql)) {
                 message_die(SQL_ERROR, "Can't get user workspaces", '', __LINE__, __FILE__, $sql);
             }
 
             $workspaces = array();
 
-            while ($row = $db->sql_fetchrow($result)) {
+            while ($row = $db->fetchRow($result)) {
                 $workspace = new Workspace();
                 $workspace->id = $row['workspace_id'];
                 $workspace->load_from_row($row);
@@ -211,12 +211,12 @@ class Workspace {
     public static function is_workspace ($code) {
         global $db;
 
-        $code = $db->sql_escape($code);
+        $code = $db->escape($code);
         $sql = "SELECT count(*) FROM " . TABLE_WORKSPACES . " WHERE workspace_code = '$code'";
-        if (!$result = $db->sql_query($sql)) {
+        if (!$result = $db->query($sql)) {
             message_die(SQL_ERROR, "Can't check workspace code", '', __LINE__, __FILE__, $sql);
         }
-        $row = $db->sql_fetchrow($result);
+        $row = $db->fetchRow($result);
         return ($row[0] == 1);
     }
 }

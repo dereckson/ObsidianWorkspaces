@@ -17,7 +17,7 @@
         }
     ],
     "require": {
-        "keruald/database": "0.5.0",
+        "keruald/database": "0.5.2",
         "keruald/omnitools": "0.15.0",
         "smarty/smarty": "^5.6.0",
         "ext-mysqli": "*"

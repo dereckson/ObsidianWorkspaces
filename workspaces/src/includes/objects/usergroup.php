@@ -63,10 +63,10 @@ class UserGroup {
      */
     function load_from_database () {
         global $db;
-        $id = $db->sql_escape($this->id);
+        $id = $db->escape($this->id);
         $sql = "SELECT * FROM " . TABLE_UGROUPS . " WHERE group_id = '" . $id . "'";
-        if (!$result = $db->sql_query($sql)) message_die(SQL_ERROR, "Unable to query users_groups", '', __LINE__, __FILE__, $sql);
-        if (!$row = $db->sql_fetchrow($result)) {
+        if (!$result = $db->query($sql)) message_die(SQL_ERROR, "Unable to query users_groups", '', __LINE__, __FILE__, $sql);
+        if (!$row = $db->fetchRow($result)) {
             $this->lastError = "UserGroup unknown: " . $this->id;
             return false;
         }
@@ -82,10 +82,10 @@ class UserGroup {
      */
     public static function fromCode ($code) {
         global $db;
-        $code = $db->sql_escape($code);
+        $code = $db->escape($code);
         $sql = "SELECT * FROM " . TABLE_UGROUPS . " WHERE group_code = '" . $code . "'";
-        if (!$result = $db->sql_query($sql)) message_die(SQL_ERROR, "Unable to query group", '', __LINE__, __FILE__, $sql);
-        if (!$row = $db->sql_fetchrow($result)) {
+        if (!$result = $db->query($sql)) message_die(SQL_ERROR, "Unable to query group", '', __LINE__, __FILE__, $sql);
+        if (!$row = $db->fetchRow($result)) {
             throw new Exception("Group unknown: " . $code);
         }
 
@@ -100,20 +100,20 @@ class UserGroup {
     function save_to_database () {
         global $db;
 
-        $id = $this->id ? "'" . $db->sql_escape($this->id) . "'" : 'NULL';
-        $code = $db->sql_escape($this->code);
-        $title = $db->sql_escape($this->title);
-        $description = $db->sql_escape($this->description);
+        $id = $this->id ? "'" . $db->escape($this->id) . "'" : 'NULL';
+        $code = $db->escape($this->code);
+        $title = $db->escape($this->title);
+        $description = $db->escape($this->description);
 
         //Updates or inserts
         $sql = "REPLACE INTO " . TABLE_UGROUPS . " (`group_id`, `group_code`, `group_title`, `group_description`) VALUES ('$id', '$code', '$title', '$description')";
-        if (!$db->sql_query($sql)) {
+        if (!$db->query($sql)) {
             message_die(SQL_ERROR, "Unable to save", '', __LINE__, __FILE__, $sql);
         }
 
         if (!$this->id) {
             //Gets new record id value
-            $this->id = $db->sql_nextid();
+            $this->id = $db->nextId();
         }
     }
 }

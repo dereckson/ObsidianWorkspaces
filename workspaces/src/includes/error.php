@@ -94,7 +94,7 @@ function message_die ($code, $text = '', $title = '', $line = '', $file = '', $s
             $title = $title ? $title : "SQL error";
 
             //Gets SQL error information
-            $sqlError = $db->sql_error();
+            $sqlError = $db->error();
             if ($sqlError['message'] != '') {
                 $text .= "<br />Error n° $sqlError[code]: $sqlError[message]";
             }

@@ -98,15 +98,15 @@ class Session {
         $onlineDuration  = array_key_exists('OnlineDuration', $Config)  ? $Config['OnlineDuration']  :  300;
         $sessionDuration = array_key_exists('SessionDuration', $Config) ? $Config['SessionDuration'] : 7200;
 
-        $resource = array_key_exists('ResourceID', $Config) ? '\'' . $db->sql_escape($Config['ResourceID']) . '\'' : 'default';
+        $resource = array_key_exists('ResourceID', $Config) ? '\'' . $db->escape($Config['ResourceID']) . '\'' : 'default';
 
         //Deletes expired sessions
         $sql = "DELETE FROM " . TABLE_SESSIONS . " WHERE session_resource = $resource AND TIMESTAMPDIFF(SECOND, session_updated, NOW()) > $sessionDuration";
-        if (!$db->sql_query($sql)) message_die(SQL_ERROR, "Can't delete expired sessions", '', __LINE__, __FILE__, $sql);
+        if (!$db->query($sql)) message_die(SQL_ERROR, "Can't delete expired sessions", '', __LINE__, __FILE__, $sql);
 
         //Online -> offline
         $sql = "UPDATE " . TABLE_SESSIONS . " SET session_resource = $resource AND session_online = 0 WHERE TIMESTAMPDIFF(SECOND, session_updated, NOW()) > $onlineDuration";
-        if (!$db->sql_query($sql)) message_die(SQL_ERROR, 'Can\'t update sessions online statuses', '', __LINE__, __FILE__, $sql);
+        if (!$db->query($sql)) message_die(SQL_ERROR, 'Can\'t update sessions online statuses', '', __LINE__, __FILE__, $sql);
     }
 
 
@@ -124,11 +124,11 @@ class Session {
 
         //Saves session in database.
         //If the session already exists, it updates the field online and updated.
-        $id = $db->sql_escape($this->id);
-        $resource = array_key_exists('ResourceID', $Config) ? '\'' . $db->sql_escape($Config['ResourceID']) . '\'' : 'default';
-        $user_id = $db->sql_escape(ANONYMOUS_USER);
+        $id = $db->escape($this->id);
+        $resource = array_key_exists('ResourceID', $Config) ? '\'' . $db->escape($Config['ResourceID']) . '\'' : 'default';
+        $user_id = $db->escape(ANONYMOUS_USER);
         $sql = "INSERT INTO " . TABLE_SESSIONS . " (session_id, session_ip, session_resource, user_id) VALUES ('$id', '$this->ip', $resource, '$user_id') ON DUPLICATE KEY UPDATE session_online = 1";
-        if (!$db->sql_query($sql)) message_die(SQL_ERROR, 'Can\'t save current session', '', __LINE__, __FILE__, $sql);
+        if (!$db->query($sql)) message_die(SQL_ERROR, 'Can\'t save current session', '', __LINE__, __FILE__, $sql);
     }
 
     /**
@@ -144,9 +144,9 @@ class Session {
             //Queries sessions table
             global $db, $Config;
 
-            $resource = array_key_exists('ResourceID', $Config) ? '\'' . $db->sql_escape($Config['ResourceID']) . '\'' : 'default';
+            $resource = array_key_exists('ResourceID', $Config) ? '\'' . $db->escape($Config['ResourceID']) . '\'' : 'default';
             $sql = "SELECT count(*) FROM " . TABLE_SESSIONS . " WHERE session_resource = $resource AND session_online = 1";
-            $count = (int)$db->sql_query_express($sql, "Can't count online users");
+            $count = (int)$db->queryScalar($sql, "Can't count online users");
         }
 
         //Returns number of users online
@@ -162,9 +162,9 @@ class Session {
     public function get_info ($info) {
         global $db;
 
-        $id = $db->sql_escape($this->id);
+        $id = $db->escape($this->id);
         $sql = "SELECT `$info` FROM " . TABLE_SESSIONS . " WHERE session_id = '$id'";
-        return $db->sql_query_express($sql, "Can't get session $info info");
+        return $db->queryScalar($sql, "Can't get session $info info");
     }
 
     /**
@@ -176,10 +176,10 @@ class Session {
     public function set_info ($info, $value) {
         global $db;
 
-        $value = ($value === null) ? 'NULL' : "'" . $db->sql_escape($value) . "'";
-        $id = $db->sql_escape($this->id);
+        $value = ($value === null) ? 'NULL' : "'" . $db->escape($value) . "'";
+        $id = $db->escape($this->id);
     	$sql = "UPDATE " . TABLE_SESSIONS . " SET `$info` = $value WHERE session_id = '$id'";
-        if (!$db->sql_query($sql))
+        if (!$db->query($sql))
             message_die(SQL_ERROR, "Can't set session $info info", '', __LINE__, __FILE__, $sql);
     }
 
@@ -192,11 +192,11 @@ class Session {
         global $db;
 
         //Gets session information
-        $id = $db->sql_escape($this->id);
+        $id = $db->escape($this->id);
         $sql = "SELECT * FROM " . TABLE_SESSIONS . " WHERE session_id = '$id'";
-        if (!$result = $db->sql_query($sql))
+        if (!$result = $db->query($sql))
             message_die(SQL_ERROR, "Can't query session information", '', __LINE__, __FILE__, $sql);
-        $row = $db->sql_fetchrow($result);
+        $row = $db->fetchRow($result);
 
         //Gets user instance
         require_once('includes/objects/user.php');
@@ -230,10 +230,10 @@ class Session {
         global $db;
 
         //Sets specified user ID in sessions table
-        $user_id = $db->sql_escape($user_id);
-        $id  = $db->sql_escape($this->id);
+        $user_id = $db->escape($user_id);
+        $id  = $db->escape($this->id);
         $sql = "UPDATE " . TABLE_SESSIONS . " SET user_id = '$user_id' WHERE session_id = '$id'";
-        if (!$db->sql_query($sql))
+        if (!$db->query($sql))
             message_die(SQL_ERROR, "Can't set logged in status", '', __LINE__, __FILE__, $sql);
     }
 
@@ -244,10 +244,10 @@ class Session {
         global $db;
 
         //Sets anonymous user in sessions table
-        $user_id = $db->sql_escape(ANONYMOUS_USER);
-        $id  = $db->sql_escape($this->id);
+        $user_id = $db->escape(ANONYMOUS_USER);
+        $id  = $db->escape($this->id);
         $sql = "UPDATE " . TABLE_SESSIONS . " SET user_id = '$user_id' WHERE session_id = '$id'";
-        if (!$db->sql_query($sql))
+        if (!$db->query($sql))
             message_die(SQL_ERROR, "Can't set logged out status", '', __LINE__, __FILE__, $sql);
 
         //Cleans session

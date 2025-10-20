@@ -85,8 +85,8 @@ class User {
     function load_from_database () {
         global $db;
         $sql = "SELECT * FROM " . TABLE_USERS . " WHERE user_id = '" . $this->id . "'";
-        if ( !($result = $db->sql_query($sql)) ) message_die(SQL_ERROR, "Unable to query users", '', __LINE__, __FILE__, $sql);
-        if (!$row = $db->sql_fetchrow($result)) {
+        if ( !($result = $db->query($sql)) ) message_die(SQL_ERROR, "Unable to query users", '', __LINE__, __FILE__, $sql);
+        if (!$row = $db->fetchRow($result)) {
             $this->lastError = "User unknown: " . $this->id;
             return false;
         }
@@ -118,22 +118,22 @@ class User {
     function save_to_database () {
         global $db;
 
-        $id = $this->id ? "'" . $db->sql_escape($this->id) . "'" : 'NULL';
-        $name = $db->sql_escape($this->name);
-        $password = $db->sql_escape($this->password);
+        $id = $this->id ? "'" . $db->escape($this->id) . "'" : 'NULL';
+        $name = $db->escape($this->name);
+        $password = $db->escape($this->password);
         $active = $this->active ? 1 : 0;
-        $email = $db->sql_escape($this->email);
-        $regdate = $this->regdate ? "'" . $db->sql_escape($this->regdate) . "'" : 'NULL';
+        $email = $db->escape($this->email);
+        $regdate = $this->regdate ? "'" . $db->escape($this->regdate) . "'" : 'NULL';
 
         //Updates or inserts
         $sql = "REPLACE INTO " . TABLE_USERS . " (`user_id`, `username`, `user_password`, `user_active`, `user_email`, `user_regdate`) VALUES ($id, '$name', '$password', $active, '$email', $regdate)";
-        if (!$db->sql_query($sql)) {
+        if (!$db->query($sql)) {
             message_die(SQL_ERROR, "Unable to save user", '', __LINE__, __FILE__, $sql);
         }
 
         if (!$this->id) {
             //Gets new record id value
-            $this->id = $db->sql_nextid();
+            $this->id = $db->nextId();
         }
     }
 
@@ -145,10 +145,10 @@ class User {
         if (!$this->id) {
             message_die(GENERAL_ERROR, "You're trying to update a record not yet saved in the database");
         }
-        $id = $db->sql_escape($this->id);
-        $value = $db->sql_escape($this->$field);
+        $id = $db->escape($this->id);
+        $value = $db->escape($this->$field);
         $sql = "UPDATE " . TABLE_USERS . " SET `$field` = '$value' WHERE user_id = '$id'";
-        if (!$db->sql_query($sql)) {
+        if (!$db->query($sql)) {
             message_die(SQL_ERROR, "Unable to save $field field", '', __LINE__, __FILE__, $sql);
         }
     }
@@ -166,10 +166,10 @@ class User {
         do {
             $this->id = mt_rand(2001, 9999);
             $sql = "SELECT COUNT(*) FROM " . TABLE_USERS . " WHERE user_id = $this->id";
-            if (!$result = $db->sql_query($sql)) {
+            if (!$result = $db->query($sql)) {
                 message_die(SQL_ERROR, "Can't check if a user id is free", '', __LINE__, __FILE__, $sql);
             }
-            $row = $db->sql_fetchrow($result);
+            $row = $db->fetchRow($result);
         } while ($row[0]);
     }
 
@@ -190,10 +190,10 @@ class User {
     public static function is_available_login ($login) {
         global $db;
         $sql = "SELECT COUNT(*) FROM " . TABLE_USERS . " WHERE username = '$login'";
-        if (!$result = $db->sql_query($sql)) {
+        if (!$result = $db->query($sql)) {
             message_die(SQL_ERROR, "Can't check if the specified login is available", '', __LINE__, __FILE__, $sql);
         }
-        $row = $db->sql_fetchrow($result);
+        $row = $db->fetchRow($result);
         return ($row[0] == 0);
     }
 
@@ -218,11 +218,11 @@ class User {
     public static function get_user_from_email ($mail) {
         global $db;
         $sql = "SELECT * FROM " . TABLE_USERS . " WHERE user_email = '$mail'";
-        if (!$result = $db->sql_query($sql)) {
+        if (!$result = $db->query($sql)) {
             message_die(SQL_ERROR, "Can't get user", '', __LINE__, __FILE__, $sql);
         }
 
-        if ($row = $db->sql_fetchrow($result)) {
+        if ($row = $db->fetchRow($result)) {
             //E-mail found.
             $user = new User();
             $user->load_from_row($row);
@@ -247,15 +247,15 @@ class User {
     public static function getUserFromRemoteIdentity ($authType, $remoteUserId) {
         global $db;
 
-        $authType = $db->sql_escape($authType);
-        $remoteUserId = $db->sql_escape($remoteUserId);
+        $authType = $db->escape($authType);
+        $remoteUserId = $db->escape($remoteUserId);
         $sql = "SELECT user_id FROM " . TABLE_USERS_AUTH . "    WHERE "
              . "auth_type = '$authType' AND auth_identity = '$remoteUserId'";
-        if (!$result = $db->sql_query($sql)) {
+        if (!$result = $db->query($sql)) {
             message_die(SQL_ERROR, "Can't get user", '', __LINE__, __FILE__, $sql);
         }
 
-        if ($row = $db->sql_fetchrow($result)) {
+        if ($row = $db->fetchRow($result)) {
             return User::get($row['user_id']);
         }
 
@@ -270,12 +270,12 @@ class User {
      * */
     public function setRemoteIdentity ($authType, $remoteUserId, $properties = null) {
         global $db;
-        $authType = $db->sql_escape($authType);
-        $remoteUserId = $db->sql_escape($remoteUserId);
-        $properties = ($properties === NULL) ? 'NULL' : "'" . $db->sql_escape($properties) . "'";
+        $authType = $db->escape($authType);
+        $remoteUserId = $db->escape($remoteUserId);
+        $properties = ($properties === NULL) ? 'NULL' : "'" . $db->escape($properties) . "'";
         $sql = "INSERT INTO " . TABLE_USERS_AUTH . " (auth_type, auth_identity, auth_properties, user_id) "
              . "VALUES ('$authType', '$remoteUserId', $properties, $this->id)";
-        if (!$db->sql_query($sql)) {
+        if (!$db->query($sql)) {
              message_die(SQL_ERROR, "Can't set user remote identity provider information", '', __LINE__, __FILE__, $sql);
          }
     }
@@ -301,10 +301,10 @@ class User {
     public function isMemberOfGroup (UserGroup $group) {
         global $db;
         $sql = "SELECT count(*) FROM users_groups_members WHERE group_id = $group->id AND user_id = $this->id";
-        if (!$result = $db->sql_query($sql)) {
+        if (!$result = $db->query($sql)) {
             message_die(SQL_ERROR, "Can't determine if the user belongs to the group", '', __LINE__, __FILE__, $sql);
         }
-        $row = $db->sql_fetchrow($result);
+        $row = $db->fetchRow($result);
 
         return $row[0] == 1;
     }
@@ -319,7 +319,7 @@ class User {
         global $db;
         $isAdmin = $isAdmin ? 1 : 0;
         $sql = "REPLACE INTO users_groups_members VALUES ($group->id, $this->id, $isAdmin)";
-        if (!$db->sql_query($sql)) {
+        if (!$db->query($sql)) {
             message_die(SQL_ERROR, "Can't add user to group", '', __LINE__, __FILE__, $sql);
         }
     }
@@ -355,11 +355,11 @@ class User {
      */
     public function setPermission ($resourceType, $resourceId, $permissionName, $permissionFlag = 1) {
         global $db;
-        $resourceType = $db->sql_escape($resourceType);
+        $resourceType = $db->escape($resourceType);
         if (!is_numeric($resourceId)) {
             throw new Exception("Resource ID must be a positive or null integer, and not $resourceId.");
         }
-        $permissionName = $db->sql_escape($permissionName);
+        $permissionName = $db->escape($permissionName);
         if (!is_numeric($permissionFlag)) {
             throw new Exception("Permission flag must be a positive or null integer, and not $permissionFlag.");
         }
@@ -372,7 +372,7 @@ class User {
                 ('U',               $this->id,
                  '$resourceType',   $resourceId,
                  '$permissionName', $permissionFlag)";
-        if (!$db->sql_query($sql)) {
+        if (!$db->query($sql)) {
             message_die(SQL_ERROR, "Can't set user permission", '', __LINE__, __FILE__, $sql);
         }
     }
@@ -386,11 +386,11 @@ class User {
     public static function get_groups_from_user_id ($user_id) {
         global $db;
         $sql = "SELECT group_id FROM " . TABLE_UGROUPS_MEMBERS . " WHERE user_id = " . $user_id;
-        if (!$result = $db->sql_query($sql)) {
+        if (!$result = $db->query($sql)) {
             message_die(SQL_ERROR, "Can't get user groups", '', __LINE__, __FILE__, $sql);
         }
         $gids = array();
-        while ($row = $db->sql_fetchrow($result)) {
+        while ($row = $db->fetchRow($result)) {
             $gids[] = $row['group_id'];
         }
         return $gids;

@@ -20,11 +20,11 @@ $action = array_key_exists('action', $_GET) ? $_GET['action'] : '';
 
 if (array_key_exists('LogIn', $_POST)) {
     //User have submitted login form
-    $username = $db->sql_escape($_POST['username']);
+    $username = $db->escape($_POST['username']);
     $sql = "SELECT user_password, user_id FROM " . TABLE_USERS . " WHERE username = '$username'";
-    if ( !($result = $db->sql_query($sql)) ) message_die(SQL_ERROR, "Can't get user information", '', __LINE__, __FILE__, $sql);
+    if ( !($result = $db->query($sql)) ) message_die(SQL_ERROR, "Can't get user information", '', __LINE__, __FILE__, $sql);
 
-    if ($row = $db->sql_fetchrow($result)) {
+    if ($row = $db->fetchRow($result)) {
         if (!$row['user_password']) {
             //No password set
             $LoginError = "This account exists but hasn't a password defined. Contact the site administrator.";

@@ -15,9 +15,9 @@
 function get_username ($user_id) {
 	global $db;
 
-	$user_id = $db->sql_escape($user_id);
+	$user_id = $db->escape($user_id);
 	$sql = 'SELECT username FROM '. TABLE_USERS . " WHERE user_id = '$userid'";
-	return $db->sql_query_express($sql, "Can't get username from specified user id");
+	return $db->queryScalar($sql, "Can't get username from specified user id");
 }
 
 /**
@@ -29,9 +29,9 @@ function get_username ($user_id) {
 function get_userid ($username) {
 	global $db;
 
-	$username = $db->sql_escape($username);
+	$username = $db->escape($username);
 	$sql = 'SELECT user_id FROM '. TABLE_USERS . " WHERE username LIKE '$username'";
-    return $db->sql_query_express($sql, "Can't get user id from specified username");
+    return $db->queryScalar($sql, "Can't get user id from specified username");
 }
 
 /**
