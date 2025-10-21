@@ -15,6 +15,8 @@
  * @filesource
  */
 
+use Waystone\Workspaces\Engines\Apps\Application;
+
 /**
  * Static content application class
  *

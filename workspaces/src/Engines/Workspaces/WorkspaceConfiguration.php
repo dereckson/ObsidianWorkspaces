@@ -17,9 +17,9 @@
 
 namespace Waystone\Workspaces\Engines\Workspaces;
 
+use Waystone\Workspaces\Engines\Apps\ApplicationConfiguration;
 use Waystone\Workspaces\Engines\Framework\Context;
 
-use ApplicationConfiguration;
 use ObjectDeserializableWithContext;
 
 /**

@@ -15,6 +15,8 @@
  * @filesource
  */
 
+use Waystone\Workspaces\Engines\Apps\Application;
+
 /**
  * Hello World application class
  *

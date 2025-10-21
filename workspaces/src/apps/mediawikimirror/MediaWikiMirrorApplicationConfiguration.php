@@ -15,6 +15,8 @@
  * @filesource
  */
 
+use Waystone\Workspaces\Engines\Apps\ApplicationConfiguration;
+
 /**
  * MediaWiki mirror application configuration class
  */

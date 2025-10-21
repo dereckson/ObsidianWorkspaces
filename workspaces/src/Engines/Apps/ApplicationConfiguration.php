@@ -15,7 +15,12 @@
  * @filesource
  */
 
+namespace Waystone\Workspaces\Engines\Apps;
+
 use Waystone\Workspaces\Engines\Workspaces\WorkspaceConfiguration;
+
+use Message;
+use ObjectDeserializable;
 
 /**
  * Application configuration class
@@ -25,11 +30,12 @@ use Waystone\Workspaces\Engines\Workspaces\WorkspaceConfiguration;
  * It can be serialized into a workspace.conf application entry
  */
 class ApplicationConfiguration implements ObjectDeserializable {
+
     /**
      * @var string The URL the application is binded to, without initial slash.
      */
     public $bind;
-    
+
     /**
      * @var Message The navigation entry
      */
@@ -41,7 +47,8 @@ class ApplicationConfiguration implements ObjectDeserializable {
     public $icon;
 
     /**
-     * @var array The collections to use. Keys ares collections roles, values collections names.
+     * @var string[] The collections to use. Keys ares collections roles, values
+     *      collections names.
      */
     public $useCollections = [];
 
@@ -49,6 +56,7 @@ class ApplicationConfiguration implements ObjectDeserializable {
      * Loads a WorkspaceConfiguration instance from an object
      *
      * @param object $data The object to deserialize
+     *
      * @return WorkspaceConfiguration The deserialized instance
      */
     public static function loadFromObject ($data) {

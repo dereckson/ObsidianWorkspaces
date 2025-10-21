@@ -15,6 +15,8 @@
  * @filesource
  */
 
+namespace Waystone\Workspaces\Engines\Apps;
+
 use Waystone\Workspaces\Engines\Framework\Context;
 
 /**
@@ -23,6 +25,7 @@ use Waystone\Workspaces\Engines\Framework\Context;
  * This class describes an application context, in addition to the site context.
  */
 class ApplicationContext extends Context {
+
     /**
      * @var ApplicationConfiguration the application configuration
      */
@@ -32,9 +35,13 @@ class ApplicationContext extends Context {
      * Initializes a new ApplicationContext instance from a Context instance
      *
      * @param Context $sourceContext The source context
-     * @param ApplicationConfiguration The application configuration (facultative)
+     * @param ApplicationConfiguration The application configuration
+     *                                     (facultative)
      */
-    public static function loadFromContext ($sourceContext, $applicationConfiguration = NULL) {
+    public static function loadFromContext (
+        $sourceContext,
+        $applicationConfiguration = null
+    ) {
         $applicationContext = new ApplicationContext();
 
         $applicationContext->workspace = $sourceContext->workspace;
@@ -43,7 +50,7 @@ class ApplicationContext extends Context {
         $applicationContext->url = $sourceContext->url;
         $applicationContext->templateEngine = $sourceContext->templateEngine;
 
-        if ($applicationConfiguration !== NULL) {
+        if ($applicationConfiguration !== null) {
             $applicationContext->configuration = $applicationConfiguration;
         }
 

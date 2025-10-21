@@ -15,8 +15,14 @@
  * @filesource
  */
 
+namespace Waystone\Workspaces\Engines\Apps;
+
 use Waystone\Workspaces\Engines\Controller\Controller;
 use Waystone\Workspaces\Engines\Workspaces\WorkspaceConfiguration;
+
+use Collection;
+
+use Exception;
 
 /**
  * Application class
@@ -24,6 +30,7 @@ use Waystone\Workspaces\Engines\Workspaces\WorkspaceConfiguration;
  * This class describes an application
  */
 abstract class Application extends Controller {
+
     /**
      * @var string The application name
      */
@@ -35,9 +42,10 @@ abstract class Application extends Controller {
     public $context;
 
     /**
-     * @var The collections, keys as collections roles and values as collections names.
+     * @var Collection[] The collections, keys as collections roles and values as
+     *      collections names.
      */
-    public $collections;
+    public $collections = [];
 
     /**
      * Initializes the controller resources
@@ -49,17 +57,27 @@ abstract class Application extends Controller {
     /**
      * Loads the collection
      */
-    private function loadCollections () {
-        $workspaceCollections = $this->context->workspace->configuration->collections;
+    private function loadCollections () : array {
+        $loadedCollections = [];
 
-        foreach ($this->context->configuration->useCollections as $role => $name) {
+        $workspaceCollections =
+            $this->context->workspace->configuration->collections;
+
+        foreach (
+            $this->context->configuration->useCollections as $role => $name
+        ) {
             if (!array_key_exists($name, $workspaceCollections)) {
-                $name = WorkspaceConfiguration::getCollectionNameWithPrefix($this->context->workspace, $name);
+                $name =
+                    WorkspaceConfiguration::getCollectionNameWithPrefix($this->context->workspace,
+                        $name);
                 if (!array_key_exists($name, $workspaceCollections)) {
                     throw new Exception("Collection not found: $name");
                 }
             }
-            $collections[$role] = Collection::load($name, $workspaceCollections[$name]);
+            $loadedCollections[$role] =
+                Collection::load($name, $workspaceCollections[$name]);
         }
+
+        return $loadedCollections;
     }
 }
