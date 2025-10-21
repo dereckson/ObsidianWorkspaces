@@ -7,34 +7,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 /**
- * Gets the username matching specified user id
- *
- * @param string $user_id the user ID
- * @return string the username
- */
-function get_username ($user_id) {
-	global $db;
-
-	$user_id = $db->escape($user_id);
-	$sql = 'SELECT username FROM '. TABLE_USERS . " WHERE user_id = '$userid'";
-	return $db->queryScalar($sql, "Can't get username from specified user id");
-}
-
-/**
- * Gets the user id matching specified username
- *
- * @param string $username the username
- * @return string the user ID
- */
-function get_userid ($username) {
-	global $db;
-
-	$username = $db->escape($username);
-	$sql = 'SELECT user_id FROM '. TABLE_USERS . " WHERE username LIKE '$username'";
-    return $db->queryScalar($sql, "Can't get user id from specified username");
-}
-
-/**
  * Gets the resource ID from an identifier
  *
  * @param $resource_type the resource type
@@ -95,52 +67,6 @@ function dprint_r ($mixed) {
     echo '</pre>';
 }
 
-/*
- * Generates a new GUID
- * @return string a guid (without {})
- */
-function new_guid () {
-	//The guid chars
-    $chars = explode(',', 'a,b,c,d,e,f,0,1,2,3,4,5,6,7,8,9');
-
-    //Let's build our 36 characters string
-    //e.g. 68ed40c6-f5bb-4a4a-8659-3adf23536b75
-	$guid = "";
-	for ($i = 0 ; $i < 36 ; $i++) {
-        if ($i == 8 || $i == 13 || $i == 18 || $i == 23) {
-            //Dashes at position 9, 14, 19 and 24
-            $guid .= "-";
-		} else {
-            //0-f hex digit elsewhere
-			$guid .= $chars[mt_rand() % sizeof($characters)];
-		}
-	}
-	return $guid;
-}
-
-/*
- * Determines if the expression is a valid guid (in uuid notation, without {})
- * @param string $expression the guid to check
- * @return true if the expression is a valid guid ; otherwise, false
- */
-function is_guid ($expression) {
-    //We avoid regexp to speed up the check
-    //A guid is a 36 characters string
-    if (strlen($expression) != 36) return false;
-
-    $expression = strtolower($expression);
-	for ($i = 0 ; $i < 36 ; $i++) {
-		if ($i == 8 || $i == 13 || $i == 18 || $i == 23) {
-			//with dashes
-			if ($expression[$i] != '-') return false;
-		} else {
-		    //and hex numbers
-			if (!is_numeric($expression[$i]) && $expression[$i] != 'a' && $expression[$i] != 'b' && $expression[$i] != 'c' && $expression[$i] != 'd' && $expression[$i] != 'e' && $expression[$i] != 'f' ) return false;
-		}
-	}
-    return true;
-}
-
 /**
  * Gets file extension
  * @param string $file the file to get the extension
@@ -198,18 +124,6 @@ function get_url () {
     } else {
         return $Config['BaseURL'];
     }
-}
-
-/*
- * Gets page URL
- * @return string URL
- */
-function get_page_url () {
-    $url = $_SERVER['SCRIPT_NAME'] . $_SERVER['PATH_INFO'];
-    if (substr($url, -10) == "/index.php") {
-        return substr($url, 0, -9);
-    }
-    return $url;
 }
 
 /*
@@ -287,45 +201,4 @@ function get_current_url_fragments () {
     $url_source = get_current_url();
     if ($url_source == '/index.php') return array();
     return explode('/', substr($url_source, 1));
-}
-
-////////////////////////////////////////////////////////////////////////////////
-///                                                                          ///
-/// URL xmlHttpRequest helpers functions                                     ///
-///                                                                          ///
-////////////////////////////////////////////////////////////////////////////////
-
-/*
- * Gets a hash value to check the integrity of URLs in /do.php calls
- * @param Array $args the args to compute the hash
- * @return the hash paramater for your xmlHttpRequest url
- */
-function get_xhr_hash ($args) {
-    global $Config;
-
-    array_shift($args);
-    return md5($_SESSION['ID'] . $Config['SecretKey'] . implode('', $args));
-}
-
-/*
- * Gets the URL to call do.php, the xmlHttpRequest controller
- * @return string the xmlHttpRequest url, with an integrity hash
- */
-function get_xhr_hashed_url () {
-    global $Config;
-
-    $args = func_get_args();
-    $args[] = get_xhr_hash($args);
-    return $Config['DoURL'] . '/' . implode('/', $args);
-}
-
-/*
- * Gets the URL to call do.php, the xmlHttpRequest controller
- * @return string the xmlHttpRequest url
- */
-function get_xhr_url () {
-    global $Config;
-
-    $args = func_get_args();
-    return $Config['DoURL'] . '/' .implode('/', $args);
 }

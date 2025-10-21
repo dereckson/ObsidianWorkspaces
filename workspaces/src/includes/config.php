@@ -124,9 +124,6 @@ $Config['Theme'] = 'bluegray';
 $Config['SiteURL'] = get_server_url();
 $Config['BaseURL'] = '';
 
-//xmlHttpRequest callbacks URL
-$Config['DoURL'] = $Config['SiteURL'] . "/do.php";
-
 ////////////////////////////////////////////////////////////////////////////////
 ///                                                                          ///
 /// IV. Static content                                                       ///
