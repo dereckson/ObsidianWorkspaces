@@ -16,6 +16,7 @@
  */
 
 use Waystone\Workspaces\Engines\Apps\Application;
+use Waystone\Workspaces\Engines\Errors\ErrorHandling;
 
 /**
  * Documents application class
@@ -67,11 +68,26 @@ class DocumentsApplication extends Application {
     public function getDocument ($docId) {
         $file = $this->getFilePath($docId . '.json');
         $data = file_get_contents($file);
-        return json_decode($data);
+
+        $data = json_decode($data);
+        if ($data === null) {
+            ErrorHandling::messageAndDie(
+                GENERAL_ERROR,
+                json_last_error_msg(),
+                "Can't parse JSON to load $docId"
+            );
+        }
+
+        if (property_exists($data, "type")) {
+            $data->type = DocumentType::from(ucfirst($data->type));
+        }
+
+        $mapper = new JsonMapper();
+        return $mapper->map($data, new Document);
     }
 
-    public static function getDocumentType ($type) {
-        $key = 'DocumentType' . ucfirst(strtolower($type));
+    public static function getDocumentType (DocumentType $type) : string {
+        $key = 'DocumentType' . $type->value;
         return Language::get($key);
     }
 

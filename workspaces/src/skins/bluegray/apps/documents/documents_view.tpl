@@ -9,8 +9,8 @@
         <p><strong>{#Date#}{#_t#}</strong> {$document->date}</p>
         <p><strong>{#Type#}{#_t#}</strong> {$documentType}</p>
 {if $document->refs}
-        <p><strong>{#RefsUs#}{#_t#}</strong> {$document->refs->us}</p>
-        <p><strong>{#RefsYours#}{#_t#}</strong> {$document->refs->yours}</p>
+        <p><strong>{#RefsUs#}{#_t#}</strong> {$document->refs["us"]}</p>
+        <p><strong>{#RefsYours#}{#_t#}</strong> {$document->refs["yours"]}</p>
 {/if}
     </div>
 </section>

@@ -22,8 +22,10 @@ function obsidian_autoload ($name) {
     /// Applications
     ///
 
+    if ($name == 'Document') { require $dir . '/apps/documents/Document.php'; return true; }
     if ($name == 'DocumentsApplication') { require $dir . '/apps/documents/DocumentsApplication.php'; return true; }
     if ($name == 'DocumentsApplicationConfiguration') { require $dir . '/apps/documents/DocumentsApplicationConfiguration.php'; return true; }
+    if ($name == 'DocumentType') { require $dir . '/apps/documents/DocumentType.php'; return true; }
 
     if ($name == 'HelloWorldApplication') { require $dir . '/apps/helloworld/HelloWorldApplication.php'; return true; }
 
