@@ -57,16 +57,6 @@ function s ($amount) {
 	if ($amount >= 2 || $amount <= -2 ) return 's';
 }
 
-/*
- * Prints human-readable information about a variable, wrapped in a <pre> block
- * @param mixed $mixed the variable to dump
- */
-function dprint_r ($mixed) {
-	echo '<pre>';
-    print_r($mixed);
-    echo '</pre>';
-}
-
 /**
  * Gets file extension
  * @param string $file the file to get the extension

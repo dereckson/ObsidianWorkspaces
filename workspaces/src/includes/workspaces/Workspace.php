@@ -15,6 +15,7 @@
  * @filesource
  */
 
+use Waystone\Workspaces\Engines\Errors\ErrorHandling;
 use Waystone\Workspaces\Engines\Framework\Context;
 
 /**
@@ -78,7 +79,7 @@ class Workspace {
         global $db;
         $code = $db->escape($code);
         $sql = "SELECT * FROM " . TABLE_WORKSPACES . " WHERE workspace_code = '" . $code . "'";
-        if (!$result = $db->query($sql)) message_die(SQL_ERROR, "Unable to query workspaces", '', __LINE__, __FILE__, $sql);
+        if (!$result = $db->query($sql)) ErrorHandling::messageAndDie(SQL_ERROR, "Unable to query workspaces", '', __LINE__, __FILE__, $sql);
         if (!$row = $db->fetchRow($result)) {
             throw new Exception("Workspace unknown: " . $code);
         }
@@ -95,7 +96,7 @@ class Workspace {
         global $db;
         $id = $db->escape($this->id);
         $sql = "SELECT * FROM " . TABLE_WORKSPACES . " WHERE workspace_id = '" . $id . "'";
-        if (!$result = $db->query($sql)) message_die(SQL_ERROR, "Unable to query workspaces", '', __LINE__, __FILE__, $sql);
+        if (!$result = $db->query($sql)) ErrorHandling::messageAndDie(SQL_ERROR, "Unable to query workspaces", '', __LINE__, __FILE__, $sql);
         if (!$row = $db->fetchRow($result)) {
             $this->lastError = "Workspace unknown: " . $this->id;
             return false;
@@ -119,7 +120,7 @@ class Workspace {
         //Updates or inserts
         $sql = "REPLACE INTO " . TABLE_WORKSPACES . " (`workspace_id`, `workspace_code`, `workspace_name`, `workspace_created`, `workspace_description`) VALUES ('$id', '$code', '$name', '$created', '$description')";
         if (!$db->query($sql)) {
-            message_die(SQL_ERROR, "Unable to save", '', __LINE__, __FILE__, $sql);
+            ErrorHandling::messageAndDie(SQL_ERROR, "Unable to save", '', __LINE__, __FILE__, $sql);
         }
 
         if (!$this->id) {
@@ -186,7 +187,7 @@ class Workspace {
                            p.permission_flag > 0 AND
                            ($clause)";
             if (!$result = $db->query($sql)) {
-                message_die(SQL_ERROR, "Can't get user workspaces", '', __LINE__, __FILE__, $sql);
+                ErrorHandling::messageAndDie(SQL_ERROR, "Can't get user workspaces", '', __LINE__, __FILE__, $sql);
             }
 
             $workspaces = array();
@@ -216,7 +217,7 @@ class Workspace {
         $code = $db->escape($code);
         $sql = "SELECT count(*) FROM " . TABLE_WORKSPACES . " WHERE workspace_code = '$code'";
         if (!$result = $db->query($sql)) {
-            message_die(SQL_ERROR, "Can't check workspace code", '', __LINE__, __FILE__, $sql);
+            ErrorHandling::messageAndDie(SQL_ERROR, "Can't check workspace code", '', __LINE__, __FILE__, $sql);
         }
         $row = $db->fetchRow($result);
         return ($row[0] == 1);

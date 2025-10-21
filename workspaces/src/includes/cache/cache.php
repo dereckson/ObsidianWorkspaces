@@ -31,6 +31,8 @@
  *
  */
 
+use Waystone\Workspaces\Engines\Errors\ErrorHandling;
+
 /**
  * Cache caller
  */
@@ -71,12 +73,12 @@ class Cache {
         $engine_class = 'Cache' . ucfirst($engine);
 
         if (!file_exists($engine_file)) {
-            message_die(GENERAL_ERROR, "Can't initialize $engine cache engine.<br />$engine_file not found.", 'Cache');
+            ErrorHandling::messageAndDie(GENERAL_ERROR, "Can't initialize $engine cache engine.<br />$engine_file not found.", 'Cache');
         }
 
         require_once($engine_file);
         if (!class_exists($engine_class)) {
-            message_die(GENERAL_ERROR, "Can't initialize $engine cache engine.<br />$engine_class class not found.", 'Cache');
+            ErrorHandling::messageAndDie(GENERAL_ERROR, "Can't initialize $engine cache engine.<br />$engine_class class not found.", 'Cache');
         }
 
         return call_user_func(array($engine_class, 'load'));

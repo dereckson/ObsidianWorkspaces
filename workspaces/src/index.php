@@ -17,6 +17,7 @@
  */
 
 use Keruald\Database\Database;
+use Waystone\Workspaces\Engines\Errors\ErrorHandling;
 
 ////////////////////////////////////////////////////////////////////////////////
 ///
@@ -46,7 +47,7 @@ try {
         $context->workspace->loadConfiguration($context);
     }
 } catch (Exception $ex) {
-    message_die(GENERAL_ERROR, $ex->getMessage(), Language::get('CantLoadWorkspace'));
+    ErrorHandling::messageAndDie(GENERAL_ERROR, $ex->getMessage(), Language::get('CantLoadWorkspace'));
 }
 
 //Handles login or logout
@@ -69,7 +70,7 @@ if ($context->user->id == ANONYMOUS_USER) {
 
 //If a workspace has been selected, ensures the current logged in user has access to it.
 if ($context->workspace && !$context->workspace->userCanAccess($context->user)) {
-    message_die(HACK_ERROR, "You don't have access to this workspace.", 'Access control');
+    ErrorHandling::messageAndDie(HACK_ERROR, "You don't have access to this workspace.", 'Access control');
 }
 
 $controller = count($context->url) > 0 ? $context->url[0] : '';

@@ -15,6 +15,8 @@
  * @filesource
  */
 
+use Waystone\Workspaces\Engines\Errors\ErrorHandling;
+
 /**
  * UserGroup class
  *
@@ -65,7 +67,7 @@ class UserGroup {
         global $db;
         $id = $db->escape($this->id);
         $sql = "SELECT * FROM " . TABLE_UGROUPS . " WHERE group_id = '" . $id . "'";
-        if (!$result = $db->query($sql)) message_die(SQL_ERROR, "Unable to query users_groups", '', __LINE__, __FILE__, $sql);
+        if (!$result = $db->query($sql)) ErrorHandling::messageAndDie(SQL_ERROR, "Unable to query users_groups", '', __LINE__, __FILE__, $sql);
         if (!$row = $db->fetchRow($result)) {
             $this->lastError = "UserGroup unknown: " . $this->id;
             return false;
@@ -84,7 +86,7 @@ class UserGroup {
         global $db;
         $code = $db->escape($code);
         $sql = "SELECT * FROM " . TABLE_UGROUPS . " WHERE group_code = '" . $code . "'";
-        if (!$result = $db->query($sql)) message_die(SQL_ERROR, "Unable to query group", '', __LINE__, __FILE__, $sql);
+        if (!$result = $db->query($sql)) ErrorHandling::messageAndDie(SQL_ERROR, "Unable to query group", '', __LINE__, __FILE__, $sql);
         if (!$row = $db->fetchRow($result)) {
             throw new Exception("Group unknown: " . $code);
         }
@@ -108,7 +110,7 @@ class UserGroup {
         //Updates or inserts
         $sql = "REPLACE INTO " . TABLE_UGROUPS . " (`group_id`, `group_code`, `group_title`, `group_description`) VALUES ('$id', '$code', '$title', '$description')";
         if (!$db->query($sql)) {
-            message_die(SQL_ERROR, "Unable to save", '', __LINE__, __FILE__, $sql);
+            ErrorHandling::messageAndDie(SQL_ERROR, "Unable to save", '', __LINE__, __FILE__, $sql);
         }
 
         if (!$this->id) {

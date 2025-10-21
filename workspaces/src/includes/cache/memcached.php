@@ -16,6 +16,8 @@
  *
  */
 
+use Waystone\Workspaces\Engines\Errors\ErrorHandling;
+
 /**
  * Memcached cache
  *
@@ -52,9 +54,9 @@ class CacheMemcached {
         //Checks extension is okay
         if (!extension_loaded('memcached')) {
             if (extension_loaded('memcache')) {
-                message_die(GENERAL_ERROR, "Can't initialize $engine cache engine.<br />PHP extension memcached not loaded.<br /><strong>!!! This class uses the Memcached extension AND NOT the Memcache extension (this one is loaded) !!!</strong>", 'Cache');
+                ErrorHandling::messageAndDie(GENERAL_ERROR, "Can't initialize $engine cache engine.<br />PHP extension memcached not loaded.<br /><strong>!!! This class uses the Memcached extension AND NOT the Memcache extension (this one is loaded) !!!</strong>", 'Cache');
             } else {
-                message_die(GENERAL_ERROR, "Can't initialize $engine cache engine.<br />PHP extension memcached not loaded.", 'Cache');
+                ErrorHandling::messageAndDie(GENERAL_ERROR, "Can't initialize $engine cache engine.<br />PHP extension memcached not loaded.", 'Cache');
             }
         }
 
