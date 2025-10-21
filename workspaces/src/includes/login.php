@@ -18,6 +18,9 @@
 
 use Waystone\Workspaces\Engines\Errors\ErrorHandling;
 
+global $context;
+$db = $context->db;
+
 $action = array_key_exists('action', $_GET) ? $_GET['action'] : '';
 
 if (array_key_exists('LogIn', $_POST)) {
@@ -35,7 +38,7 @@ if (array_key_exists('LogIn', $_POST)) {
             $LoginError = "Incorrect password.";
         } else {
             //Login successful
-            Session::load()->user_login($row['user_id']);
+            $context->session->user_login($row['user_id']);
             $LoginSuccessful = true;
         }
     } else {
@@ -43,7 +46,7 @@ if (array_key_exists('LogIn', $_POST)) {
     }
 } elseif (array_key_exists('LogOut', $_POST) || $action == "user.logout") {
     //User have submitted logout form or clicked a logout link
-    Session::load()->user_logout();
+    $context->session->user_logout();
 } elseif (array_key_exists('authenticationMethodId', $_GET)) {
     //Call authentication method for more processing
     $auth = AuthenticationMethod::getFromId($_GET['authenticationMethodId'], $context);

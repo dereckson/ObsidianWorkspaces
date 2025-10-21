@@ -22,15 +22,6 @@
 ///                                                                          ///
 ////////////////////////////////////////////////////////////////////////////////
 
-require_once("autoload_vendor.php");
-
-//Errors management
-include_once("error.php");
-error_reporting(E_ALL);
-
-$minorRecoverableErrors = E_NOTICE | E_USER_NOTICE | E_DEPRECATED | E_USER_DEPRECATED;
-set_error_handler('throwExceptionErrorHandler', E_ALL ^ $minorRecoverableErrors);
-
 //Loads global functions
 include_once("GlobalFunctions.php"); //Global functions
 
@@ -48,5 +39,9 @@ if (isset($_SERVER) && array_key_exists('OBSIDIAN_CONFIG', $_SERVER)) {
 }
 
 //Loads libraries
-include_once("session.php");           //Sessions handler
 include_once("autoload.php");         //Autoloader for needed classes
+
+//The user_id matching anonymous user (overridable in config file)
+if (!defined('ANONYMOUS_USER')) {
+    define('ANONYMOUS_USER', -1);
+}

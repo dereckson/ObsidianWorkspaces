@@ -1,4 +1,5 @@
 <?php
+global $Config;
 
 /**
  *    _, __,  _, _ __, _  _, _, _
@@ -16,25 +17,23 @@
  *
  */
 
-use Keruald\Database\Database;
 use Waystone\Workspaces\Engines\Errors\ErrorHandling;
+use Waystone\Workspaces\Engines\Framework\Application;
 
 ////////////////////////////////////////////////////////////////////////////////
 ///
 /// Initialization
 ///
 
-//Keruald and Obsidian Workspaces libraries
+require_once("includes/autoload_vendor.php");
+Application::init();
 
 include('includes/core.php');
 
 //Prepares the site context
-$context = new Context();
-$context->config = $Config;
-$context->db = $db = Database::load($Config["sql"]);
-$context->session = Session::load();
-$context->url = get_current_url_fragments();
-$context->initializeTemplateEngine($context->config['Theme']);
+
+$context = Application::getContext($Config);
+$db = $context->db;
 
 //Loads language files
 Language::initialize();
