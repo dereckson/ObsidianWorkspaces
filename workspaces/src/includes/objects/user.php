@@ -28,6 +28,8 @@ class User {
     public $email;
     public $regdate;
 
+    public array $session = [];
+
     /**
      * @var Array An array of users already loaded, the username as user id
      */
