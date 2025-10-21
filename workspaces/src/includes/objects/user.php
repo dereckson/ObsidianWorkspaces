@@ -17,6 +17,7 @@
  */
 
 use Waystone\Workspaces\Engines\Errors\ErrorHandling;
+use Waystone\Workspaces\Engines\Workspaces\Workspace;
 
 /**
  * User class

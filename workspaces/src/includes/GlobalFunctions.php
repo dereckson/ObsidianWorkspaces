@@ -1,5 +1,7 @@
 <?php
 
+use Waystone\Workspaces\Engines\Workspaces\Workspace;
+
 ////////////////////////////////////////////////////////////////////////////////
 ///                                                                          ///
 /// Information helper functions                                             ///

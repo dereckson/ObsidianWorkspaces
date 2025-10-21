@@ -20,7 +20,7 @@ namespace Waystone\Workspaces\Engines\Framework;
 use Keruald\Database\DatabaseEngine;
 use Smarty\Smarty;
 use User;
-use WorkSpace;
+use Waystone\Workspaces\Engines\Workspaces\WorkSpace;
 
 /**
  * Context class

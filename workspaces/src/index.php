@@ -19,6 +19,7 @@ global $Config;
 
 use Waystone\Workspaces\Engines\Errors\ErrorHandling;
 use Waystone\Workspaces\Engines\Framework\Application;
+use Waystone\Workspaces\Engines\Workspaces\Workspace;
 
 ////////////////////////////////////////////////////////////////////////////////
 ///

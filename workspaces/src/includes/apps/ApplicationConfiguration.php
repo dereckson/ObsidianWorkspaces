@@ -15,6 +15,8 @@
  * @filesource
  */
 
+use Waystone\Workspaces\Engines\Workspaces\WorkspaceConfiguration;
+
 /**
  * Application configuration class
  *

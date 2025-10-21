@@ -15,8 +15,13 @@
  * @filesource
  */
 
+namespace Waystone\Workspaces\Engines\Workspaces;
+
 use Waystone\Workspaces\Engines\Errors\ErrorHandling;
 use Waystone\Workspaces\Engines\Framework\Context;
+
+use Cache;
+use User;
 
 /**
  * Workspace class
@@ -41,7 +46,7 @@ class Workspace {
      *
      * @param int $id the primary key
      */
-    function __construct ($id = NULL) {
+    function __construct ($id = null) {
         if ($id) {
             $this->id = $id;
             $this->load_from_database();
@@ -52,10 +57,18 @@ class Workspace {
      * Loads the object Workspace (ie fill the properties) from the $_POST array
      */
     function load_from_form () {
-        if (array_key_exists('code', $_POST)) $this->code = $_POST['code'];
-        if (array_key_exists('name', $_POST)) $this->name = $_POST['name'];
-        if (array_key_exists('created', $_POST)) $this->created = $_POST['created'];
-        if (array_key_exists('description', $_POST)) $this->description = $_POST['description'];
+        if (array_key_exists('code', $_POST)) {
+            $this->code = $_POST['code'];
+        }
+        if (array_key_exists('name', $_POST)) {
+            $this->name = $_POST['name'];
+        }
+        if (array_key_exists('created', $_POST)) {
+            $this->created = $_POST['created'];
+        }
+        if (array_key_exists('description', $_POST)) {
+            $this->description = $_POST['description'];
+        }
     }
 
     /**
@@ -73,19 +86,25 @@ class Workspace {
      * Loads the specified workspace from code
      *
      * @param string $code The workspace code
+     *
      * @return Workspace The specified workspace instance
      */
     public static function fromCode ($code) {
         global $db;
         $code = $db->escape($code);
-        $sql = "SELECT * FROM " . TABLE_WORKSPACES . " WHERE workspace_code = '" . $code . "'";
-        if (!$result = $db->query($sql)) ErrorHandling::messageAndDie(SQL_ERROR, "Unable to query workspaces", '', __LINE__, __FILE__, $sql);
+        $sql = "SELECT * FROM " . TABLE_WORKSPACES . " WHERE workspace_code = '"
+               . $code . "'";
+        if (!$result = $db->query($sql)) {
+            ErrorHandling::messageAndDie(SQL_ERROR,
+                "Unable to query workspaces", '', __LINE__, __FILE__, $sql);
+        }
         if (!$row = $db->fetchRow($result)) {
             throw new Exception("Workspace unknown: " . $code);
         }
 
         $workspace = new Workspace();
         $workspace->load_from_row($row);
+
         return $workspace;
     }
 
@@ -95,13 +114,19 @@ class Workspace {
     function load_from_database () {
         global $db;
         $id = $db->escape($this->id);
-        $sql = "SELECT * FROM " . TABLE_WORKSPACES . " WHERE workspace_id = '" . $id . "'";
-        if (!$result = $db->query($sql)) ErrorHandling::messageAndDie(SQL_ERROR, "Unable to query workspaces", '', __LINE__, __FILE__, $sql);
+        $sql = "SELECT * FROM " . TABLE_WORKSPACES . " WHERE workspace_id = '"
+               . $id . "'";
+        if (!$result = $db->query($sql)) {
+            ErrorHandling::messageAndDie(SQL_ERROR,
+                "Unable to query workspaces", '', __LINE__, __FILE__, $sql);
+        }
         if (!$row = $db->fetchRow($result)) {
             $this->lastError = "Workspace unknown: " . $this->id;
+
             return false;
         }
         $this->load_from_row($row);
+
         return true;
     }
 
@@ -118,9 +143,11 @@ class Workspace {
         $description = $db->escape($this->description);
 
         //Updates or inserts
-        $sql = "REPLACE INTO " . TABLE_WORKSPACES . " (`workspace_id`, `workspace_code`, `workspace_name`, `workspace_created`, `workspace_description`) VALUES ('$id', '$code', '$name', '$created', '$description')";
+        $sql = "REPLACE INTO " . TABLE_WORKSPACES
+               . " (`workspace_id`, `workspace_code`, `workspace_name`, `workspace_created`, `workspace_description`) VALUES ('$id', '$code', '$name', '$created', '$description')";
         if (!$db->query($sql)) {
-            ErrorHandling::messageAndDie(SQL_ERROR, "Unable to save", '', __LINE__, __FILE__, $sql);
+            ErrorHandling::messageAndDie(SQL_ERROR, "Unable to save", '',
+                __LINE__, __FILE__, $sql);
         }
 
         if (!$this->id) {
@@ -132,8 +159,10 @@ class Workspace {
     /**
      * Determines if the specified user has access to the current workspace
      *
-     * @param User the user to check
-     * @return boolean true if the user has access to the current workspace ; otherwise, false.
+     * @param User $user The user to check
+     *
+     * @return boolean true if the user has access to the current workspace ;
+     *                 otherwise, false.
      */
     public function userCanAccess (User $user) {
         if ($this->id === false || $this->id === null || $this->id === '') {
@@ -144,31 +173,36 @@ class Workspace {
                 return true;
             }
         }
+
         return false;
     }
 
     /**
      * Loads configuration
      *
-     * @param $context The site context
+     * @param Context $context The site context
      */
     public function loadConfiguration (Context $context) {
         global $Config;
 
-        $file = $Config['Content']['Workspaces'] . '/' . $this->code . '/workspace.conf';
+        $file = $Config['Content']['Workspaces'] . '/' . $this->code
+                . '/workspace.conf';
         if (!file_exists($file)) {
-            $exceptionMessage = sprintf(Language::get('NotConfiguredWorkspace'), $file);
+            $exceptionMessage =
+                sprintf(Language::get('NotConfiguredWorkspace'), $file);
             throw new Exception($exceptionMessage);
         }
 
-        $this->configuration = WorkspaceConfiguration::loadFromFile($file, $context);
+        $this->configuration =
+            WorkspaceConfiguration::loadFromFile($file, $context);
     }
 
     /**
      * Gets workspaces specified user has access to.
      *
      * @param int $user_id The user to get his workspaces
-     * @return Array A list of workspaces
+     *
+     * @return Workspace[] A list of workspaces
      */
     public static function get_user_workspaces ($user_id) {
         global $db;
@@ -179,7 +213,7 @@ class Workspace {
 
         if (!$workspaces = unserialize($cache->get("workspaces-$user_id"))) {
             $clause = User::get_permissions_clause_from_user_id($user_id);
-            $sql =  "SELECT DISTINCT w.*
+            $sql = "SELECT DISTINCT w.*
                      FROM " . TABLE_PERMISSIONS . " p, " . TABLE_WORKSPACES . " w
                      WHERE p.target_resource_type = 'W' AND
                            p.target_resource_id = w.workspace_id AND
@@ -187,10 +221,11 @@ class Workspace {
                            p.permission_flag > 0 AND
                            ($clause)";
             if (!$result = $db->query($sql)) {
-                ErrorHandling::messageAndDie(SQL_ERROR, "Can't get user workspaces", '', __LINE__, __FILE__, $sql);
+                ErrorHandling::messageAndDie(SQL_ERROR,
+                    "Can't get user workspaces", '', __LINE__, __FILE__, $sql);
             }
 
-            $workspaces = array();
+            $workspaces = [];
 
             while ($row = $db->fetchRow($result)) {
                 $workspace = new Workspace();
@@ -209,17 +244,22 @@ class Workspace {
      * Determines if a string matches an existing workspace code.
      *
      * @param string $code The workspace code to check
-     * @return boolean If the specified code matches an existing workspace, true; otherwise, false.
+     *
+     * @return boolean If the specified code matches an existing workspace,
+     *                 true; otherwise, false.
      */
     public static function is_workspace ($code) {
         global $db;
 
         $code = $db->escape($code);
-        $sql = "SELECT count(*) FROM " . TABLE_WORKSPACES . " WHERE workspace_code = '$code'";
+        $sql = "SELECT count(*) FROM " . TABLE_WORKSPACES
+               . " WHERE workspace_code = '$code'";
         if (!$result = $db->query($sql)) {
-            ErrorHandling::messageAndDie(SQL_ERROR, "Can't check workspace code", '', __LINE__, __FILE__, $sql);
+            ErrorHandling::messageAndDie(SQL_ERROR,
+                "Can't check workspace code", '', __LINE__, __FILE__, $sql);
         }
         $row = $db->fetchRow($result);
+
         return ($row[0] == 1);
     }
 }

@@ -15,38 +15,50 @@
  * @filesource
  */
 
+namespace Waystone\Workspaces\Engines\Workspaces;
+
 use Waystone\Workspaces\Engines\Framework\Context;
 
+use ApplicationConfiguration;
+use ObjectDeserializableWithContext;
+
 /**
-  * Workspace configuration class
-  *
-  * This class maps the workspaces table.
-  */
+ * Workspace configuration class
+ *
+ * This class maps the workspaces table.
+ */
 class WorkspaceConfiguration implements ObjectDeserializableWithContext {
+
     /**
-     * @var Array applications (each element is an instance of ApplicationConfiguration)
+     * @var array applications (each element is an instance of
+     *      ApplicationConfiguration)
      */
     public $applications = [];
 
     /**
-     * @var Array authentication methods for this workspace (each element is an instance of AuthenticationMethod)
+     * @var array authentication methods for this workspace (each element is an
+     *      instance of AuthenticationMethod)
      */
     public $authenticationMethods = [];
 
     /**
-     * @var Array disclaimers (each element a string)
+     * @var array disclaimers (each element a string)
      */
     public $disclaimers = [];
 
     /**
-     * @var Array collections (each key a string to the collection name, each value a string to the collection document type)
+     * @var array collections (each key a string to the collection name, each
+     *      value a string to the collection document type)
      */
     public $collections = [];
 
     /**
-     * Determines if internal Obsidian Workspaces authentication can be used to login on this workspace URL
+     * Determines if internal Obsidian Workspaces authentication can be used to
+     * login on this workspace URL
      *
-     * @return boolean True if a user not logged in Obsidian Workspaces going to a workspace URL should be offered to login through Obsidian ; otherwise, false.
+     * @return boolean True if a user not logged in Obsidian Workspaces going
+     *                 to a workspace URL should be offered to login through
+     *                 Obsidian ; otherwise, false.
      */
     public $allowInternalAuthentication = true;
 
@@ -68,22 +80,29 @@ class WorkspaceConfiguration implements ObjectDeserializableWithContext {
         foreach ($this->applications as $application) {
             $controllers[$application->bind] = $application;
         }
+
         return $controllers;
     }
 
     /**
      * Determines if the URL fragment matches a controller bound to it.
      *
-     * @param ApplicationConfiguration $applicationConfiguration The application configuration
-     * @return boolean true if the URL fragment matches an application controller's bind
+     * @param ApplicationConfiguration $applicationConfiguration The
+     *                                                           application
+     *                                                           configuration
+     *
+     * @return boolean true if the URL fragment matches an application
+     *                 controller's bind
      */
     public function hasControllerBind ($url, &$applicationConfiguration) {
         foreach ($this->applications as $application) {
             if ($application->bind == $url) {
                 $applicationConfiguration = $application;
+
                 return true;
             }
         }
+
         return false;
     }
 
@@ -91,7 +110,8 @@ class WorkspaceConfiguration implements ObjectDeserializableWithContext {
      * Loads a WorkspaceConfiguration instance from an object
      *
      * @param object $data The object to deserialize
-     * @param Context The site context
+     * @param Context $context The site context
+     *
      * @return WorkspaceConfiguration The deserialized instance
      */
     public static function loadFromObject ($data, $context) {
@@ -106,14 +126,16 @@ class WorkspaceConfiguration implements ObjectDeserializableWithContext {
 
                 $controllerClass = $applicationData->name;
                 if (!class_exists($controllerClass)) {
-                    trigger_error("Application controller doesn't exist: $controllerClass. If you've just added application code, update includes/autoload.php file to register your new classes.", E_USER_WARNING);
+                    trigger_error("Application controller doesn't exist: $controllerClass. If you've just added application code, update includes/autoload.php file to register your new classes.",
+                        E_USER_WARNING);
                     continue;
                 }
                 $configurationClass = $controllerClass . 'Configuration';
                 if (!class_exists($configurationClass)) {
                     $configurationClass = "ApplicationConfiguration";
                 }
-                $instance->applications[] = $configurationClass::loadFromObject($applicationData);
+                $instance->applications[] =
+                    $configurationClass::loadFromObject($applicationData);
             }
         }
 
@@ -152,8 +174,11 @@ class WorkspaceConfiguration implements ObjectDeserializableWithContext {
                     throw new Exception("A collection has been declared without name in the workspace configuration.");
                 }
                 $name = $collection->name;
-                if (!property_exists($collection, 'global') || !$collection->global) {
-                    $name = WorkspaceConfiguration::getCollectionNameWithPrefix($context->workspace, $name);
+                if (!property_exists($collection, 'global')
+                    || !$collection->global) {
+                    $name =
+                        WorkspaceConfiguration::getCollectionNameWithPrefix($context->workspace,
+                            $name);
                 }
                 if (property_exists($collection, 'documentType')) {
                     $type = $collection->documentType;
@@ -183,11 +208,15 @@ class WorkspaceConfiguration implements ObjectDeserializableWithContext {
     /**
      * Gets the full name of a collection, with the workspace prefix
      *
-     * @param $workspace The current workspace
-     * @param $workspace The collection name
+     * @param Workspace $workspace The current workspace
+     * @param string $name The collection name
+     *
      * @return string The full name of the collection
      */
-    public static function getCollectionNameWithPrefix (Workspace $workspace, $name) {
+    public static function getCollectionNameWithPrefix (
+        Workspace $workspace,
+        string $name
+    ) {
         return $workspace->code . '-' . $name;
     }
 
@@ -197,8 +226,10 @@ class WorkspaceConfiguration implements ObjectDeserializableWithContext {
     public static function loadFromFile ($file, $context) {
         $object = json_decode(file_get_contents($file));
         if ($object === null) {
-            throw new Exception("Can't parse configuration file: " . json_last_error_msg());
+            throw new Exception("Can't parse configuration file: "
+                                . json_last_error_msg());
         }
+
         return self::loadFromObject($object, $context);
     }
 }

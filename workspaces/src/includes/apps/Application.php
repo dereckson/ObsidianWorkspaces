@@ -16,6 +16,7 @@
  */
 
 use Waystone\Workspaces\Engines\Controller\Controller;
+use Waystone\Workspaces\Engines\Workspaces\WorkspaceConfiguration;
 
 /**
  * Application class
