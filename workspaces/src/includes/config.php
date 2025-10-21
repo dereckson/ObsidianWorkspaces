@@ -30,10 +30,10 @@ use Keruald\Database\Engines\MySQLiEngine;
 //SQL configuration
 
 $Config['sql']['engine'] = MySQLiEngine::class;
-$Config['sql']['host'] = 'localhost';
-$Config['sql']['username'] = 'obsidian';
-$Config['sql']['password'] = 'obsidian';
-$Config['sql']['database'] = 'obsidian';
+$Config['sql']['host'] = $_ENV["DB_HOST"] ?? 'localhost';
+$Config['sql']['username'] = $_ENV["DB_USER"] ?? 'obsidian';
+$Config['sql']['password'] = $_ENV["DB_PASSWORD"] ?? 'obsidian';
+$Config['sql']['database'] = $_ENV["DB_NAME"] ?? 'obsidian';
 $Config['sql']['fetch_mode'] = MYSQLI_BOTH;
 $Config['sql']['dontThrowExceptions'] = true;
 
