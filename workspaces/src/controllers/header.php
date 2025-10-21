@@ -16,6 +16,8 @@
  *
  */
 
+use Waystone\Workspaces\Engines\Controller\Controller;
+
 /**
  * Header controller
  */

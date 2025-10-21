@@ -15,6 +15,9 @@
  * @filesource
  */
 
+use Waystone\Workspaces\Engines\Controller\LoadableWithContext;
+use Waystone\Workspaces\Engines\Framework\Context;
+
 /**
  * Gets a specified language expression defined in configuration file
  *

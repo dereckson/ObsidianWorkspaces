@@ -15,7 +15,12 @@
  * @filesource
  */
 
+namespace Waystone\Workspaces\Engines\Framework;
+
+use Keruald\Database\DatabaseEngine;
 use Smarty\Smarty;
+use User;
+use WorkSpace;
 
 /**
  * Context class
@@ -23,40 +28,41 @@ use Smarty\Smarty;
  * This class describes the site context.
  */
 class Context {
-    /**
-     * @var WorkSpace the workspace currently enabled
-     */
-    public $workspace;
 
     /**
-     * @var Database the database instance
+     * @var ?WorkSpace the workspace currently enabled
      */
-    public $db;
+    public ?WorkSpace $workspace = null;
+
+    /**
+     * @var DatabaseEngine the database
+     */
+    public DatabaseEngine $db;
 
     /**
      * @var array the configuration
      */
-    public $config;
+    public array $config;
 
     /**
      * @var User the user currently logged in
      */
-    public $user;
+    public User $user;
 
     /**
      * @var Session the current session
      */
-    public $session;
+    public Session $session;
 
     /**
-     * @var Array the URL fragments
+     * @var string[] the URL fragments
      */
-    public $url;
+    public array $url;
 
     /**
      * @var Smarty the template engine
      */
-    public $templateEngine;
+    public Smarty $templateEngine;
 
     ///
     /// Helper methods
@@ -65,9 +71,9 @@ class Context {
     /**
      * Gets application root directory
      *
-     * @return string the application root directory
+     * @return string|false the application root directory
      */
-    public function getApplicationRootDirectory() {
+    public function getApplicationRootDirectory () : string|false {
         return getcwd();
     }
 

@@ -15,6 +15,8 @@
  * @filesource
  */
 
+use Waystone\Workspaces\Engines\Framework\Context;
+
 /**
  * Application context class
  *

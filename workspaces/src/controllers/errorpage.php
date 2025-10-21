@@ -16,6 +16,9 @@
  *
  */
 
+use Waystone\Workspaces\Engines\Controller\Controller;
+use Waystone\Workspaces\Engines\Framework\Context;
+
 /**
  * Error pages controller
  */

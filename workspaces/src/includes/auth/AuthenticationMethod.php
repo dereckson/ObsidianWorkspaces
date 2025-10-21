@@ -15,7 +15,9 @@
  * @filesource
  */
 
- /**
+use Waystone\Workspaces\Engines\Framework\Context;
+
+/**
   * Authentication method class
   *
   * This class has to be extended to implement custom authentication methods.

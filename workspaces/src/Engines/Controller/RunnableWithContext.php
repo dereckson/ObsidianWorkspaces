@@ -6,26 +6,30 @@
  *   \ / |_) , ) | |_/ | | | | \|
  *    ~  ~    ~  ~ ~   ~ ~ ~ ~  ~
  *
- * LoadableWithContext interface
+ * RunnableWithContext interface
  *
  * @package     ObsidianWorkspaces
- * @subpackage  Keruald
+ * @subpackage  Controller
  * @author      Sébastien Santoro aka Dereckson <dereckson@espace-win.org>
  * @license     http://www.opensource.org/licenses/bsd-license.php BSD
  * @filesource
  */
 
+namespace Waystone\Workspaces\Engines\Controller;
+
+use Waystone\Workspaces\Engines\Framework\Context;
+
 /**
- * LoadableWithContext interface
+ * RunnableWithContext interface
  *
  * Objects implementing this interface can initialize themselves and
  * execute a task they represent, with a context as parameter.
  */
-interface LoadableWithContext {
+interface RunnableWithContext extends LoadableWithContext {
+
     /**
-     * Initializes a new instance of the object with the specified context and handle request
-     *
-     * @return object The loaded instance of the object.
+     * Initializes a new instance of the object with the specified context and
+     * handle request
      */
-    public static function load (Context $context);
+    public static function run (Context $context);
 }

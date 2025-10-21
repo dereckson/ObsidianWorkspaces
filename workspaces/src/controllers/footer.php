@@ -16,6 +16,8 @@
  *
  */
 
+use Waystone\Workspaces\Engines\Controller\Controller;
+
 /**
  * Footer controller
  */

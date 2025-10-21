@@ -15,6 +15,8 @@
  * @filesource
  */
 
+use Waystone\Workspaces\Engines\Controller\Controller;
+
 /**
  * Application class
  *

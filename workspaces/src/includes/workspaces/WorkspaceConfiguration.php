@@ -15,7 +15,9 @@
  * @filesource
  */
 
- /**
+use Waystone\Workspaces\Engines\Framework\Context;
+
+/**
   * Workspace configuration class
   *
   * This class maps the workspaces table.
