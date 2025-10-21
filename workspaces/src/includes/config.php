@@ -47,15 +47,11 @@ define('TABLE_UGROUPS_MEMBERS', $prefix . 'users_groups_members');
 define('TABLE_SESSIONS', $prefix . 'sessions');
 define('TABLE_WORKSPACES', $prefix . 'workspaces');
 
-//TODO: you can add here your own tables and views
-
 ////////////////////////////////////////////////////////////////////////////////
 ///                                                                          ///
 /// II. Site configuration                                                   ///
 ///                                                                          ///
 ////////////////////////////////////////////////////////////////////////////////
-
-//TODO: you can add here settings like default site theme or the app title.
 
 //Dates
 date_default_timezone_set("UTC");
