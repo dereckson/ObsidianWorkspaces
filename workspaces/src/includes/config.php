@@ -61,7 +61,7 @@ date_default_timezone_set("UTC");
 $Config['SecretKey'] = 'Replace this by a secret key, like AdYN}"p/+D.U]M^MC&-Q~KFthXZCT*g<V:dL.@{Mt-Di1mEA\&~_Eh\I\WA';
 
 //When reading files, buffer size
-define('BUFFER_SIZE', 4096);
+const BUFFER_SIZE = 4096;
 
 //Site theme
 $Config['Theme'] = 'bluegray';
@@ -251,7 +251,7 @@ $Config['ImageMagick']['identify']  = 'identify';
  *
  * Security tip: you can move this cache directory outside the webserver tree.
  */
-define('CACHE_DIR', 'cache');
+const CACHE_DIR = 'cache';
 
 /*
  * Furthermore, you can also enable a cache engine, like memcached, to store
