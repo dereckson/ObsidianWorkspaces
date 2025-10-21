@@ -22,6 +22,8 @@ use Waystone\Workspaces\Engines\Framework\Context;
 
 use ObjectDeserializableWithContext;
 
+use Exception;
+
 /**
  * Workspace configuration class
  *

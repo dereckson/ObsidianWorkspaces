@@ -21,7 +21,11 @@ use Waystone\Workspaces\Engines\Errors\ErrorHandling;
 use Waystone\Workspaces\Engines\Framework\Context;
 
 use Cache;
+use Language;
 use User;
+
+use Exception;
+use LogicException;
 
 /**
  * Workspace class
