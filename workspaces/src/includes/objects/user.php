@@ -33,6 +33,8 @@ class User {
 
     public array $session = [];
 
+    public string $lastError;
+
     /**
      * @var Array An array of users already loaded, the username as user id
      */
