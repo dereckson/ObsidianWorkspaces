@@ -9,6 +9,12 @@
     <link href="{#StaticContentURL#}/css/bluegray.css" rel="stylesheet">
     <link href="{#StaticContentURL#}/favicon.ico" rel="shorcut icon" type="image/x-icon">
     <link href="{#StaticContentURL#}/favicon.png" rel="icon" type="image/png" />
+{if isset($custom_css)}
+	<style>
+	    /* Custom CSS specific for this page */
+		{$custom_css}
+	</style>
+{/if}
 </head>
 <body>
     <a href="#content" class="sr-only">{#SkipNavigation#}</a>

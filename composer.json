@@ -17,7 +17,7 @@
         }
     ],
     "require": {
-        "keruald/database": "0.5.2",
+        "keruald/database": "0.6.1",
         "keruald/omnitools": "0.16.0",
         "keruald/yaml": "0.1.1",
         "netresearch/jsonmapper": "^v5.0.0",
@@ -27,14 +27,17 @@
     },
     "require-dev": {
         "nasqueron/codestyle": "^0.1.2",
-        "phpunit/phpunit": "^12.4",
+        "phpunit/phpunit": "^12.5",
         "squizlabs/php_codesniffer": "^4.0"
     },
     "replace": {
+        "waystone/orbeon-forms": "0.1.0",
         "waystone/workspaces": "1.0.0"
     },
     "autoload": {
         "psr-4": {
+            "Waystone\\Apps\\OrbeonForms\\": "apps/orbeon-forms/src/",
+            "Waystone\\Apps\\OrbeonForms\\Tests\\": "apps/orbeon-forms/tests/",
             "Waystone\\Workspaces\\": "workspaces/src/",
             "Waystone\\Workspaces\\Tests\\": "workspaces/tests/"
         }

@@ -1,0 +1,32 @@
+{
+    "name": "waystone/orbeon-forms",
+    "description": "Read and allows to annotate forms filled with Orbeon",
+    "keywords": [
+        "orbeon",
+        "waystone",
+        "obsidian"
+    ],
+    "minimum-stability": "stable",
+    "license": "BSD-2-Clause",
+    "authors": [
+        {
+            "name": "Sébastien Santoro",
+            "email": "dereckson@espace-win.org"
+        }
+    ],
+    "require-dev": {
+        "nasqueron/codestyle": "^0.1.2",
+        "phpunit/phpunit": "^12.5",
+        "squizlabs/php_codesniffer": "^4.0"
+    },
+    "require": {
+        "keruald/database": "0.6.1",
+        "waystone/workspaces": "^1.0.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Waystone\\Apps\\OrbeonForms\\": "src/",
+            "Waystone\\Apps\\OrbeonForms\\Tests\\": "tests/"
+        }
+    }
+}
