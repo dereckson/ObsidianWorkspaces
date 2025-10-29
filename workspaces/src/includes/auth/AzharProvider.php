@@ -188,17 +188,18 @@ class AzharProvider extends AuthenticationMethod {
     }
 
     /**
-     * Loads a AzharProvider instance from a generic object. Typically used to deserialize a JSON document.
+     * Loads an AzharProvider instance from a generic array.
+     * Typically used to deserialize a configuration.
      *
-     * @param object $data The object to deserialize
+     * @param array $data The associative array to deserialize
      * @return AzharProvider The deserialized instance
      */
-    public static function loadFromObject ($data) {
-        $instance = parent::loadFromObject($data);
+    public static function loadFromArray (array $data) : self {
+        $instance = parent::loadFromArray($data);
 
-        $instance->url = $data->url;
-        $instance->secretKey = $data->secretKey;
-        $instance->clientKey = $data->clientKey;
+        $instance->url = $data["url"];
+        $instance->secretKey = $data["secretKey"];
+        $instance->clientKey = $data["clientKey"];
 
         return $instance;
     }

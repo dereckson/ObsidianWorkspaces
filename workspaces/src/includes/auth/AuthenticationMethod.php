@@ -16,6 +16,7 @@
  */
 
 use Waystone\Workspaces\Engines\Framework\Context;
+use Waystone\Workspaces\Engines\Serialization\ArrayDeserializable;
 
 /**
   * Authentication method class
@@ -23,7 +24,7 @@ use Waystone\Workspaces\Engines\Framework\Context;
   * This class has to be extended to implement custom authentication methods.
   */
 
-abstract class AuthenticationMethod implements ObjectDeserializable {
+abstract class AuthenticationMethod implements ArrayDeserializable {
     /**
      * @var User The local user matching the authentication
      */
@@ -201,43 +202,44 @@ abstract class AuthenticationMethod implements ObjectDeserializable {
     }
 
     /**
-     * Loads a AuthenticationMethod instance from a generic object. Typically used to deserialize a JSON document.
+     * Loads an AuthenticationMethod instance from a generic array.
+     * Typically used to deserialize a configuration.
      *
-     * @param object $data The object to deserialize
+     * @param array $data The associative array to deserialize
+     *
      * @return AuthenticationMethod The deserialized instance
+     * @throws InvalidArgumentException|Exception
      */
-    public static function loadFromObject ($data) {
+    public static function loadFromArray(array $data) : self {
         $instance = new static;
 
-        if (!property_exists($data, 'id')) {
+        if (!array_key_exists("id", $data)) {
             throw new InvalidArgumentException("Authentication method id is required.");
         }
-        $instance->id = $data->id;
+        $instance->id = $data["id"];
 
-        if (property_exists($data, 'loginMessage')) {
-            $instance->loginMessage = new Message($data->loginMessage);
-        } else {
-            $instance->loginMessage = new Message(Language::get("SignIn"));
-        }
+        $message = $data["loginMessage"] ?? Language::get("SignIn");
+        $instance->loginMessage = new Message($message);
 
-        if (property_exists($data, 'createUser')) {
-            if (property_exists($data->createUser, 'enabled')) {
-                $instance->canCreateUser = ($data->createUser->enabled == true);
+        if (array_key_exists("createUser", $data)) {
+            $createUser = $data["createUser"];
+
+            if (array_key_exists("enabled", $createUser)) {
+                $instance->canCreateUser = ($createUser["enabled"] === true);
             }
 
-            if (property_exists($data->createUser, 'addToGroups')) {
-                foreach ($data->createUser->addToGroups as $actionData) {
-                    $instance->createUserActions[] = AddToGroupUserAction::loadFromObject($actionData);
-                }
+            $addToGroups = $createUser["addToGroups"] ?? [];
+            foreach ($addToGroups as $actionData) {
+                $instance->createUserActions[] = AddToGroupUserAction::loadFromArray($actionData);
             }
 
-            if (property_exists($data->createUser, 'givePermissions')) {
-                foreach ($data->createUser->givePermissions as $actionData) {
-                    $instance->createUserActions[] = GivePermissionUserAction::loadFromObject($actionData);
-                }
+            $givePermissions = $createUser["givePermissions"] ?? [];
+            foreach ($createUser["givePermissions"] as $actionData) {
+                $instance->createUserActions[] = GivePermissionUserAction::loadFromArray($actionData);
             }
         }
 
         return $instance;
     }
+
 }

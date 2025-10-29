@@ -18,6 +18,7 @@
 namespace Waystone\Workspaces\Engines\Apps;
 
 use Waystone\Workspaces\Engines\Controller\Controller;
+use Waystone\Workspaces\Engines\Errors\ErrorHandling;
 use Waystone\Workspaces\Engines\Workspaces\WorkspaceConfiguration;
 
 use Collection;

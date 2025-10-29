@@ -16,10 +16,12 @@
  *
  */
 
+use Waystone\Workspaces\Engines\Serialization\ArrayDeserializable;
+
 /**
  * User action to grant user a permission
  */
-class GivePermissionUserAction extends UserAction implements ObjectDeserializable, JsonSerializable {
+class GivePermissionUserAction extends UserAction implements ArrayDeserializable, JsonSerializable {
     /**
      * @var string The permission name
      */
@@ -54,41 +56,47 @@ class GivePermissionUserAction extends UserAction implements ObjectDeserializabl
     }
 
     /**
-     * Loads a GivePermissionUserAction instance from an object.
+     * Loads a GivePermissionUserAction instance from an associative array.
      *
-     * @param object $data The object to deserialize
+     * @param object $data The associative array to deserialize
      * @return GivePermissionUserAction The deserialized instance
      */
-    public static function loadFromObject ($data) {
-        //Checks the object contains every mandatory data
-        if (!property_exists($data, 'resource')) {
+   public static function loadFromArray (mixed $data) : self {
+        // Validate mandatory data
+        if (!array_key_exists("resource", $data)) {
             throw new InvalidArgumentException("A resource property, with two mandatory type and id property is required.");
         }
-        if (!property_exists($data, 'permission')) {
+        if (!array_key_exists("permission", $data)) {
             throw new InvalidArgumentException("A permission property, with a mandatory name property and a facultative flag property is required.");
         }
-        if (!property_exists($data->permission, 'name')) {
+
+        $resource = $data["resource"];
+        $permission = $data["permission"];
+
+        if (!array_key_exists("name", $permission)) {
             throw new InvalidArgumentException("Permission name is required.");
         }
-        if (!property_exists($data->resource, 'type')) {
+        if (!array_key_exists("type", $resource)) {
             throw new InvalidArgumentException("Resource type is required.");
         }
-        if (!property_exists($data->resource, 'id')) {
+        if (!array_key_exists("id", $resource)) {
             throw new InvalidArgumentException("Resource id is required.");
         }
 
-        //Builds instance
+        // Build instance
         $instance = new GivePermissionUserAction();
 
-        $instance->resourceType = Permission::getResourceTypeLetterFromCode($data->resource->type);
-        $instance->resourceIdentifier = $data->resource->id;
-        $instance->permissionName = $data->permission->name;
-        if (property_exists($data->permission, 'flag')) {
-            $instance->permissionFlag = $data->permission->flag;
+        $instance->resourceType = Permission::getResourceTypeLetterFromCode($resource["type"]);
+        $instance->resourceIdentifier = $resource["id"];
+        $instance->permissionName = $permission["name"];
+
+        if (array_key_exists("flag", $permission)) {
+            $instance->permissionFlag = $permission["flag"];
         }
 
         return $instance;
     }
+
 
     /**
      * Serializes the object to a value that can be serialized natively by json_encode().

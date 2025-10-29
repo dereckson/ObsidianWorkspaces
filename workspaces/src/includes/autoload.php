@@ -51,7 +51,6 @@ function obsidian_autoload ($name) {
     if ($name == 'Events') { require $dir . '/includes/Events.php'; return true; }
     if ($name == 'LoadableWithContext') { require $dir . '/includes/LoadableWithContext.php'; return true; }
     if ($name == 'ObjectDeserializable') { require $dir . '/includes/ObjectDeserializable.php'; return true; }
-    if ($name == 'ObjectDeserializableWithContext') { require $dir . '/includes/ObjectDeserializable.php'; return true; }
 
     if ($name == 'Application') { require $dir . '/includes/apps/Application.php'; return true; }
     if ($name == 'ApplicationConfiguration') { require $dir . '/includes/apps/ApplicationConfiguration.php'; return true; }

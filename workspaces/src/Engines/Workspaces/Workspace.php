@@ -189,16 +189,27 @@ class Workspace {
     public function loadConfiguration (Context $context) {
         global $Config;
 
-        $file = $Config['Content']['Workspaces'] . '/' . $this->code
-                . '/workspace.conf';
-        if (!file_exists($file)) {
-            $exceptionMessage =
-                sprintf(Language::get('NotConfiguredWorkspace'), $file);
-            throw new Exception($exceptionMessage);
+        $dir = $Config['Content']['Workspaces'] . '/' . $this->code;
+
+        // Load JSON configuration file
+        $file = $dir . '/workspace.conf';
+        if (file_exists($file)) {
+            $this->configuration =
+                WorkspaceConfiguration::loadFromFile($file, $context);
+            return;
         }
 
-        $this->configuration =
-            WorkspaceConfiguration::loadFromFile($file, $context);
+        // Load YAML configuration file
+        $file = $dir . '/workspace.yml';
+        if (file_exists($file)) {
+            $this->configuration =
+                WorkspaceConfiguration::loadFromYamlFile($file, $context);
+            return;
+        }
+
+        $exceptionMessage =
+            sprintf(Language::get('NotConfiguredWorkspace'), $file);
+        throw new Exception($exceptionMessage);
     }
 
     /**

@@ -16,10 +16,12 @@
  *
  */
 
+use Waystone\Workspaces\Engines\Serialization\ArrayDeserializable;
+
 /**
  * User action to add a user into a group
  */
-class AddToGroupUserAction extends UserAction implements ObjectDeserializable {
+class AddToGroupUserAction extends UserAction implements ArrayDeserializable {
     /**
      * @var UserGroup The group to add the user to
      */
@@ -29,6 +31,7 @@ class AddToGroupUserAction extends UserAction implements ObjectDeserializable {
      * @var boolean Determines if the target user has to be added to the group in the quality of admin
      */
     public $isAdmin;
+
 
     /**
      * Executes the user action
@@ -46,15 +49,19 @@ class AddToGroupUserAction extends UserAction implements ObjectDeserializable {
     }
 
     /**
-     * Loads a AddToGroupUserAction instance from an object.
+     * Loads an AddToGroupUserAction instance from an object.
      *
-     * @param object $data The object to deserialize
+     * @param array $data The associative array to deserialize
+     *
      * @return AddToGroupUserAction The deserialized instance
+     * @throws Exception when the group code is not found
      */
-    public static function loadFromObject ($data) {
+    public static function loadFromArray (array $data) : self {
         $instance = new AddToGroupUserAction();
-        $instance->group = UserGroup::fromCode($data->code);
-        $instance->isAdmin = ($data->isAdmin == true);
+
+        $instance->group = UserGroup::fromCode($data["code"]);
+        $instance->isAdmin = ($data["isAdmin"] == true);
+
         return $instance;
     }
 }

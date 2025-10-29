@@ -17,10 +17,9 @@
 
 namespace Waystone\Workspaces\Engines\Apps;
 
-use Waystone\Workspaces\Engines\Workspaces\WorkspaceConfiguration;
+use Waystone\Workspaces\Engines\Serialization\ArrayDeserializable;
 
 use Message;
-use ObjectDeserializable;
 
 /**
  * Application configuration class
@@ -29,7 +28,7 @@ use ObjectDeserializable;
  *
  * It can be serialized into a workspace.conf application entry
  */
-class ApplicationConfiguration implements ObjectDeserializable {
+class ApplicationConfiguration implements ArrayDeserializable {
 
     /**
      * @var string The URL the application is binded to, without initial slash.
@@ -53,31 +52,20 @@ class ApplicationConfiguration implements ObjectDeserializable {
     public $useCollections = [];
 
     /**
-     * Loads a WorkspaceConfiguration instance from an object
+     * Loads an ApplicationConfiguration instance from an associative array
      *
-     * @param object $data The object to deserialize
+     * @param array $data The associative array to deserialize
      *
-     * @return WorkspaceConfiguration The deserialized instance
+     * @return ApplicationConfiguration The deserialized instance
      */
-    public static function loadFromObject ($data) {
-        $instance = new ApplicationConfiguration();
+    public static function loadFromArray (array $data) : self {
+        $instance = new static;
 
-        //Applications array
         foreach ($data as $key => $value) {
-            switch ($key) {
-                case 'nav':
-                    $instance->nav = new Message($value);
-                    break;
-
-                case 'useCollections':
-                    foreach ($data->useCollections as $role => $name) {
-                        $instance->useCollections[$role] = $name;
-                    }
-                    break;
-
-                default:
-                    $instance->$key = $value;
-            }
+            $instance->$key = match ($key) {
+                "nav" => new Message($value),
+                default => $value,
+            };
         }
 
         return $instance;

@@ -18,9 +18,14 @@
 namespace Waystone\Workspaces\Engines\Workspaces;
 
 use Waystone\Workspaces\Engines\Apps\ApplicationConfiguration;
+use Waystone\Workspaces\Engines\Exceptions\WorkspaceException;
 use Waystone\Workspaces\Engines\Framework\Context;
+use Waystone\Workspaces\Engines\Serialization\ArrayDeserializableWithContext;
 
-use ObjectDeserializableWithContext;
+use Keruald\Yaml\Parser as YamlParser;
+use Keruald\Yaml\Tags\EnvTag;
+
+use AuthenticationMethod;
 
 use Exception;
 
@@ -29,7 +34,7 @@ use Exception;
  *
  * This class maps the workspaces table.
  */
-class WorkspaceConfiguration implements ObjectDeserializableWithContext {
+class WorkspaceConfiguration implements ArrayDeserializableWithContext {
 
     /**
      * @var array applications (each element is an instance of
@@ -109,102 +114,111 @@ class WorkspaceConfiguration implements ObjectDeserializableWithContext {
     }
 
     /**
-     * Loads a WorkspaceConfiguration instance from an object
+     * Loads a WorkspaceConfiguration instance from an array
      *
-     * @param object $data The object to deserialize
-     * @param Context $context The site context
+     * @param array $data The array to deserialize
+     * @param mixed $context The application context
      *
      * @return WorkspaceConfiguration The deserialized instance
+     * @throws WorkspaceException
      */
-    public static function loadFromObject ($data, $context) {
+    public static function loadFromArray (
+        array $data,
+        mixed $context
+    ) : self {
         $instance = new WorkspaceConfiguration();
 
-        //Applications array
-        if (property_exists($data, 'applications')) {
-            foreach ($data->applications as $applicationData) {
-                if (!property_exists($applicationData, 'name')) {
-                    throw new Exception("Missing required property: application name");
-                }
-
-                $controllerClass = $applicationData->name;
-                if (!class_exists($controllerClass)) {
-                    trigger_error("Application controller doesn't exist: $controllerClass. If you've just added application code, update includes/autoload.php file to register your new classes.",
-                        E_USER_WARNING);
-                    continue;
-                }
-                $configurationClass = $controllerClass . 'Configuration';
-                if (!class_exists($configurationClass)) {
-                    $configurationClass = "ApplicationConfiguration";
-                }
-                $instance->applications[] =
-                    $configurationClass::loadFromObject($applicationData);
+        // Parse applications to load in the workspace
+        $applications = $data["applications"] ?? [];
+        foreach ($applications as $applicationData) {
+            if (!array_key_exists("name", $applicationData)) {
+                throw new WorkspaceException("Missing required property: application name");
             }
+
+            $controllerClass = $applicationData["name"];
+            if (!class_exists($controllerClass)) {
+                trigger_error("Application controller doesn't exist: $controllerClass.",
+                    E_USER_WARNING);
+                continue;
+            }
+
+            $configurationClass = $controllerClass . "Configuration";
+            if (!class_exists($configurationClass)) {
+                $configurationClass = ApplicationConfiguration::class;
+            }
+
+            $instance->applications[] = [$configurationClass, "loadFromArray"]($applicationData);
         }
 
-        //Login array
-        if (property_exists($data, 'login')) {
+        // Parse custom authentication methods for this workspace
+        if (array_key_exists("login", $data)) {
             $instance->allowInternalAuthentication = false;
-            foreach ($data->login as $authData) {
-                if (!property_exists($authData, 'type')) {
-                    throw new Exception("Missing required property: login type");
-                }
-
-                if ($authData->type == 'internal') {
+            foreach ($data["login"] as $authData) {
+                if ($authData["type"] == "internal") {
                     $instance->allowInternalAuthentication = true;
                     continue;
                 }
 
-                $class = $authData->type;
-                if (!class_exists($class)) {
-                    throw new Exception("Authentication method doesn't exist: $class. If you've just added authentication code, update includes/autoload.php file to register your new classes.");
-                }
-                $authenticationMethod = $class::loadFromObject($authData);
-                $authenticationMethod->context = $context;
-                $instance->authenticationMethods[] = $authenticationMethod;
+                $auth = self::loadAuthenticationMethod($authData, $context);
+                $instance->authenticationMethods[] = $auth;
             }
         }
 
-        //Disclaimers array
-        if (property_exists($data, 'disclaimers')) {
-            $instance->disclaimers = $data->disclaimers;
-        }
-
-        //Collections array
-        if (property_exists($data, 'collections')) {
-            foreach ($data->collections as $collection) {
-                if (!property_exists($collection, 'name')) {
-                    throw new Exception("A collection has been declared without name in the workspace configuration.");
-                }
-                $name = $collection->name;
-                if (!property_exists($collection, 'global')
-                    || !$collection->global) {
-                    $name =
-                        WorkspaceConfiguration::getCollectionNameWithPrefix($context->workspace,
-                            $name);
-                }
-                if (property_exists($collection, 'documentType')) {
-                    $type = $collection->documentType;
-                    if (!class_exists($type)) {
-                        throw new Exception("CollectionDocument children class doesn't exist: $type. If you've just added authentication code, update includes/autoload.php file to register your new classes.");
-                    }
-                } else {
-                    $type = null;
-                }
-                $instance->collections[$name] = $type;
+        // Parse collections the workspace applications can access
+        $collections = $data->collections ?? [];
+        foreach ($collections as $collection) {
+            if (!property_exists($collection, 'name')) {
+                throw new WorkspaceException("A collection has been declared without name in the workspace configuration.");
             }
+            $name = $collection->name;
+            if (!property_exists($collection, 'global')
+                || !$collection->global) {
+                $name =
+                    WorkspaceConfiguration::getCollectionNameWithPrefix($context->workspace,
+                        $name);
+            }
+            if (property_exists($collection, 'documentType')) {
+                $type = $collection->documentType;
+                if (!class_exists($type)) {
+                    throw new WorkspaceException("CollectionDocument children class doesn't exist: $type. If you've just added authentication code, update includes/autoload.php file to register your new classes.");
+                }
+            } else {
+                $type = null;
+            }
+            $instance->collections[$name] = $type;
         }
 
-        //Header string
-        if (property_exists($data, 'header')) {
-            $instance->header = $data->header;
-        }
-
-        //Footer string
-        if (property_exists($data, 'footer')) {
-            $instance->footer = $data->footer;
-        }
+        // Customization
+        $instance->disclaimers = $data->disclaimers ?? [];
+        $instance->header = $data["header"] ?? "";
+        $instance->footer = $data["footer"] ?? "";
 
         return $instance;
+    }
+
+    private static function loadAuthenticationMethod (
+        array $authData,
+        Context $context,
+    ) : AuthenticationMethod {
+        if (!array_key_exists("type", $authData)) {
+            throw new WorkspaceException("Missing required property: login type");
+        }
+
+        $class = $authData["type"];
+        if (!class_exists($class)) {
+            throw new WorkspaceException("Authentication method doesn't exist: $class.");
+        }
+
+        try {
+            $authenticationMethod = $class::loadFromArray($authData);
+            $authenticationMethod->context = $context;
+        } catch (Exception $ex) {
+            throw new WorkspaceException(
+                "Can't load authentication method: " . $ex->getMessage(), 0, $ex
+            );
+        }
+
+        return $authenticationMethod;
     }
 
     /**
@@ -226,12 +240,33 @@ class WorkspaceConfiguration implements ObjectDeserializableWithContext {
      * Loads a WorkspaceConfiguration instance deserializing a JSON file
      */
     public static function loadFromFile ($file, $context) {
-        $object = json_decode(file_get_contents($file));
+        $object = json_decode(file_get_contents($file), true);
         if ($object === null) {
             throw new Exception("Can't parse configuration file: "
                                 . json_last_error_msg());
         }
 
-        return self::loadFromObject($object, $context);
+        return self::loadFromArray($object, $context);
+    }
+
+    /**
+     * @throws WorkspaceException
+     */
+    public static function loadFromYamlFile (
+        string  $file,
+        Context $context
+    ) : self {
+        $parser = new YamlParser();
+        $parser->withTagClass(EnvTag::class);
+
+        try {
+            $value = $parser->parseFile($file);
+        }
+        catch (Exception $ex) {
+            throw new WorkspaceException("Can't parse configuration file: "
+                                         . $ex->getMessage(), 0, $ex);
+        }
+
+        return self::loadFromArray($value, $context);
     }
 }
