@@ -53,6 +53,13 @@ abstract class Application extends Controller {
      */
     public function initialize () {
         $this->collections = $this->loadCollections();
+
+        try {
+            $this->onAfterInitialize();
+        } catch (Exception $ex) {
+            ErrorHandling::messageAndDie(GENERAL_ERROR, $ex->getMessage(), "Can't load application");
+        }
+
     }
 
     /**
@@ -81,4 +88,8 @@ abstract class Application extends Controller {
 
         return $loadedCollections;
     }
+
+    protected function onAfterInitialize () : void {
+    }
+
 }
