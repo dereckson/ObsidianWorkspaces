@@ -31,25 +31,32 @@ use Message;
 class ApplicationConfiguration implements ArrayDeserializable {
 
     /**
-     * @var string The URL the application is binded to, without initial slash.
+     * @var string The URL the application is bound to, without an initial slash.
      */
-    public $bind;
+    public string $bind;
 
     /**
-     * @var Message The navigation entry
+     * @var Message The navigation entry in the application menu.
      */
-    public $nav;
+    public Message $nav;
 
     /**
      * @var string The application icon name
      */
-    public $icon;
+    public string $icon;
 
     /**
-     * @var string[] The collections to use. Keys ares collections roles, values
-     *      collections names.
+     * @var string The application class name
+     *
+     * This must be a class name that extends Application
      */
-    public $useCollections = [];
+    public string $name;
+
+    /**
+     * @var array<string,string> The collections to use.
+     * Keys are collections roles, values collections names.
+     */
+    public array $useCollections = [];
 
     /**
      * Loads an ApplicationConfiguration instance from an associative array
@@ -70,4 +77,5 @@ class ApplicationConfiguration implements ArrayDeserializable {
 
         return $instance;
     }
+
 }
