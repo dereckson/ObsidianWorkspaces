@@ -52,21 +52,25 @@ class MediaWikiMirrorApplication extends Application {
     public function handleRequest () {
         $smarty = $this->context->templateEngine;
 
-        //Gets content
-        $url = $this->getRenderUrl();
+        // Header
         $title = $this->context->configuration->page;
-        $content = file_get_contents($url);
-        $content = $this->fixLinks($content);
-
-        //Serves header
         $smarty->assign('PAGE_TITLE', $title);
         HeaderController::run($this->context);
 
-        //Serves body
-        $smarty->assign('Content', $content);
-        $smarty->display('apps/mediawikimirror/page.tpl');
+        // Body
+        $url = $this->getRenderUrl();
+        try {
+            $content = file_get_contents($url);
+            $content = $this->fixLinks($content);
+            $smarty->assign("Content", $content);
+            $smarty->display("apps/mediawikimirror/page.tpl");
+        } catch (Exception $ex) {
+            $smarty->assign("alert_level", "danger");
+            $smarty->assign("alert_note", $ex->getMessage());
+            $smarty->display("apps/_blocks/alert.tpl");
+        }
 
-        //Serves footer
+        // Footer
         FooterController::run($this->context);
     }
 }
