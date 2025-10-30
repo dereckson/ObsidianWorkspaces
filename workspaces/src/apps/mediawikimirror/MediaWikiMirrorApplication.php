@@ -36,19 +36,6 @@ class MediaWikiMirrorApplication extends Application {
     }
 
     /**
-     * Fixes links in the content
-     *
-     * @param string $content The page content
-     * @return string The page content, with updated links
-     */
-    public function fixLinks ($content) {
-        $fullUrl = $this->context->configuration->url[0] . $this->context->configuration->url[1];
-        $content = str_replace('<a href="' . $this->context->configuration->url[1], '<a href="' . $fullUrl, $content);
-        $content = str_replace(' src="' . $this->context->configuration->url[1], ' src="' . $fullUrl, $content);
-        return $content;
-    }
-
-    /**
      * Handles controller request
      */
     public function handleRequest () {
@@ -63,7 +50,6 @@ class MediaWikiMirrorApplication extends Application {
         $url = $this->getRenderUrl();
         try {
             $content = file_get_contents($url);
-            $content = $this->fixLinks($content);
             $smarty->assign("Content", $content);
             $smarty->display("apps/mediawikimirror/page.tpl");
         } catch (Exception $ex) {
