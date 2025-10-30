@@ -106,6 +106,30 @@ dl > dd + dt {
 }
 
 /*  -------------------------------------------------------------
+    Alerts
+    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -    */
+
+.alert {
+    margin-top: 0.5em;
+}
+
+.alert.alert-success {
+    box-shadow: #dff0d8 4px 4px 12px 0;
+}
+
+.alert.alert-info {
+    box-shadow: #d9edf7 4px 4px 12px 0;
+}
+
+.alert.alert-warning {
+    box-shadow: #fcf8e3 4px 4px 12px 0;
+}
+
+.alert.alert-danger {
+    box-shadow: #f2dede 4px 4px 12px 0;
+}
+
+/*  -------------------------------------------------------------
     Navigation
     - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -    */
 
