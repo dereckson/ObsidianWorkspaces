@@ -33,7 +33,7 @@
 {/if}
             </div>
 
-            <ul class="nav navbar-top-links navbar-right">
+            <ul class="nav navbar-top-links navbar-pushed-to-right">
 {if $workspaces_count > 1}
                 <!-- Workspaces -->
                 <li class="dropdown">

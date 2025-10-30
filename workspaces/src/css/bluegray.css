@@ -72,7 +72,7 @@ h3 {
 }
 
 dl > dd + dt {
-    margin-top: 1em;
+    margin-top: 1.25em;
 }
 
 /*  -------------------------------------------------------------
@@ -100,7 +100,7 @@ dl > dd + dt {
         position: inherit;
         margin: 0 0 0 250px;
         padding: 0 30px;
-        min-height: 1300px;
+        min-height: 94vh;
         border-left: 1px solid #e7e7e7;
     }
 }
@@ -176,6 +176,10 @@ dl > dd + dt {
 .navbar-top-links li a {
     padding: 15px;
     min-height: 50px;
+}
+
+.navbar-top-links .dropdown-menu {
+    left: -120px;
 }
 
 .navbar-top-links .dropdown-menu li {
@@ -261,6 +265,11 @@ dl > dd + dt {
     .navbar-top-links .dropdown-tasks,
     .navbar-top-links .dropdown-alerts {
         margin-left: auto;
+    }
+
+    .navbar-pushed-to-right {
+        float: right !important;
+        padding-right: 2em;
     }
 }
     
@@ -1032,4 +1041,3 @@ table.dataTable thead .sorting:after {
       clear: none; }
     .large-block-grid-12 > li:nth-of-type(12n+1) {
       clear: both; } }
-      
