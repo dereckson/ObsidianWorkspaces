@@ -27,10 +27,12 @@ class MediaWikiMirrorApplication extends Application {
      * @return string the URL
      */
     public function getRenderUrl () {
+        $page = urlencode($this->context->configuration->page);
+
         return
             $this->context->configuration->url[0] .
             $this->context->configuration->url[1] .
-            "/index.php?action=render&title=". $this->context->configuration->page;
+            "/index.php?action=render&title=". $page;
     }
 
     /**
