@@ -58,7 +58,7 @@ class HeaderController extends Controller {
                     $nav[] = [
                         'link' => $applicationConfig->nav->__toString(),
                         'url' => $applicationConfig->bind,
-                        'icon' => $applicationConfig->icon
+                        'icon' => $applicationConfig->icon ?? null,
                     ];
                 }
             }
