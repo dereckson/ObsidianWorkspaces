@@ -15,17 +15,24 @@
  * @filesource
  */
 
+namespace Waystone\Workspaces\Engines\Collection;
+
+use Iterator;
+use MongoCursor;
+
 /**
  * Iterator for MongoDBCollection::getAll()
  */
 class MongoDBCollectionIterator implements Iterator {
+
     /**
      * @var MongoCursor The MongoDB cursor
      */
     private $cursor;
 
     /**
-     * @var MongoDBCollection The collection attached to the current iterator instance
+     * @var MongoDBCollection The collection attached to the current iterator
+     *     instance
      */
     private $collection;
 
@@ -35,7 +42,10 @@ class MongoDBCollectionIterator implements Iterator {
      * @param MongoDBCollection $collection The collection to iterate
      * @param ?MongoCursor $cursor The cursor to the results [optional]
      */
-    public function __construct (MongoDBCollection $collection, ?MongoCursor $cursor = null) {
+    public function __construct (
+        MongoDBCollection $collection,
+        ?MongoCursor $cursor = null,
+    ) {
         $this->collection = $collection;
         if ($cursor === null) {
             $this->cursor = $collection->mongoCollection->find();
@@ -51,7 +61,7 @@ class MongoDBCollectionIterator implements Iterator {
      */
     public function current () {
         return $this->collection->getDocumentFromArray(
-            $this->cursor->current()
+            $this->cursor->current(),
         );
     }
 
@@ -67,7 +77,7 @@ class MongoDBCollectionIterator implements Iterator {
     /**
      *  Moves forward to next element
      */
-    public function next ()  {
+    public function next () {
         $this->cursor->next();
     }
 

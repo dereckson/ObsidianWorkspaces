@@ -15,28 +15,38 @@
  * @filesource
  */
 
+namespace Waystone\Workspaces\Engines\Collection;
+
+use Exception;
+use Generator;
+
 /**
  * Files Collection class
  *
  * This class represents a collection of documents, stored on the filesystem.
  */
 class FilesCollection extends Collection {
+
     ///
     /// Helper methods
     ///
 
     /**
-     * Gets the path to the folder where the specified collection documents are stored.
+     * Gets the path to the folder where the specified collection documents are
+     * stored.
      *
      * @param string $collectionId The collection identifiant
+     *
      * @return string The path to the specified collection folder
      */
     public static function getCollectionPath ($collectionId) {
         global $Config;
-        if (!array_key_exists('DocumentStorage', $Config) || !array_key_exists('Path', $Config['DocumentStorage'])) {
+        if (!array_key_exists('DocumentStorage', $Config)
+            || !array_key_exists('Path', $Config['DocumentStorage'])) {
             throw new Exception("Configuration parameter missing: \$Config['DocumentStorage']['Path']. Expected value for this parameter is the path to the collections folders.");
         }
-        $path = $Config['DocumentStorage']['Path'] . DIRECTORY_SEPARATOR . $collectionId;
+        $path = $Config['DocumentStorage']['Path'] . DIRECTORY_SEPARATOR
+            . $collectionId;
 
         //Ensure directory exists. If not, creates it or throws an exception
         if (!file_exists($path) && !mkdir($path, 0700, true)) {
@@ -50,12 +60,14 @@ class FilesCollection extends Collection {
      * Gets the path to the file where the specified document is stored.
      *
      * @param string $documentId The document identifiant
+     *
      * @return string The path to the specified document file
      */
     public function getDocumentPath ($documentId) {
-        return static::getCollectionPath($this->id) . DIRECTORY_SEPARATOR . $documentId . '.json';
+        return static::getCollectionPath($this->id) . DIRECTORY_SEPARATOR
+            . $documentId . '.json';
     }
-    
+
     /**
      * Gets the path to the folder where the current collection is stored.
      *
@@ -86,6 +98,7 @@ class FilesCollection extends Collection {
      * Adds a document to the collection
      *
      * @param CollectionDocument $document The document to add
+     *
      * @return boolean true if the operation succeeded; otherwise, false.
      */
     public function add (CollectionDocument &$document) {
@@ -107,6 +120,7 @@ class FilesCollection extends Collection {
      * Deletes a document from the collection
      *
      * @param string $documentId The identifiant of the document to delete
+     *
      * @return boolean true if the operation succeeded; otherwise, false.
      */
     public function delete ($documentId) {
@@ -118,10 +132,12 @@ class FilesCollection extends Collection {
      * Determines if a document exists
      *
      * @param CollectionDocument $document The document to check
+     *
      * @return boolean true if the document exists; otherwise, false.
      */
     public function exists (CollectionDocument $document) {
         $filename = $this->getDocumentPath($document->id);
+
         return file_exists($filename);
     }
 
@@ -129,17 +145,20 @@ class FilesCollection extends Collection {
      * Updates a document in the collection
      *
      * @param CollectionDocument $document The document to update
+     *
      * @return boolean true if the operation succeeded; otherwise, false.
      */
     public function update (CollectionDocument &$document) {
         if ($document->id === '') {
             $document->id = uniqid();
-            user_error("An ID were expected for an update operation, but not provided. We'll use $document->id.", E_USER_WARNING);
+            user_error("An ID were expected for an update operation, but not provided. We'll use $document->id.",
+                E_USER_WARNING);
         }
 
         $filename = $this->getDocumentPath($document->id);
         if (!file_exists($filename)) {
-            user_error("File $filename doesn't exist. The update operation has became an insert one.", E_USER_WARNING);
+            user_error("File $filename doesn't exist. The update operation has became an insert one.",
+                E_USER_WARNING);
         }
 
         $data = json_encode($document);
@@ -161,6 +180,7 @@ class FilesCollection extends Collection {
 
         $filename = $this->getDocumentPath($documentId);
         $data = json_decode(file_get_contents($filename));
+
         return $type::loadFromObject($data);
     }
 
@@ -168,6 +188,7 @@ class FilesCollection extends Collection {
      * Adds or updates a document in the collection
      *
      * @param CollectionDocument $document The document to set
+     *
      * @return boolean true if the operation succeeded; otherwise, false.
      */
     public function set (CollectionDocument &$document) {
@@ -193,13 +214,15 @@ class FilesCollection extends Collection {
                 $count++;
             }
         }
+
         return $count;
     }
 
     /**
      * Gets all the documents from the collection
      *
-     * @return Generator An iterator to the documents, each item an instance of CollectionDocument
+     * @return Generator An iterator to the documents, each item an instance of
+     *     CollectionDocument
      */
     public function getAll () {
         $dir = $this->getCurrentCollectionPath();
@@ -226,6 +249,7 @@ class FilesCollection extends Collection {
                 $documents[] = get_filename($file);
             }
         }
+
         return $documents;
     }
 }

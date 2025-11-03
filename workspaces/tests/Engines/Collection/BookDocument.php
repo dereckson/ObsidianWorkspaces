@@ -2,7 +2,7 @@
 
 namespace Waystone\Workspaces\Tests\Engines\Collection;
 
-use CollectionDocument;
+use Waystone\Workspaces\Engines\Collection\CollectionDocument;
 
 require_once(__DIR__ . '/../../../src/includes/autoload.php');
 

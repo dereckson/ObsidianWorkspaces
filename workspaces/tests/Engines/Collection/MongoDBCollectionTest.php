@@ -17,10 +17,10 @@
 
 namespace Waystone\Workspaces\Tests\Engines\Collection;
 
+use Waystone\Workspaces\Engines\Collection\MongoDBCollection;
+
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-
-use MongoDBCollection;
 
 /**
  * Tests MongoDBCollection class

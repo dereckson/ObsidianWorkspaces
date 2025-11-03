@@ -15,8 +15,14 @@
  * @filesource
  */
 
-define('MONGO_DEFAULT_HOST',     'localhost');
-define('MONGO_DEFAULT_PORT',     27017);
+namespace Waystone\Workspaces\Engines\Collection;
+
+use Exception;
+use Iterator;
+use MongoClient;
+
+define('MONGO_DEFAULT_HOST', 'localhost');
+define('MONGO_DEFAULT_PORT', 27017);
 define('MONGO_DEFAULT_DATABASE', 'obsidian');
 
 /**
@@ -25,6 +31,7 @@ define('MONGO_DEFAULT_DATABASE', 'obsidian');
  * This class represents a collection of documents, stored on MongoDB.
  */
 class MongoDBCollection extends Collection {
+
     /**
      * @var MongoCollection the Mongo collection
      */
@@ -35,13 +42,15 @@ class MongoDBCollection extends Collection {
     ///
 
     /**
-     * @var MongoClient The mongo client to the database the collection is hosted
+     * @var MongoClient The mongo client to the database the collection is
+     *     hosted
      */
     public static $mongoClient = null;
 
 
     /**
-     * Gets the existing MongoClient instance, or if not available, initializes one.
+     * Gets the existing MongoClient instance, or if not available, initializes
+     * one.
      *
      * @return MongoClient The MongoClient instance
      */
@@ -49,6 +58,7 @@ class MongoDBCollection extends Collection {
         if (self::$mongoClient === null) {
             self::$mongoClient = self::initializeMongoClient();
         }
+
         return self::$mongoClient;
     }
 
@@ -65,10 +75,11 @@ class MongoDBCollection extends Collection {
         global $Config;
 
         //Protocol
-        $connectionString  = 'mongodb://';
+        $connectionString = 'mongodb://';
 
         //Host
-        if (isset($Config['DocumentStorage']) && array_key_exists('Host', $Config['DocumentStorage'])) {
+        if (isset($Config['DocumentStorage'])
+            && array_key_exists('Host', $Config['DocumentStorage'])) {
             $connectionString .= $Config['DocumentStorage']['Host'];
         } else {
             $connectionString .= MONGO_DEFAULT_HOST;
@@ -76,7 +87,8 @@ class MongoDBCollection extends Collection {
 
         //Port
         $connectionString .= ':';
-        if (isset($Config['DocumentStorage']) && array_key_exists('Port', $Config['DocumentStorage'])) {
+        if (isset($Config['DocumentStorage'])
+            && array_key_exists('Port', $Config['DocumentStorage'])) {
             $connectionString .= $Config['DocumentStorage']['Port'];
         } else {
             $connectionString .= MONGO_DEFAULT_PORT;
@@ -93,16 +105,18 @@ class MongoDBCollection extends Collection {
     public static function initializeMongoClient () {
         global $Config;
 
-        $connectionString  = self::getConnectionString();
-        if (isset($Config['DocumentStorage']) && array_key_exists('SSL', $Config['DocumentStorage']) && $Config['DocumentStorage']['SSL'] !== null) {
+        $connectionString = self::getConnectionString();
+        if (isset($Config['DocumentStorage'])
+            && array_key_exists('SSL', $Config['DocumentStorage'])
+            && $Config['DocumentStorage']['SSL'] !== null) {
             $context = stream_context_create(
-                [ 'ssl' => $Config['DocumentStorage']['SSL'] ]
+                ['ssl' => $Config['DocumentStorage']['SSL']],
             );
 
             $m = new MongoClient(
                 $connectionString,
-                [ 'ssl' => true ],
-                [ 'context' => $context ]
+                ['ssl' => true],
+                ['context' => $context],
             );
         } else {
             $m = new MongoClient($connectionString);
@@ -117,7 +131,8 @@ class MongoDBCollection extends Collection {
     public static function getDatabase () {
         global $Config;
 
-        if (isset($Config['DocumentStorage']) && array_key_exists('Database', $Config['DocumentStorage'])) {
+        if (isset($Config['DocumentStorage'])
+            && array_key_exists('Database', $Config['DocumentStorage'])) {
             return $Config['DocumentStorage']['Database'];
         }
 
@@ -144,9 +159,11 @@ class MongoDBCollection extends Collection {
     ///
 
     /**
-     * Gets an associative array with document collection properties as key and values.
+     * Gets an associative array with document collection properties as key and
+     * values.
      *
      * @param CollectionDocument $document The document
+     *
      * @return array The array representation of the document
      */
     public function getArrayFromDocument (CollectionDocument $document) {
@@ -159,6 +176,7 @@ class MongoDBCollection extends Collection {
                 $array[$key] = $value;
             }
         }
+
         return $array;
     }
 
@@ -170,6 +188,7 @@ class MongoDBCollection extends Collection {
      * Adds a document to the collection
      *
      * @param CollectionDocument $document The document to add
+     *
      * @return boolean true if the operation succeeded; otherwise, false.
      */
     public function add (CollectionDocument &$document) {
@@ -182,11 +201,12 @@ class MongoDBCollection extends Collection {
      * Deletes a document from the collection
      *
      * @param string $documentId The identifiant of the document to delete
+     *
      * @return boolean true if the operation succeeded; otherwise, false.
      */
     public function delete ($documentId) {
         $this->mongoCollection->remove(
-            [ '_id' => $documentId ]
+            ['_id' => $documentId],
         );
     }
 
@@ -194,14 +214,16 @@ class MongoDBCollection extends Collection {
      * Determines if a document exists
      *
      * @param CollectionDocument $document The document to check
+     *
      * @return boolean true if the document exists; otherwise, false.
      */
     public function exists (CollectionDocument $document) {
         //According https://blog.serverdensity.com/checking-if-a-document-exists-mongodb-slow-findone-vs-find/
         //this is more efficient to use find than findOne() to determine existence.
         $cursor = $this->mongoCollection->find(
-            [ '_id' => $document->id ]
+            ['_id' => $document->id],
         )->limit(1);
+
         return $cursor->hasNext();
     }
 
@@ -209,13 +231,14 @@ class MongoDBCollection extends Collection {
      * Updates a document in the collection
      *
      * @param CollectionDocument $document The document to update
+     *
      * @return boolean true if the operation succeeded; otherwise, false.
      */
     public function update (CollectionDocument &$document) {
         $object = static::getArrayFromDocument($document);;
         $this->mongoCollection->update(
-            [ '_id' => $document->id ],
-            $object
+            ['_id' => $document->id],
+            $object,
         );
     }
 
@@ -227,19 +250,21 @@ class MongoDBCollection extends Collection {
      */
     public function get ($documentId) {
         $data = $this->mongoCollection->findOne(
-            [ '_id' => $documentId ]
+            ['_id' => $documentId],
         );
+
         return $this->getDocumentFromArray($data);
     }
 
     /**
      * Gets a document of the relevant collection documents type from an array.
      */
-    public function getDocumentFromArray($documentArray) {
+    public function getDocumentFromArray ($documentArray) {
         $type = $this->documentType;
         if (!class_exists($type)) {
             throw new Exception("Can't create an instance of $type. If the class exists, did you register a SPL autoloader or updated includes/autoload.php?");
         }
+
         return $type::loadFromObject($documentArray);
     }
 
@@ -255,7 +280,8 @@ class MongoDBCollection extends Collection {
     /**
      * Gets all the documents from the collection
      *
-     * @return Iterator An iterator to the documents, each item an instance of CollectionDocument
+     * @return Iterator An iterator to the documents, each item an instance of
+     *     CollectionDocument
      */
     public function getAll () {
         return new MongoDBCollectionIterator($this);

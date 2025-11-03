@@ -15,12 +15,18 @@
  * @filesource
  */
 
+namespace Waystone\Workspaces\Engines\Collection;
+
+use Exception;
+use Traversable;
+
 /**
  * Collection class
  *
  * This abstract class represents a collection of documents
  */
 abstract class Collection {
+
     ///
     /// Common properties
     ///
@@ -43,8 +49,11 @@ abstract class Collection {
      * Loads a new instance of the collection
      *
      * @param string $id The collection identifiant
-     * @param string $documentType The type, inheriting from CollectionDocumt  to use for ollection's documents
-     * @return Collection The collection, of the type specified in the storage configuration
+     * @param string $documentType The type, inheriting from CollectionDocumt
+     *     to use for ollection's documents
+     *
+     * @return Collection The collection, of the type specified in the storage
+     *     configuration
      */
     public static function load ($id, $documentType = null) {
         global $Config;
@@ -64,6 +73,7 @@ abstract class Collection {
         if ($documentType !== null) {
             $instance->documentType = $documentType;
         }
+
         return $instance;
     }
 
@@ -76,6 +86,7 @@ abstract class Collection {
      * Adds a document to the collection
      *
      * @param CollectionDocument $document The document to add
+     *
      * @return boolean true if the operation succeeded; otherwise, false.
      */
     public abstract function add (CollectionDocument &$document);
@@ -84,6 +95,7 @@ abstract class Collection {
      * Deletes a document from the collection
      *
      * @param string $documentId The identifiant of the document to delete
+     *
      * @return boolean true if the operation succeeded; otherwise, false.
      */
     public abstract function delete ($documentId);
@@ -92,6 +104,7 @@ abstract class Collection {
      * Determines if a document exists
      *
      * @param CollectionDocument $document The document to check
+     *
      * @return boolean true if the document exists; otherwise, false.
      */
     public abstract function exists (CollectionDocument $document);
@@ -100,6 +113,7 @@ abstract class Collection {
      * Updates a document in the collection
      *
      * @param CollectionDocument $document The document to update
+     *
      * @return boolean true if the operation succeeded; otherwise, false.
      */
     public abstract function update (CollectionDocument &$document);
@@ -122,7 +136,8 @@ abstract class Collection {
     /**
      * Gets all the documents from the collection
      *
-     * @return Traversable An iterator to the documents, each item an instance of CollectionDocument
+     * @return Traversable An iterator to the documents, each item an instance
+     *     of CollectionDocument
      */
     public abstract function getAll ();
 
@@ -130,6 +145,7 @@ abstract class Collection {
      * Adds or updates a document in the collection
      *
      * @param CollectionDocument $document The document to set
+     *
      * @return boolean true if the operation succeeded; otherwise, false.
      */
     public function set (CollectionDocument &$document) {

@@ -15,7 +15,11 @@
  * @filesource
  */
 
+namespace Waystone\Workspaces\Engines\Collection;
+
 use Waystone\Workspaces\Engines\Serialization\ObjectDeserializable;
+
+use JsonSerializable;
 
 /**
  * Collection document class
@@ -23,6 +27,7 @@ use Waystone\Workspaces\Engines\Serialization\ObjectDeserializable;
  * This class represents a document, inside a collection.
  */
 class CollectionDocument implements JsonSerializable, ObjectDeserializable {
+
     /**
      * @var string The document identifier
      */
@@ -30,10 +35,8 @@ class CollectionDocument implements JsonSerializable, ObjectDeserializable {
 
     /**
      * Specifies data which should be serialized to JSON
-     *
-     * @return moxed data which can be serialized by json_encode()
      */
-    public function jsonSerialize () {
+    public function jsonSerialize () : static {
         return $this;
     }
 
@@ -41,9 +44,10 @@ class CollectionDocument implements JsonSerializable, ObjectDeserializable {
      * Loads a CollectionDocument instance from a generic object.
      *
      * @param object $data The object to deserialize
-     * @return object The deserialized instance
+     *
+     * @return self The deserialized instance
      */
-    public static function loadFromObject ($data) {
+    public static function loadFromObject (object $data) : static {
         $instance = new static;
         foreach ($data as $key => $value) {
             if ($key == '_id') {
@@ -54,6 +58,7 @@ class CollectionDocument implements JsonSerializable, ObjectDeserializable {
             }
             $instance->$key = $value;
         }
+
         return $instance;
     }
 }

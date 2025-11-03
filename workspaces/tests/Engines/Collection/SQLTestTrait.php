@@ -17,7 +17,7 @@
 
 namespace Waystone\Workspaces\Tests\Engines\Collection;
 
-require_once(__DIR__ . '/../../../src/includes/autoload.php');
+use Exception;
 
 /**
  * The tests for our SQL storage engines, to ensure the schema is created correctly.
@@ -25,9 +25,7 @@ require_once(__DIR__ . '/../../../src/includes/autoload.php');
  * For coverage purposes, it requires a coversDefaultClass annotation in the classes using this trait.
  */
 trait SQLTestTrait {
-    /**
-     * @covers ::query()
-     */
+
     public function testQuery () {
         /*
         The query method is a complicated aspect of the code, as it returns a different

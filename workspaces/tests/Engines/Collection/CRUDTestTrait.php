@@ -17,7 +17,7 @@
 
 namespace Waystone\Workspaces\Tests\Engines\Collection;
 
-use CollectionDocument;
+use Waystone\Workspaces\Engines\Collection\CollectionDocument;
 
 /**
  * The tests for our basic, non storage engine specific CRUD features

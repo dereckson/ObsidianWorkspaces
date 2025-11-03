@@ -15,6 +15,10 @@
  * @filesource
  */
 
+namespace Waystone\Workspaces\Engines\Collection;
+
+use SQLite3;
+
 /**
  * SQLite Collection class
  *
@@ -41,6 +45,7 @@ class SQLiteCollection extends SQLCollection {
         if (self::$client === null) {
             self::$client = self::initializeClient();
         }
+
         return self::$client;
     }
 
@@ -51,7 +56,8 @@ class SQLiteCollection extends SQLCollection {
      */
     public static function initializeClient () {
         global $Config;
-        if (!array_key_exists('DocumentStorage', $Config) || !array_key_exists('File', $Config['DocumentStorage'])) {
+        if (!array_key_exists('DocumentStorage', $Config)
+            || !array_key_exists('File', $Config['DocumentStorage'])) {
             throw new Exception("Configuration parameter missing: \$Config['DocumentStorage']['File']. Expected value for this parameter is the path to the SQLite database file.");
         }
 
@@ -81,7 +87,8 @@ class SQLiteCollection extends SQLCollection {
      * Initializes collections table
      */
     protected function initializeCollectionsTable () {
-        if (defined('COLLECTIONS_SQLITE_DATABASE_READY') && COLLECTIONS_SQLITE_DATABASE_READY) {
+        if (defined('COLLECTIONS_SQLITE_DATABASE_READY')
+            && COLLECTIONS_SQLITE_DATABASE_READY) {
             return;
         }
 
@@ -92,7 +99,7 @@ class SQLiteCollection extends SQLCollection {
                 document_id TEXT,
                 document_value BLOB,
                 PRIMARY KEY (collection_id, document_id)
-            );"
+            );",
         );
 
         define('COLLECTIONS_SQLITE_DATABASE_READY', true);
@@ -106,10 +113,12 @@ class SQLiteCollection extends SQLCollection {
      * Determines if the SQL query is a statement
      *
      * @return boolean true is a SELECT one; otherwise, false.
-     * @todo To use this outside the Collection scope, adds the other cases where a query is indicated.
+     * @todo To use this outside the Collection scope, adds the other cases
+     *     where a query is indicated.
      */
     public static function isStatement ($sql) {
         $instruction = strtoupper(strstr($sql, ' ', true));
+
         return $instruction != "SELECT" && $instruction != "PRAGMA";
     }
 
@@ -117,7 +126,10 @@ class SQLiteCollection extends SQLCollection {
      * Executes a SQL query
      *
      * @param string $sql The SQL query
-     * @return mixed If the query doesn't return any result, null. If the query return a row with one field, the scalar value. Otherwise, an associative array, the fields as keys, the row as values.
+     *
+     * @return mixed If the query doesn't return any result, null. If the query
+     *     return a row with one field, the scalar value. Otherwise, an
+     *     associative array, the fields as keys, the row as values.
      */
     public function query ($sql) {
         $client = static::getClient();
@@ -126,9 +138,10 @@ class SQLiteCollection extends SQLCollection {
             if (!$client->exec($sql)) {
                 throw new Exception(
                     "Can't execute collection query. "
-                    . $client->lastErrorMsg()
+                    . $client->lastErrorMsg(),
                 );
             }
+
             return null;
         }
 
@@ -139,7 +152,7 @@ class SQLiteCollection extends SQLCollection {
         if ($result === false) {
             throw new Exception(
                 "Can't execute collection query. "
-                . $client->lastErrorMsg()
+                . $client->lastErrorMsg(),
             );
         }
 
@@ -158,6 +171,7 @@ class SQLiteCollection extends SQLCollection {
      * Escapes the SQL string
      *
      * @param string $value The value to escape
+     *
      * @return string The escaped value
      */
     public function escape ($value) {
@@ -167,11 +181,13 @@ class SQLiteCollection extends SQLCollection {
     /**
      * Gets all the documents from the collection
      *
-     * @return Iterator An iterator to the documents, each item an instance of CollectionDocument
+     * @return Iterator An iterator to the documents, each item an instance of
+     *     CollectionDocument
      */
     public function getAll () {
         $collectionId = $this->escape($this->id);
-        $sql = "SELECT document_value FROM $this->table WHERE collection_id = '$collectionId'";
+        $sql =
+            "SELECT document_value FROM $this->table WHERE collection_id = '$collectionId'";
         $client = static::getClient();
         $type = $this->documentType;
 
