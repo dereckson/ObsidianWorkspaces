@@ -6,7 +6,7 @@
  *   \ / |_) , ) | |_/ | | | | \|
  *    ~  ~    ~  ~ ~   ~ ~ ~ ~  ~
  *
- * ObjectDeserializable and ObjectDeserializableWithContext interfaces
+ * ObjectDeserializable interface
  *
  * @package     ObsidianWorkspaces
  * @subpackage  Keruald
@@ -16,15 +16,20 @@
  *
  */
 
+namespace Waystone\Workspaces\Engines\Serialization;
+
 /**
  * ObjectDeserializable interface
  */
 interface ObjectDeserializable {
+
     /**
-     * Loads a specified class instance from a generic object. Typically used to deserialize a JSON document.
+     * Loads a specified class instance from a generic object.
+     * Typically used to deserialize a JSON document.
      *
      * @param object $data The object to deserialize
-     * @return object The deserialized instance
+     *
+     * @return self The deserialized instance
      */
-    public static function loadFromObject ($data);
+    public static function loadFromObject (object $data) : self;
 }

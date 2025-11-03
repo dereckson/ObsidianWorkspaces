@@ -15,7 +15,9 @@
  * @filesource
  */
 
- /**
+use Waystone\Workspaces\Engines\Serialization\ObjectDeserializable;
+
+/**
  * Collection document class
  *
  * This class represents a document, inside a collection.
