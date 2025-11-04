@@ -22,6 +22,10 @@ use Waystone\Workspaces\Engines\Auth\Actions\GivePermissionUserAction;
 use Waystone\Workspaces\Engines\Framework\Context;
 use Waystone\Workspaces\Engines\Serialization\ArrayDeserializable;
 
+use Keruald\OmniTools\DataTypes\Option\None;
+use Keruald\OmniTools\DataTypes\Option\Option;
+use Keruald\OmniTools\DataTypes\Option\Some;
+
 use Language;
 use Message;
 use User;
@@ -111,27 +115,27 @@ abstract class AuthenticationMethod implements ArrayDeserializable {
     /**
      * Finds user from available data
      *
-     * @return User the user if a user has been found; otherwise, false.
+     * @return Option<User> the user if a user has been found; otherwise, false.
      */
-    private function findUser () {
+    private function findUser () : Option {
         if ($this->remoteUserId != '') {
             $user = User::getUserFromRemoteIdentity(
                 $this->id, $this->remoteUserId,
             );
 
             if ($user !== null) {
-                return $user;
+                return new Some($user);
             }
         }
 
         if ($this->email != '') {
             $user = User::get_user_from_email($this->email);
-            if ($user !== null) {
+            if ($user->isSome()) {
                 return $user;
             }
         }
 
-        return null;
+        return new None;
     }
 
     /**
@@ -149,7 +153,11 @@ abstract class AuthenticationMethod implements ArrayDeserializable {
         // Finally, we proceed to log in.
 
         if ($this->localUser === null) {
-            $this->localUser = $this->findUser();
+            $user = $this->findUser();
+
+            if ($user->isSome()) {
+                $this->localUser = $user->getValue();
+            }
         }
 
         if ($this->localUser === null) {

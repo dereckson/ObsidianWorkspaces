@@ -20,6 +20,7 @@ namespace Waystone\Workspaces\Engines\Auth\Actions;
 
 use Waystone\Workspaces\Engines\Auth\Permission;
 use Waystone\Workspaces\Engines\Auth\UserAction;
+use Waystone\Workspaces\Engines\Framework\Resources;
 use Waystone\Workspaces\Engines\Serialization\ArrayDeserializable;
 
 use Exception;
@@ -56,13 +57,15 @@ class GivePermissionUserAction extends UserAction
      * Executes the user action
      */
     public function run () {
-        if (!$id = resolve_resource_id($this->resourceType,
-            $this->resourceIdentifier)) {
-            throw new Exception("Can't get identifier from resource "
+        $id = Resources::resolveID($this->resourceType, $this->resourceIdentifier);
+
+        if ($id->isNone()) {
+            throw new Exception("Can't resolve resource "
                 . $this->resourceType . " " . $this->resourceIdentifier);
         }
+
         $this->targetUser->setPermission(
-            $this->resourceType, $id,
+            $this->resourceType, $id->getValue(),
             $this->permissionName, $this->permissionFlag,
         );
     }

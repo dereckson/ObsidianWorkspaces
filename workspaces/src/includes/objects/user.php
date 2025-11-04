@@ -19,6 +19,10 @@
 use Waystone\Workspaces\Engines\Errors\ErrorHandling;
 use Waystone\Workspaces\Engines\Workspaces\Workspace;
 
+use Keruald\OmniTools\DataTypes\Option\None;
+use Keruald\OmniTools\DataTypes\Option\Option;
+use Keruald\OmniTools\DataTypes\Option\Some;
+
 /**
  * User class
  */
@@ -115,6 +119,13 @@ class User {
         //Puts object in hashtable, so it's accessible in future call of
         //this run through User::get($id).
         self::$hashtableById[$this->id] = $this;
+    }
+
+    private static function fromRow (array $row) : User {
+        $user = new User();
+        $user->load_from_row($row);
+
+        return $user;
     }
 
     /**
@@ -216,26 +227,41 @@ class User {
     }
 
     /**
-     * Gets user from specified e-mail
-     *
-     * @return User the user matching the specified e-mail; null, if the mail were not found.
+     * @return Option<User>
      */
-    public static function get_user_from_email ($mail) {
+    private static function getByProperty ($property, $value) : Option {
         global $db;
-        $sql = "SELECT * FROM " . TABLE_USERS . " WHERE user_email = '$mail'";
+
+        $value = $db->escape($value);
+        $sql = "SELECT * FROM " . TABLE_USERS . " WHERE $property = '$value'";
         if (!$result = $db->query($sql)) {
             ErrorHandling::messageAndDie(SQL_ERROR, "Can't get user", '', __LINE__, __FILE__, $sql);
         }
 
         if ($row = $db->fetchRow($result)) {
-            //E-mail found.
-            $user = new User();
-            $user->load_from_row($row);
-            return $user;
+            return new Some(User::fromRow($row));
         }
 
-        //E-mail not found.
-        return null;
+        return new None;
+    }
+
+    /**
+     * Gets user from specified e-mail
+     *
+     * @return Option<User> the user matching the specified e-mail; None, if the mail were not found.
+     */
+    public static function get_user_from_email ($mail) : Option {
+        return self::getByProperty("user_email", $mail);
+    }
+
+    public static function get_user_from_username ($username) : Option {
+        return self::getByProperty("username", $username);
+    }
+
+    public static function resolveUserID ($expression) : Option {
+        return self::get_user_from_username($expression)
+            ->orElse(self::get_user_from_email($expression))
+            ->map(fn($user) => $user->id);
     }
 
     //

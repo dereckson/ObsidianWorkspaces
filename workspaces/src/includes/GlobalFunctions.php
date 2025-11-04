@@ -4,46 +4,6 @@ use Waystone\Workspaces\Engines\Workspaces\Workspace;
 
 ////////////////////////////////////////////////////////////////////////////////
 ///                                                                          ///
-/// Information helper functions                                             ///
-///                                                                          ///
-////////////////////////////////////////////////////////////////////////////////
-
-/**
- * Gets the resource ID from an identifier
- *
- * @param $resource_type the resource type
- * @param $identifier resource identifier
- * @return mixed the resource ID (as integer), or NULL if unknown
- */
-function resolve_resource_id ($resource_type, $identifier) {
-    //Trivial cases: already an ID, null or void ID
-    if (is_numeric($identifier)) {
-        return $identifier;
-    }
-    if (!$identifier) {
-        return NULL;
-    }
-
-    //Searches identifier
-    switch ($resource_type) {
-        case 'U':
-            return get_user_id($identifier);
-
-        case 'G':
-            $group = UserGroup::fromCode($identifier);
-            return $group->id;
-
-        case 'W':
-            $workspace = Workspace::fromCode($identifier);
-            return $workspace->id;
-
-        default:
-            throw new Exception("Unknown resource type: $resource_type", E_USER_ERROR);
-    }
-}
-
-////////////////////////////////////////////////////////////////////////////////
-///                                                                          ///
 /// Misc helper functions                                                    ///
 ///                                                                          ///
 ////////////////////////////////////////////////////////////////////////////////
