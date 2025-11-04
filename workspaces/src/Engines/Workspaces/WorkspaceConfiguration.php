@@ -17,17 +17,14 @@
 
 namespace Waystone\Workspaces\Engines\Workspaces;
 
+use Exception;
+use Keruald\Yaml\Parser as YamlParser;
+use Keruald\Yaml\Tags\EnvTag;
 use Waystone\Workspaces\Engines\Apps\ApplicationConfiguration;
+use Waystone\Workspaces\Engines\Auth\AuthenticationMethod;
 use Waystone\Workspaces\Engines\Exceptions\WorkspaceException;
 use Waystone\Workspaces\Engines\Framework\Context;
 use Waystone\Workspaces\Engines\Serialization\ArrayDeserializableWithContext;
-
-use Keruald\Yaml\Parser as YamlParser;
-use Keruald\Yaml\Tags\EnvTag;
-
-use AuthenticationMethod;
-
-use Exception;
 
 /**
  * Workspace configuration class

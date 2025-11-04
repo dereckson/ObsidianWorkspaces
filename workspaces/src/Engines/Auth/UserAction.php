@@ -16,10 +16,15 @@
  *
  */
 
+namespace Waystone\Workspaces\Engines\Auth;
+
+use User;
+
 /**
  * User action class, to be extended to implement an action related to user
  */
 abstract class UserAction {
+
     /**
      * @var User the target action user
      */
@@ -30,7 +35,7 @@ abstract class UserAction {
      *
      * @param User $targetUser the target action user
      */
-    public function __construct ($targetUser = NULL) {
+    public function __construct ($targetUser = null) {
         $this->targetUser = $targetUser;
     }
 

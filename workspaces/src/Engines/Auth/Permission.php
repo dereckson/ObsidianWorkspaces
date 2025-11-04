@@ -9,21 +9,27 @@
  * Permission class
  *
  * @package     ObsidianWorkspaces
- * @subpackage  Model
+ * @subpackage  Auth
  * @author      Sébastien Santoro aka Dereckson <dereckson@espace-win.org>
  * @license     http://www.opensource.org/licenses/bsd-license.php BSD
  * @filesource
  *
  */
 
+namespace Waystone\Workspaces\Engines\Auth;
+
+use InvalidArgumentException;
+
 /**
  * Permission class
  */
 class Permission {
+
     /**
      * Gets resource type letter from code
      *
      * @param string $code The resource type code
+     *
      * @return string The resource type letter
      */
     public static function getResourceTypeLetterFromCode ($code) {
@@ -41,9 +47,10 @@ class Permission {
      * Gets resource type code from letter
      *
      * @param string $letter The resource type letter
+     *
      * @return string The resource type code
      */
-    public static function getResourceTypeCodeFromLetter($letter) {
+    public static function getResourceTypeCodeFromLetter ($letter) {
         switch ($letter) {
             case 'U': return "user";
             case 'G': return "group";

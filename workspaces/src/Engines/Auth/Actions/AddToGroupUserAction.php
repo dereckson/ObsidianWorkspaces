@@ -16,19 +16,28 @@
  *
  */
 
+namespace Waystone\Workspaces\Engines\Auth\Actions;
+
+use Waystone\Workspaces\Engines\Auth\UserAction;
 use Waystone\Workspaces\Engines\Serialization\ArrayDeserializable;
+
+use Exception;
+
+use UserGroup;
 
 /**
  * User action to add a user into a group
  */
 class AddToGroupUserAction extends UserAction implements ArrayDeserializable {
+
     /**
      * @var UserGroup The group to add the user to
      */
     public $group;
 
     /**
-     * @var boolean Determines if the target user has to be added to the group in the quality of admin
+     * @var boolean Determines if the target user has to be added to the group
+     *     in the quality of admin
      */
     public $isAdmin;
 

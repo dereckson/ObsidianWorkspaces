@@ -16,6 +16,7 @@
  *
  */
 
+use Waystone\Workspaces\Engines\Auth\AuthenticationMethod;
 use Waystone\Workspaces\Engines\Errors\ErrorHandling;
 
 global $context;

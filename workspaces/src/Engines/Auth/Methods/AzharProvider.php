@@ -15,13 +15,22 @@
  * @filesource
  */
 
- /**
-  * Azhàr provider authentication method class
-  *
-  * Azhàr sends a document providing authentication and registration of new users.
-  * It's signed by a shared secret key.
-  */
+namespace Waystone\Workspaces\Engines\Auth\Methods;
+
+use Waystone\Workspaces\Engines\Auth\AuthenticationMethod;
+
+use Language;
+
+use stdClass;
+
+/**
+ * Azhàr provider authentication method class
+ *
+ * Azhàr sends a document providing authentication and registration of new
+ * users. It's signed by a shared secret key.
+ */
 class AzharProvider extends AuthenticationMethod {
+
     /**
      * @var string Shared secret key
      */
@@ -42,15 +51,18 @@ class AzharProvider extends AuthenticationMethod {
      */
     public function handleRequest () {
         $action = array_key_exists('action', $_GET) ? $_GET['action'] : '';
-        $sessionKey = array_key_exists('sessionKey', $_GET) ? $_GET['sessionKey'] : '';
+        $sessionKey =
+            array_key_exists('sessionKey', $_GET) ? $_GET['sessionKey'] : '';
 
         if ($action == "user.login.azhar.initialize") {
             //Redirects user to Azhàr SSO service
-            $callbackUrl = get_server_url() . get_url($this->context->workspace->code)
-                         . '?action=user.login.azhar.success&authenticationMethodId=' . $this->id;
+            $callbackUrl =
+                get_server_url() . get_url($this->context->workspace->code)
+                . '?action=user.login.azhar.success&authenticationMethodId='
+                . $this->id;
             $url = $this->url . '?mode=provider&key=' . $this->clientKey
-                   . '&sessionKey=' . $this->getSessionKey()
-                   . '&url=' . urlencode($callbackUrl);
+                . '&sessionKey=' . $this->getSessionKey()
+                . '&url=' . urlencode($callbackUrl);
             header('Location: ' . $url);
             exit;
         } elseif ($action == "user.login.azhar.success") {
@@ -58,7 +70,8 @@ class AzharProvider extends AuthenticationMethod {
             $reply = $this->fetchInformation();
 
             if (!$this->isDocumentLegit($reply)) {
-                $this ->loginError = Language::get('ExternalLoginNotLegitReply');
+                $this->loginError = Language::get('ExternalLoginNotLegitReply');
+
                 return;
             }
 
@@ -68,6 +81,7 @@ class AzharProvider extends AuthenticationMethod {
                 $this->email = $reply->email;
                 $this->remoteUserId = $reply->localUserId;
                 $this->signInOrCreateUser();
+
                 return;
             } elseif ($reply->status == "ERROR_USER_SIDE") {
                 switch ($reply->code) {
@@ -86,7 +100,7 @@ class AzharProvider extends AuthenticationMethod {
 
             $this->loginError = '<p>An unknown error has been received:</p><pre>' . print_r($reply, true) . '</pre><p>Please notify technical support about this new error message, so we can handle it in the future.</p>';
         } else {
-            $this ->loginError = '<p>Unknown action: $action</p>';
+            $this->loginError = '<p>Unknown action: $action</p>';
         }
     }
 
@@ -106,6 +120,7 @@ class AzharProvider extends AuthenticationMethod {
             $this->setSessionSecret($reply->sessionSecret);
             $_SESSION['Auth-$hash']['SessionKey'] = $reply->sessionKey;
         }
+
         return $_SESSION['Auth-$hash']['SessionKey'];
     }
 
@@ -116,6 +131,7 @@ class AzharProvider extends AuthenticationMethod {
      */
     private function getSessionSecret () {
         $hash = md5($this->id);
+
         return $_SESSION['Auth-$hash']['SessionSecret'];
     }
 
@@ -134,7 +150,7 @@ class AzharProvider extends AuthenticationMethod {
      *
      * @retrun string the login link
      */
-    public function getAuthenticationLink() {
+    public function getAuthenticationLink () {
         $url = get_server_url() . get_url($this->context->workspace->code)
              . '?action=user.login.azhar.initialize&authenticationMethodId=' . $this->id;
         return $url;
@@ -147,7 +163,7 @@ class AzharProvider extends AuthenticationMethod {
      */
     function isDocumentLegit ($document) {
         $hash = '';
-        $claimedHash = NULL;
+        $claimedHash = null;
         foreach ($document as $key => $value) {
             if ($key == 'hash') {
                 $claimedHash = $value;
@@ -180,10 +196,12 @@ class AzharProvider extends AuthenticationMethod {
      * Gets the contents of the specified URL and decode the JSON reply
      *
      * @param string $url The URL to the JSON document to query.
+     *
      * @return stdClass The reply
      */
     public static function query ($url) {
         $data = file_get_contents($url);
+
         return json_decode($data);
     }
 
@@ -192,6 +210,7 @@ class AzharProvider extends AuthenticationMethod {
      * Typically used to deserialize a configuration.
      *
      * @param array $data The associative array to deserialize
+     *
      * @return AzharProvider The deserialized instance
      */
     public static function loadFromArray (array $data) : self {

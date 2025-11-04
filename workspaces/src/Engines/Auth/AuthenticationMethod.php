@@ -15,16 +15,27 @@
  * @filesource
  */
 
+namespace Waystone\Workspaces\Engines\Auth;
+
+use Waystone\Workspaces\Engines\Auth\Actions\AddToGroupUserAction;
+use Waystone\Workspaces\Engines\Auth\Actions\GivePermissionUserAction;
 use Waystone\Workspaces\Engines\Framework\Context;
 use Waystone\Workspaces\Engines\Serialization\ArrayDeserializable;
 
-/**
-  * Authentication method class
-  *
-  * This class has to be extended to implement custom authentication methods.
-  */
+use Language;
+use Message;
+use User;
 
+use Exception;
+use InvalidArgumentException;
+
+/**
+ * Authentication method class
+ *
+ * This class has to be extended to implement custom authentication methods.
+ */
 abstract class AuthenticationMethod implements ArrayDeserializable {
+
     /**
      * @var User The local user matching the authentication
      */
@@ -56,12 +67,14 @@ abstract class AuthenticationMethod implements ArrayDeserializable {
     public $loginMessage;
 
     /**
-     * @var boolean Determines if the authentication method could  be used to register new users
+     * @var boolean Determines if the authentication method could  be used to
+     *     register new users
      */
     public $canCreateUser = false;
 
     /**
-     * @var Array Actions to execute if a user is created, each instance a member of UserAction
+     * @var Array Actions to execute if a user is created, each instance a
+     *     member of UserAction
      */
     public $createUserActions = [];
 
@@ -78,12 +91,12 @@ abstract class AuthenticationMethod implements ArrayDeserializable {
     /**
      * Gets authentication link for this method
      */
-    public abstract function getAuthenticationLink();
+    public abstract function getAuthenticationLink ();
 
     /**
      * Handles request
      */
-    public abstract function handleRequest();
+    public abstract function handleRequest ();
 
     /**
      * Runs actions planned on user create
@@ -103,15 +116,19 @@ abstract class AuthenticationMethod implements ArrayDeserializable {
     private function findUser () {
         if ($this->remoteUserId != '') {
             $user = User::getUserFromRemoteIdentity(
-                $this->id, $this->remoteUserId
+                $this->id, $this->remoteUserId,
             );
 
-            if ($user !== null) return $user;
+            if ($user !== null) {
+                return $user;
+            }
         }
 
         if ($this->email != '') {
             $user = User::get_user_from_email($this->email);
-            if ($user !== null) return $user;
+            if ($user !== null) {
+                return $user;
+            }
         }
 
         return null;
@@ -120,7 +137,8 @@ abstract class AuthenticationMethod implements ArrayDeserializable {
     /**
      * Signs in or creates a new user
      *
-     * @return boolean true if user has been successfully logged in; otherwise, false.
+     * @return boolean true if user has been successfully logged in; otherwise,
+     *     false.
      */
     public function signInOrCreateUser () {
         // At this stage, if we don't already have a user instance,
@@ -136,7 +154,9 @@ abstract class AuthenticationMethod implements ArrayDeserializable {
 
         if ($this->localUser === null) {
             if (!$this->canCreateUser) {
-                $this->loginError = Language::get("ExternalLoginCantCreateAccount");
+                $this->loginError =
+                    Language::get("ExternalLoginCantCreateAccount");
+
                 return false;
             } else {
                 $this->createUser();
@@ -147,6 +167,7 @@ abstract class AuthenticationMethod implements ArrayDeserializable {
         }
 
         $this->signIn($this->localUser);
+
         return true;
     }
 
@@ -155,7 +176,7 @@ abstract class AuthenticationMethod implements ArrayDeserializable {
      *
      * @param User The user to log in
      */
-    public function signIn(User $user) {
+    public function signIn (User $user) {
         $this->context->session->user_login($user->id);
     }
 
@@ -175,7 +196,7 @@ abstract class AuthenticationMethod implements ArrayDeserializable {
         $user->save_to_database();
 
         $user->setRemoteIdentity(
-            $this->id, $this->remoteUserId
+            $this->id, $this->remoteUserId,
         );
 
         $this->localUser = $user;
@@ -188,16 +209,21 @@ abstract class AuthenticationMethod implements ArrayDeserializable {
      *
      * @param string $id The authentication method id
      * @param Context $context The site context
+     *
      * @return AuthenticationMethod The authentication method matching the id
      */
     public static function getFromId ($id, $context) {
         if ($context->workspace != null) {
-            foreach ($context->workspace->configuration->authenticationMethods as $authenticationMethod) {
+            foreach (
+                $context->workspace->configuration->authenticationMethods as
+                $authenticationMethod
+            ) {
                 if ($authenticationMethod->id == $id) {
                     return $authenticationMethod;
                 }
             }
         }
+
         return null;
     }
 
@@ -210,7 +236,7 @@ abstract class AuthenticationMethod implements ArrayDeserializable {
      * @return AuthenticationMethod The deserialized instance
      * @throws InvalidArgumentException|Exception
      */
-    public static function loadFromArray(array $data) : self {
+    public static function loadFromArray (array $data) : self {
         $instance = new static;
 
         if (!array_key_exists("id", $data)) {
@@ -230,12 +256,14 @@ abstract class AuthenticationMethod implements ArrayDeserializable {
 
             $addToGroups = $createUser["addToGroups"] ?? [];
             foreach ($addToGroups as $actionData) {
-                $instance->createUserActions[] = AddToGroupUserAction::loadFromArray($actionData);
+                $instance->createUserActions[] =
+                    AddToGroupUserAction::loadFromArray($actionData);
             }
 
             $givePermissions = $createUser["givePermissions"] ?? [];
             foreach ($createUser["givePermissions"] as $actionData) {
-                $instance->createUserActions[] = GivePermissionUserAction::loadFromArray($actionData);
+                $instance->createUserActions[] =
+                    GivePermissionUserAction::loadFromArray($actionData);
             }
         }
 

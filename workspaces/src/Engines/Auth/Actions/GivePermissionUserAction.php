@@ -16,12 +16,22 @@
  *
  */
 
+namespace Waystone\Workspaces\Engines\Auth\Actions;
+
+use Waystone\Workspaces\Engines\Auth\Permission;
+use Waystone\Workspaces\Engines\Auth\UserAction;
 use Waystone\Workspaces\Engines\Serialization\ArrayDeserializable;
+
+use Exception;
+use InvalidArgumentException;
+use JsonSerializable;
 
 /**
  * User action to grant user a permission
  */
-class GivePermissionUserAction extends UserAction implements ArrayDeserializable, JsonSerializable {
+class GivePermissionUserAction extends UserAction
+    implements ArrayDeserializable, JsonSerializable {
+
     /**
      * @var string The permission name
      */
@@ -46,12 +56,14 @@ class GivePermissionUserAction extends UserAction implements ArrayDeserializable
      * Executes the user action
      */
     public function run () {
-        if (!$id = resolve_resource_id($this->resourceType, $this->resourceIdentifier)) {
-            throw new Exception("Can't get identifier from resource " . $this->resourceType . " " . $this->resourceIdentifier);
+        if (!$id = resolve_resource_id($this->resourceType,
+            $this->resourceIdentifier)) {
+            throw new Exception("Can't get identifier from resource "
+                . $this->resourceType . " " . $this->resourceIdentifier);
         }
         $this->targetUser->setPermission(
             $this->resourceType, $id,
-            $this->permissionName, $this->permissionFlag
+            $this->permissionName, $this->permissionFlag,
         );
     }
 
@@ -59,9 +71,10 @@ class GivePermissionUserAction extends UserAction implements ArrayDeserializable
      * Loads a GivePermissionUserAction instance from an associative array.
      *
      * @param object $data The associative array to deserialize
+     *
      * @return GivePermissionUserAction The deserialized instance
      */
-   public static function loadFromArray (mixed $data) : self {
+    public static function loadFromArray (mixed $data) : self {
         // Validate mandatory data
         if (!array_key_exists("resource", $data)) {
             throw new InvalidArgumentException("A resource property, with two mandatory type and id property is required.");
@@ -86,7 +99,8 @@ class GivePermissionUserAction extends UserAction implements ArrayDeserializable
         // Build instance
         $instance = new GivePermissionUserAction();
 
-        $instance->resourceType = Permission::getResourceTypeLetterFromCode($resource["type"]);
+        $instance->resourceType =
+            Permission::getResourceTypeLetterFromCode($resource["type"]);
         $instance->resourceIdentifier = $resource["id"];
         $instance->permissionName = $permission["name"];
 
@@ -99,16 +113,19 @@ class GivePermissionUserAction extends UserAction implements ArrayDeserializable
 
 
     /**
-     * Serializes the object to a value that can be serialized natively by json_encode().
+     * Serializes the object to a value that can be serialized natively by
+     * json_encode().
      *
      * @return object The serializable value
      */
-    public function jsonSerialize() {
+    public function jsonSerialize () {
         //TODO: if you wish strict code here, we need such a class.
-        $data->resource->type = Permission::getResourceTypeCodeFromLetter($this->resourceType);
+        $data->resource->type =
+            Permission::getResourceTypeCodeFromLetter($this->resourceType);
         $data->resource->id = $this->resourceIdentifier;
         $data->permission->name = $this->permissionName;
         $data->permission->flag = $this->permissionFlag;
+
         return $data;
     }
 }
