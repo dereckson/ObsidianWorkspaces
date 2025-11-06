@@ -19,18 +19,6 @@ use Waystone\Workspaces\Engines\Controller\LoadableWithContext;
 use Waystone\Workspaces\Engines\Framework\Context;
 
 /**
- * Gets a specified language expression defined in configuration file
- *
- * @param string $key the configuration key matching the value to get
- * @return string The value in the configuration file
- * @deprecated
- */
-function lang_get ($key) {
-    trigger_error("The use of the L10n global functions is deprecated. Call Language::get('$key') instead.", E_USER_DEPRECATED);
-    return Language::get($key);
-}
-
-/**
  * Language services
  */
 class Language implements LoadableWithContext {
