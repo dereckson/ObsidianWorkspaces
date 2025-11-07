@@ -22,13 +22,14 @@ use Waystone\Workspaces\Engines\Auth\UserAction;
 use Waystone\Workspaces\Engines\Serialization\ArrayDeserializable;
 
 use Exception;
+use JsonSerializable;
 
 use UserGroup;
 
 /**
  * User action to add a user into a group
  */
-class AddToGroupUserAction extends UserAction implements ArrayDeserializable {
+class AddToGroupUserAction extends UserAction implements ArrayDeserializable, JsonSerializable {
 
     /**
      * @var UserGroup The group to add the user to
@@ -72,5 +73,12 @@ class AddToGroupUserAction extends UserAction implements ArrayDeserializable {
         $instance->isAdmin = ($data["isAdmin"] == true);
 
         return $instance;
+    }
+
+    public function jsonSerialize () : array {
+        return [
+            "code" => $this->group->code,
+            "isAdmin" => $this->isAdmin
+        ];
     }
 }

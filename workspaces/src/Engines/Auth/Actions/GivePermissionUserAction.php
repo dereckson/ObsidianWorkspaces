@@ -119,16 +119,21 @@ class GivePermissionUserAction extends UserAction
      * Serializes the object to a value that can be serialized natively by
      * json_encode().
      *
-     * @return object The serializable value
+     * @return array The serializable value
      */
-    public function jsonSerialize () {
-        //TODO: if you wish strict code here, we need such a class.
-        $data->resource->type =
-            Permission::getResourceTypeCodeFromLetter($this->resourceType);
-        $data->resource->id = $this->resourceIdentifier;
-        $data->permission->name = $this->permissionName;
-        $data->permission->flag = $this->permissionFlag;
+    public function jsonSerialize () : array {
+        $type = Permission::getResourceTypeCodeFromLetter($this->resourceType);
 
-        return $data;
+        return [
+            "resource" => [
+                "type" => $type,
+                "id" => $this->resourceIdentifier
+            ],
+
+            "permission" => [
+                "name" => $this->permissionName,
+                "flag" => $this->permissionFlag,
+            ],
+        ];
     }
 }
