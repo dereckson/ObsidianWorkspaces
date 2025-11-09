@@ -45,11 +45,6 @@ class Context {
      */
     public array $config;
 
-    /**
-     * @var UserRepository the users already loaded from database
-     */
-    public UserRepository $userRepository;
-
     public Resources $resources;
 
     /**

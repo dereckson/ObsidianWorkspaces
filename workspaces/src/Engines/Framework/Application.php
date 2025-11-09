@@ -18,13 +18,12 @@ class Application {
 
         $context->config = $config;
         $context->db = Database::load($config["sql"]);
-        $context->userRepository = new UserRepository($context->db);
         $context->resources = new Resources(
-            $context->userRepository,
+            new UserRepository($context->db),
         );
         $context->session = Session::load(
             $context->db,
-            $context->userRepository,
+            $context->resources->users,
         );
         $context->url = get_current_url_fragments();
         $context->initializeTemplateEngine($context->config['Theme']);

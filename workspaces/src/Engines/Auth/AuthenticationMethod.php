@@ -119,7 +119,7 @@ abstract class AuthenticationMethod implements ArrayDeserializableWithContext {
      * @return Option<User> the user if a user has been found; otherwise, false.
      */
     private function findUser () : Option {
-        $users = $this->context->userRepository;
+        $users = $this->context->resources->users;
 
         if ($this->remoteUserId != '') {
             $user = $users->getUserFromRemoteIdentity(
@@ -202,7 +202,7 @@ abstract class AuthenticationMethod implements ArrayDeserializableWithContext {
             throw new Exception("Can't create user: the canCreateUser property is set at false.");
         }
 
-        $users = $this->context->userRepository;
+        $users = $this->context->resources->users;
 
         $user = $users->create();
         $user->name = $this->name;

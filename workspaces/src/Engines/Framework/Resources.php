@@ -16,7 +16,7 @@ use InvalidArgumentException;
 class Resources {
 
     public function __construct (
-        private UserRepository $users,
+        public UserRepository $users,
     ) {
     }
 
