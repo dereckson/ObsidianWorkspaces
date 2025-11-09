@@ -21,6 +21,7 @@ use Waystone\Workspaces\Engines\Auth\Actions\AddToGroupUserAction;
 use Waystone\Workspaces\Engines\Auth\Actions\GivePermissionUserAction;
 use Waystone\Workspaces\Engines\Framework\Context;
 use Waystone\Workspaces\Engines\Serialization\ArrayDeserializableWithContext;
+use Waystone\Workspaces\Engines\Users\User;
 
 use Keruald\OmniTools\DataTypes\Option\None;
 use Keruald\OmniTools\DataTypes\Option\Option;
@@ -28,7 +29,6 @@ use Keruald\OmniTools\DataTypes\Option\Some;
 
 use Language;
 use Message;
-use User;
 
 use Exception;
 use InvalidArgumentException;
@@ -202,13 +202,15 @@ abstract class AuthenticationMethod implements ArrayDeserializableWithContext {
             throw new Exception("Can't create user: the canCreateUser property is set at false.");
         }
 
-        $user = User::create($this->context->db);
+        $users = $this->context->userRepository;
+
+        $user = $users->create();
         $user->name = $this->name;
         $user->email = $this->email;
-        $user->save_to_database();
+        $users->saveToDatabase($user);
 
-        $user->setRemoteIdentity(
-            $this->id, $this->remoteUserId,
+        $users->setRemoteIdentity(
+            $user, $this->id, $this->remoteUserId,
         );
 
         $this->localUser = $user;

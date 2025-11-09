@@ -19,10 +19,10 @@ namespace Waystone\Workspaces\Engines\Workspaces;
 
 use Waystone\Workspaces\Engines\Errors\ErrorHandling;
 use Waystone\Workspaces\Engines\Framework\Context;
+use Waystone\Workspaces\Engines\Users\User;
 
 use Cache;
 use Language;
-use User;
 
 use Exception;
 use LogicException;

@@ -16,10 +16,14 @@
  *
  */
 
+namespace Waystone\Workspaces\Engines\Users;
+
 use Waystone\Workspaces\Engines\Errors\ErrorHandling;
 use Waystone\Workspaces\Engines\Workspaces\Workspace;
 
 use Keruald\Database\DatabaseEngine;
+
+use UserGroup;
 
 /**
  * User class
@@ -44,19 +48,45 @@ class User {
 
     private DatabaseEngine $db;
 
-    /*
-     * Initializes a new instance
-     *
-     * @param int $id the primary key
-     */
-    function __construct ($id = null, DatabaseEngine $db = null) {
-        $this->id = $id;
-        $this->db = $db;
+    ///
+    /// Constructors
+    ///
 
-        if ($id) {
-            $this->load_from_database();
-        }
+    public static function fromRow (array $row) : self {
+        $user = new self;
+        $user->load_from_row($row);
+
+        return $user;
     }
+
+    /**
+     * Create a new user instance with arbitrary user_id
+     *
+     * The created user is not saved in the database.
+     *
+     * @param int $user_id A unassigned user ID
+     * @return self
+     */
+    public static function create (int $user_id) : self {
+        $user = new self;
+
+        $user->id = $user_id;
+        $user->active = true;
+        $user->regdate = time();
+
+        return $user;
+    }
+
+    /**
+     * Creates a new anonymous user instance
+     */
+    public static function anonymous () : User {
+        return User::create(ANONYMOUS_USER);
+    }
+
+    ///
+    /// Load data
+    ///
 
     /**
      * Loads the object User (ie fill the properties) from the $_POST array
@@ -71,25 +101,6 @@ class User {
     }
 
     /**
-     * Loads the object User (ie fill the properties) from the database
-     */
-    function load_from_database () {
-        $db = $this->db;
-
-        $id = $this->db->escape($this->id);
-        $sql = "SELECT * FROM " . TABLE_USERS . " WHERE user_id = '" . $id . "'";
-        if ( !($result = $db->query($sql)) ) ErrorHandling::messageAndDie(SQL_ERROR, "Unable to query users", '', __LINE__, __FILE__, $sql);
-        if (!$row = $db->fetchRow($result)) {
-            $this->lastError = "User unknown: " . $this->id;
-            return false;
-        }
-
-        $this->load_from_row($row);
-
-        return true;
-    }
-
-    /**
      * Loads the object User (ie fill the properties) from the database row
      */
     function load_from_row ($row) {
@@ -101,114 +112,20 @@ class User {
         $this->regdate  = $row['user_regdate'];
     }
 
-    /**
-     * Saves to database
-     */
-    function save_to_database () {
-        $db = $this->db;
-
-        $id = $this->id ? "'" . $db->escape($this->id) . "'" : 'NULL';
-        $name = $db->escape($this->name);
-        $password = $db->escape($this->password);
-        $active = $this->active ? 1 : 0;
-        $email = $db->escape($this->email);
-        $regdate = $this->regdate ? "'" . $db->escape($this->regdate) . "'" : 'NULL';
-
-        //Updates or inserts
-        $sql = "REPLACE INTO " . TABLE_USERS . " (`user_id`, `username`, `user_password`, `user_active`, `user_email`, `user_regdate`) VALUES ($id, '$name', '$password', $active, '$email', $regdate)";
-        if (!$db->query($sql)) {
-            ErrorHandling::messageAndDie(SQL_ERROR, "Unable to save user", '', __LINE__, __FILE__, $sql);
-        }
-
-        if (!$this->id) {
-            //Gets new record id value
-            $this->id = $db->nextId();
-        }
-    }
-
-    /**
-     * Updates the specified field in the database record
-     */
-    function save_field ($field) {
-        $db = $this->db;
-
-        if (!$this->id) {
-            ErrorHandling::messageAndDie(GENERAL_ERROR, "You're trying to update a record not yet saved in the database");
-        }
-        $id = $db->escape($this->id);
-        $value = $db->escape($this->$field);
-        $sql = "UPDATE " . TABLE_USERS . " SET `$field` = '$value' WHERE user_id = '$id'";
-        if (!$db->query($sql)) {
-            ErrorHandling::messageAndDie(SQL_ERROR, "Unable to save $field field", '', __LINE__, __FILE__, $sql);
-        }
-    }
-
     //
-    // USER MANAGEMENT FUNCTIONS
+    // User properties
     //
-
-    /**
-     * Generates a unique user id
-     */
-    function generate_id () {
-        $db = $this->db;
-
-        do {
-            $this->id = mt_rand(2001, 9999);
-            $sql = "SELECT COUNT(*) FROM " . TABLE_USERS . " WHERE user_id = $this->id";
-            if (!$result = $db->query($sql)) {
-                ErrorHandling::messageAndDie(SQL_ERROR, "Can't check if a user id is free", '', __LINE__, __FILE__, $sql);
-            }
-            $row = $db->fetchRow($result);
-        } while ($row[0]);
-    }
 
     /**
      * Fills password field with encrypted version
      * of the specified clear password
      */
-    public function set_password ($newpassword) {
-        $this->password = md5($newpassword);
-    }
-
-    /**
-     * Initializes a new User instance ready to have its property filled
-     *
-     * @return User the new user instance
-     */
-    public static function create (DatabaseEngine $db) {
-        $user = new User(null, $db);
-        $user->generate_id();
-        $user->active = true;
-        $user->regdate = time();
-        return $user;
+    public function setPassword ($password) {
+        $this->password = md5($password);
     }
 
     //
-    // REMOTE IDENTITY PROVIDERS
-    //
-
-    /**
-     * Sets user's remote identity provider identifiant
-     *
-     * @param $authType The authentication method type
-     * @param $remoteUserId The remote user identifier
-     * */
-    public function setRemoteIdentity ($authType, $remoteUserId, $properties = null) {
-        $db = $this->db;
-
-        $authType = $db->escape($authType);
-        $remoteUserId = $db->escape($remoteUserId);
-        $properties = ($properties === NULL) ? 'NULL' : "'" . $db->escape($properties) . "'";
-        $sql = "INSERT INTO " . TABLE_USERS_AUTH . " (auth_type, auth_identity, auth_properties, user_id) "
-             . "VALUES ('$authType', '$remoteUserId', $properties, $this->id)";
-        if (!$db->query($sql)) {
-             ErrorHandling::messageAndDie(SQL_ERROR, "Can't set user remote identity provider information", '', __LINE__, __FILE__, $sql);
-         }
-    }
-
-    //
-    // INTERACTION WITH OTHER OBJECTS
+    // Interaction with groups and permissions
     //
 
     /**

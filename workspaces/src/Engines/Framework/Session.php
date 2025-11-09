@@ -22,11 +22,10 @@
 namespace Waystone\Workspaces\Engines\Framework;
 
 use Waystone\Workspaces\Engines\Errors\ErrorHandling;
+use Waystone\Workspaces\Engines\Users\User;
 use Waystone\Workspaces\Engines\Users\UserRepository;
 
 use Keruald\Database\DatabaseEngine;
-
-use User;
 
 /**
  * Session class
@@ -260,8 +259,11 @@ class Session {
         $row = $db->fetchRow($result);
 
         //Gets user instance
-        require_once('includes/objects/user.php');
-        $user = new User($row['user_id'], $db);
+        $user_id = (int)$row['user_id'];
+        $user = match ($user_id) {
+            ANONYMOUS_USER => User::anonymous(),
+            default => $this->users->get($user_id),
+        };
 
         //Adds session property to this user instance
         $user->session = $row;

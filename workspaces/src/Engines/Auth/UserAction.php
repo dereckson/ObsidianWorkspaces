@@ -19,8 +19,7 @@
 namespace Waystone\Workspaces\Engines\Auth;
 
 use Waystone\Workspaces\Engines\Framework\Context;
-
-use User;
+use Waystone\Workspaces\Engines\Users\User;
 
 /**
  * User action class, to be extended to implement an action related to user

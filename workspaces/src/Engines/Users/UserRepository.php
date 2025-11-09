@@ -3,6 +3,7 @@
 namespace Waystone\Workspaces\Engines\Users;
 
 use Waystone\Workspaces\Engines\Errors\ErrorHandling;
+use Waystone\Workspaces\Engines\Exceptions\UserNotFoundException;
 use Waystone\Workspaces\Engines\Framework\Repository;
 
 use Keruald\Database\Exceptions\SqlException;
@@ -10,7 +11,7 @@ use Keruald\OmniTools\DataTypes\Option\None;
 use Keruald\OmniTools\DataTypes\Option\Option;
 use Keruald\OmniTools\DataTypes\Option\Some;
 
-use User;
+use RuntimeException;
 
 class UserRepository extends Repository {
 
@@ -40,8 +41,7 @@ class UserRepository extends Repository {
             return new None;
         }
 
-        $user = new User(null, $this->db);
-        $user->load_from_row($row);
+        $user = User::fromRow($row);
         $this->table[$user->id] = $user;
 
         return new Some($user);
@@ -118,17 +118,138 @@ class UserRepository extends Repository {
      * Gets an instance of the class from the table or loads it from database.
      *
      * @param int $id the user ID
+     *
      * @return User the user instance
+     * @throws Exception when the user is not found
      */
     public function get (int $id) : User {
         if ($this->table->has($id)) {
             return $this->table[$id];
         }
 
-        $user = new User($id, $this->db);
+        $user = $this->loadFromDatabase($id);
+        if ($user->isNone()) {
+            throw new UserNotFoundException;
+        }
+
+        $user = $user->getValue();
         $this->table[$id] = $user;
 
         return $user;
+    }
+
+    /**
+     * Loads the object User (ie fill the properties) from the database
+     *
+     * @return Option<User> the user instance, or None if not found
+     */
+    private function loadFromDatabase (int $id) : Option {
+        $db = $this->db;
+
+        $sql = "SELECT * FROM " . TABLE_USERS . " WHERE user_id = '" . $id . "'";
+        if (!$result = $db->query($sql)) {
+            ErrorHandling::messageAndDie(SQL_ERROR, "Unable to query users", '', __LINE__, __FILE__, $sql);
+        }
+
+        $row = $db->fetchRow($result);
+        if (!$row) {
+            return new None;
+        }
+
+        return new Some(User::fromRow($row));
+    }
+
+    ///
+    /// Create object
+    ///
+
+    /**
+     * Initializes a new User instance ready to have its property filled
+     *
+     * @return User the new user instance
+     */
+    public function create () : User {
+        $id = $this->generateId();
+
+        return User::create($id);
+    }
+
+    /**
+     * Generates a unique user id
+     */
+    private function generateId () : int {
+        $db = $this->db;
+
+        do {
+            $id = mt_rand(2001, 9999);
+            $sql = "SELECT COUNT(*) FROM " . TABLE_USERS . " WHERE user_id = $this->id";
+
+            try {
+                $result = $db->queryScalar($sql);
+            } catch (SqlException) {
+                ErrorHandling::messageAndDie(SQL_ERROR, "Can't check if a user id is free", '', __LINE__, __FILE__, $sql);
+            }
+        } while ($result);
+
+        return $id;
+    }
+
+    ///
+    /// Save object
+    ///
+
+    /**
+     * Saves to database
+     */
+    function saveToDatabase (User $user) : void {
+        $db = $this->db;
+
+        $id = $user->id ? "'" . $db->escape($user->id) . "'" : 'NULL';
+        $name = $db->escape($user->name);
+        $password = $db->escape($user->password);
+        $active = $user->active ? 1 : 0;
+        $email = $db->escape($user->email);
+        $regdate = $user->regdate ? "'" . $db->escape($user->regdate) . "'" : 'NULL';
+
+        //Updates or inserts
+        $sql = "REPLACE INTO " . TABLE_USERS . " (`user_id`, `username`, `user_password`, `user_active`, `user_email`, `user_regdate`) VALUES ($id, '$name', '$password', $active, '$email', $regdate)";
+        if (!$db->query($sql)) {
+            ErrorHandling::messageAndDie(SQL_ERROR, "Unable to save user", '', __LINE__, __FILE__, $sql);
+        }
+
+        if (!$user->id) {
+            //Gets new record id value
+            $user->id = $db->nextId();
+        }
+    }
+
+    //
+    // User authentication
+    //
+
+    /**
+     * Sets user's remote identity provider identifiant
+     *
+     * @param User $user
+     * @param string $authType The authentication method type
+     * @param string $remoteUserId The remote user identifier
+     * @param array $properties The authentication method properties
+     */
+    public function setRemoteIdentity (User $user, string $authType, string $remoteUserId, array $properties = []) : void {
+        $db = $this->db;
+
+        if ($properties != []) {
+            throw new RuntimeException("The remote identity provider properties have not been implemented yet.");
+        }
+
+        $authType = $db->escape($authType);
+        $remoteUserId = $db->escape($remoteUserId);
+        $properties = "NULL";
+        $sql = "INSERT INTO " . TABLE_USERS_AUTH . " (auth_type, auth_identity, auth_properties, user_id) "
+            . "VALUES ('$authType', '$remoteUserId', $properties, $user->id)";
+        if (!$db->query($sql)) {
+            ErrorHandling::messageAndDie(SQL_ERROR, "Can't set user remote identity provider information", '', __LINE__, __FILE__, $sql);
+        }
     }
 
 }

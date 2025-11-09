@@ -57,7 +57,6 @@ function obsidian_autoload ($name) {
     if ($name == 'TextFileMessage') { require $dir . '/includes/i18n/TextFileMessage.php'; return true; }
 
     if ($name == 'Disclaimer') { require $dir . '/includes/objects/Disclaimer.php'; return true; }
-    if ($name == 'User') { require $dir . '/includes/objects/user.php'; return true; }
     if ($name == 'UserGroup') { require $dir . '/includes/objects/usergroup.php'; return true; }
 
     return false;
