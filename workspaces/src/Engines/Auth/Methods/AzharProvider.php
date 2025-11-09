@@ -210,11 +210,12 @@ class AzharProvider extends AuthenticationMethod {
      * Typically used to deserialize a configuration.
      *
      * @param array $data The associative array to deserialize
+     * @param mixed $context The application context
      *
      * @return AzharProvider The deserialized instance
      */
-    public static function loadFromArray (array $data) : self {
-        $instance = parent::loadFromArray($data);
+    public static function loadFromArray (array $data, mixed $context) : self {
+        $instance = parent::loadFromArray($data, $context);
 
         $instance->url = $data["url"];
         $instance->secretKey = $data["secretKey"];

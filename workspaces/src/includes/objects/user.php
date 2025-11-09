@@ -19,16 +19,14 @@
 use Waystone\Workspaces\Engines\Errors\ErrorHandling;
 use Waystone\Workspaces\Engines\Workspaces\Workspace;
 
-use Keruald\OmniTools\DataTypes\Option\None;
-use Keruald\OmniTools\DataTypes\Option\Option;
-use Keruald\OmniTools\DataTypes\Option\Some;
+use Keruald\Database\DatabaseEngine;
 
 /**
  * User class
  */
 class User {
 
-    public $id;
+    public ?int $id;
     public $name;
     public $password;
     public $active = 0;
@@ -40,40 +38,24 @@ class User {
     public string $lastError;
 
     /**
-     * @var Array An array of users already loaded, the username as user id
-     */
-    public static $hashtableById = [];
-
-    /**
      * @var array|null An array of the workspaces the user has access to, each element an instance of the Workspace object. As long as the field hasn't been initialized by get_workspaces, null.
      */
     private $workspaces = null;
+
+    private DatabaseEngine $db;
 
     /*
      * Initializes a new instance
      *
      * @param int $id the primary key
      */
-    function __construct ($id = null) {
+    function __construct ($id = null, DatabaseEngine $db = null) {
+        $this->id = $id;
+        $this->db = $db;
+
         if ($id) {
-            $this->id = $id;
             $this->load_from_database();
         }
-    }
-
-    /**
-     * Initializes a new User instance if needed or get already available one.
-     *
-     * @param iint $id the user ID
-     * @return User the user instance
-     */
-    static function get ($id = NULL) {
-        if ($id && array_key_exists($id, User::$hashtableById)) {
-            return self::$hashtableById[$id];
-        }
-
-        $user = new self($id);
-        return $user;
     }
 
     /**
@@ -92,8 +74,10 @@ class User {
      * Loads the object User (ie fill the properties) from the database
      */
     function load_from_database () {
-        global $db;
-        $sql = "SELECT * FROM " . TABLE_USERS . " WHERE user_id = '" . $this->id . "'";
+        $db = $this->db;
+
+        $id = $this->db->escape($this->id);
+        $sql = "SELECT * FROM " . TABLE_USERS . " WHERE user_id = '" . $id . "'";
         if ( !($result = $db->query($sql)) ) ErrorHandling::messageAndDie(SQL_ERROR, "Unable to query users", '', __LINE__, __FILE__, $sql);
         if (!$row = $db->fetchRow($result)) {
             $this->lastError = "User unknown: " . $this->id;
@@ -115,24 +99,13 @@ class User {
         $this->active   = $row['user_active'] ? true : false;
         $this->email    = $row['user_email'];
         $this->regdate  = $row['user_regdate'];
-
-        //Puts object in hashtable, so it's accessible in future call of
-        //this run through User::get($id).
-        self::$hashtableById[$this->id] = $this;
-    }
-
-    private static function fromRow (array $row) : User {
-        $user = new User();
-        $user->load_from_row($row);
-
-        return $user;
     }
 
     /**
      * Saves to database
      */
     function save_to_database () {
-        global $db;
+        $db = $this->db;
 
         $id = $this->id ? "'" . $db->escape($this->id) . "'" : 'NULL';
         $name = $db->escape($this->name);
@@ -157,7 +130,8 @@ class User {
      * Updates the specified field in the database record
      */
     function save_field ($field) {
-        global $db;
+        $db = $this->db;
+
         if (!$this->id) {
             ErrorHandling::messageAndDie(GENERAL_ERROR, "You're trying to update a record not yet saved in the database");
         }
@@ -177,7 +151,7 @@ class User {
      * Generates a unique user id
      */
     function generate_id () {
-        global $db;
+        $db = $this->db;
 
         do {
             $this->id = mt_rand(2001, 9999);
@@ -198,100 +172,21 @@ class User {
     }
 
     /**
-     * Checks if a login is available
-     *
-     * @param string $login the login to check
-     * @return boolean true if the login is available; otherwise, false.
-     */
-    public static function is_available_login ($login) {
-        global $db;
-        $sql = "SELECT COUNT(*) FROM " . TABLE_USERS . " WHERE username = '$login'";
-        if (!$result = $db->query($sql)) {
-            ErrorHandling::messageAndDie(SQL_ERROR, "Can't check if the specified login is available", '', __LINE__, __FILE__, $sql);
-        }
-        $row = $db->fetchRow($result);
-        return ($row[0] == 0);
-    }
-
-    /**
      * Initializes a new User instance ready to have its property filled
      *
      * @return User the new user instance
      */
-    public static function create () {
-        $user = new User();
+    public static function create (DatabaseEngine $db) {
+        $user = new User(null, $db);
         $user->generate_id();
         $user->active = true;
         $user->regdate = time();
         return $user;
     }
 
-    /**
-     * @return Option<User>
-     */
-    private static function getByProperty ($property, $value) : Option {
-        global $db;
-
-        $value = $db->escape($value);
-        $sql = "SELECT * FROM " . TABLE_USERS . " WHERE $property = '$value'";
-        if (!$result = $db->query($sql)) {
-            ErrorHandling::messageAndDie(SQL_ERROR, "Can't get user", '', __LINE__, __FILE__, $sql);
-        }
-
-        if ($row = $db->fetchRow($result)) {
-            return new Some(User::fromRow($row));
-        }
-
-        return new None;
-    }
-
-    /**
-     * Gets user from specified e-mail
-     *
-     * @return Option<User> the user matching the specified e-mail; None, if the mail were not found.
-     */
-    public static function get_user_from_email ($mail) : Option {
-        return self::getByProperty("user_email", $mail);
-    }
-
-    public static function get_user_from_username ($username) : Option {
-        return self::getByProperty("username", $username);
-    }
-
-    public static function resolveUserID ($expression) : Option {
-        return self::get_user_from_username($expression)
-            ->orElse(self::get_user_from_email($expression))
-            ->map(fn($user) => $user->id);
-    }
-
     //
     // REMOTE IDENTITY PROVIDERS
     //
-
-    /**
-     * Gets user from remote identity provider identifiant
-     *
-     * @param $authType The authentication method type
-     * @param $remoteUserId The remote user identifier
-     * @return User the user matching the specified identity provider and identifiant; null if no user were found.
-     */
-    public static function getUserFromRemoteIdentity ($authType, $remoteUserId) {
-        global $db;
-
-        $authType = $db->escape($authType);
-        $remoteUserId = $db->escape($remoteUserId);
-        $sql = "SELECT user_id FROM " . TABLE_USERS_AUTH . "    WHERE "
-             . "auth_type = '$authType' AND auth_identity = '$remoteUserId'";
-        if (!$result = $db->query($sql)) {
-            ErrorHandling::messageAndDie(SQL_ERROR, "Can't get user", '', __LINE__, __FILE__, $sql);
-        }
-
-        if ($row = $db->fetchRow($result)) {
-            return User::get($row['user_id']);
-        }
-
-        return null;
-    }
 
     /**
      * Sets user's remote identity provider identifiant
@@ -300,7 +195,8 @@ class User {
      * @param $remoteUserId The remote user identifier
      * */
     public function setRemoteIdentity ($authType, $remoteUserId, $properties = null) {
-        global $db;
+        $db = $this->db;
+
         $authType = $db->escape($authType);
         $remoteUserId = $db->escape($remoteUserId);
         $properties = ($properties === NULL) ? 'NULL' : "'" . $db->escape($properties) . "'";
@@ -321,7 +217,7 @@ class User {
      * @return array an array containing group_id, matching groups the current user has access to.
      */
     public function get_groups () {
-        return self::get_groups_from_user_id($this->id);
+        return self::get_groups_from_user_id($this->id, $this->db);
     }
 
     /**
@@ -330,7 +226,8 @@ class User {
      * @param UserGroup $group The group to check
      */
     public function isMemberOfGroup (UserGroup $group) {
-        global $db;
+        $db = $this->db;
+
         $sql = "SELECT count(*) FROM users_groups_members WHERE group_id = $group->id AND user_id = $this->id";
         if (!$result = $db->query($sql)) {
             ErrorHandling::messageAndDie(SQL_ERROR, "Can't determine if the user belongs to the group", '', __LINE__, __FILE__, $sql);
@@ -347,7 +244,8 @@ class User {
      * @parap boolean $isAdmin if true, set the user admin; otherwise, set it regular user.
      */
     public function addToGroup (UserGroup $group, $isAdmin = false) {
-        global $db;
+        $db = $this->db;
+
         $isAdmin = $isAdmin ? 1 : 0;
         $sql = "REPLACE INTO users_groups_members VALUES ($group->id, $this->id, $isAdmin)";
         if (!$db->query($sql)) {
@@ -361,7 +259,7 @@ class User {
      * @return string The SQL WHERE clause
      */
     public function get_permissions_clause () {
-        return self::get_permissions_clause_from_user_id($this->id);
+        return self::get_permissions_clause_from_user_id($this->id, $this->db);
     }
 
     /**
@@ -385,7 +283,8 @@ class User {
      * @param int $permissionFlag The permission flag (facultative; by default, 1)
      */
     public function setPermission ($resourceType, $resourceId, $permissionName, $permissionFlag = 1) {
-        global $db;
+        $db = $this->db;
+
         $resourceType = $db->escape($resourceType);
         if (!is_numeric($resourceId)) {
             throw new Exception("Resource ID must be a positive or null integer, and not $resourceId.");
@@ -414,8 +313,7 @@ class User {
      * @param int $user_id the user to get the groups list
      * @return array an array containing group_id, matching groups the specified user has access to.
      */
-    public static function get_groups_from_user_id ($user_id) {
-        global $db;
+    public static function get_groups_from_user_id ($user_id, DatabaseEngine $db) {
         $sql = "SELECT group_id FROM " . TABLE_UGROUPS_MEMBERS . " WHERE user_id = " . $user_id;
         if (!$result = $db->query($sql)) {
             ErrorHandling::messageAndDie(SQL_ERROR, "Can't get user groups", '', __LINE__, __FILE__, $sql);
@@ -433,9 +331,9 @@ class User {
      * @param $user_id The user ID
      * @return string The SQL WHERE clause
      */
-    public static function get_permissions_clause_from_user_id ($user_id) {
+    public static function get_permissions_clause_from_user_id ($user_id, DatabaseEngine $db) {
         $clause = "subject_resource_type = 'U' AND subject_resource_id = $user_id";
-        if ($groups = self::get_groups_from_user_id ($user_id)) {
+        if ($groups = self::get_groups_from_user_id ($user_id, $db)) {
             $clause  = "($clause) OR (subject_resource_type = 'G' AND subject_resource_id = ";
             $clause .= join(") OR (subject_resource_type = 'G' AND subject_resource_id = ", $groups);
             $clause .= ')';

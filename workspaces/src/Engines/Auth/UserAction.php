@@ -18,6 +18,8 @@
 
 namespace Waystone\Workspaces\Engines\Auth;
 
+use Waystone\Workspaces\Engines\Framework\Context;
+
 use User;
 
 /**
@@ -29,6 +31,8 @@ abstract class UserAction {
      * @var User the target action user
      */
     public $targetUser;
+
+    public ?Context $context = null;
 
     /**
      * Initializes a new instance of an UserAction object

@@ -207,7 +207,7 @@ class WorkspaceConfiguration implements ArrayDeserializableWithContext {
         }
 
         try {
-            $authenticationMethod = $class::loadFromArray($authData);
+            $authenticationMethod = $class::loadFromArray($authData, $context);
             $authenticationMethod->context = $context;
         } catch (Exception $ex) {
             throw new WorkspaceException(

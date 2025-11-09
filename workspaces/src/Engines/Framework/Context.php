@@ -20,6 +20,7 @@ namespace Waystone\Workspaces\Engines\Framework;
 use Keruald\Database\DatabaseEngine;
 use Smarty\Smarty;
 use User;
+use Waystone\Workspaces\Engines\Users\UserRepository;
 use Waystone\Workspaces\Engines\Workspaces\WorkSpace;
 
 /**
@@ -43,6 +44,13 @@ class Context {
      * @var array the configuration
      */
     public array $config;
+
+    /**
+     * @var UserRepository the users already loaded from database
+     */
+    public UserRepository $userRepository;
+
+    public Resources $resources;
 
     /**
      * @var User the user currently logged in

@@ -57,7 +57,10 @@ class GivePermissionUserAction extends UserAction
      * Executes the user action
      */
     public function run () {
-        $id = Resources::resolveID($this->resourceType, $this->resourceIdentifier);
+        $id = $this->context->resources->resolveID(
+            $this->resourceType,
+            $this->resourceIdentifier,
+        );
 
         if ($id->isNone()) {
             throw new Exception("Can't resolve resource "

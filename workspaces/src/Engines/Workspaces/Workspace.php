@@ -227,7 +227,7 @@ class Workspace {
         $cache = Cache::load();
 
         if (!$workspaces = unserialize($cache->get("workspaces-$user_id"))) {
-            $clause = User::get_permissions_clause_from_user_id($user_id);
+            $clause = User::get_permissions_clause_from_user_id($user_id, $db);
             $sql = "SELECT DISTINCT w.*
                      FROM " . TABLE_PERMISSIONS . " p, " . TABLE_WORKSPACES . " w
                      WHERE p.target_resource_type = 'W' AND

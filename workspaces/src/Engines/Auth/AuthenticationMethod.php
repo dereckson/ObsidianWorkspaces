@@ -20,7 +20,7 @@ namespace Waystone\Workspaces\Engines\Auth;
 use Waystone\Workspaces\Engines\Auth\Actions\AddToGroupUserAction;
 use Waystone\Workspaces\Engines\Auth\Actions\GivePermissionUserAction;
 use Waystone\Workspaces\Engines\Framework\Context;
-use Waystone\Workspaces\Engines\Serialization\ArrayDeserializable;
+use Waystone\Workspaces\Engines\Serialization\ArrayDeserializableWithContext;
 
 use Keruald\OmniTools\DataTypes\Option\None;
 use Keruald\OmniTools\DataTypes\Option\Option;
@@ -38,7 +38,7 @@ use InvalidArgumentException;
  *
  * This class has to be extended to implement custom authentication methods.
  */
-abstract class AuthenticationMethod implements ArrayDeserializable {
+abstract class AuthenticationMethod implements ArrayDeserializableWithContext {
 
     /**
      * @var User The local user matching the authentication
@@ -107,6 +107,7 @@ abstract class AuthenticationMethod implements ArrayDeserializable {
      */
     protected function runCreateUserActions () {
         foreach ($this->createUserActions as $action) {
+            $action->context = $this->context;
             $action->targetUser = $this->localUser;
             $action->run();
         }
@@ -118,18 +119,21 @@ abstract class AuthenticationMethod implements ArrayDeserializable {
      * @return Option<User> the user if a user has been found; otherwise, false.
      */
     private function findUser () : Option {
-        if ($this->remoteUserId != '') {
-            $user = User::getUserFromRemoteIdentity(
-                $this->id, $this->remoteUserId,
-            );
+        $users = $this->context->userRepository;
 
-            if ($user !== null) {
-                return new Some($user);
+        if ($this->remoteUserId != '') {
+            $user = $users->getUserFromRemoteIdentity(
+                    $this->id, $this->remoteUserId,
+                );
+
+            if ($user->isSome()) {
+                return $user;
             }
         }
 
         if ($this->email != '') {
-            $user = User::get_user_from_email($this->email);
+            $user = $users->getUserFromEmail($this->email);
+
             if ($user->isSome()) {
                 return $user;
             }
@@ -198,7 +202,7 @@ abstract class AuthenticationMethod implements ArrayDeserializable {
             throw new Exception("Can't create user: the canCreateUser property is set at false.");
         }
 
-        $user = User::create();
+        $user = User::create($this->context->db);
         $user->name = $this->name;
         $user->email = $this->email;
         $user->save_to_database();
@@ -240,12 +244,15 @@ abstract class AuthenticationMethod implements ArrayDeserializable {
      * Typically used to deserialize a configuration.
      *
      * @param array $data The associative array to deserialize
+     * @param mixed $context The application context
      *
      * @return AuthenticationMethod The deserialized instance
      * @throws InvalidArgumentException|Exception
      */
-    public static function loadFromArray (array $data) : self {
+    public static function loadFromArray (array $data, mixed $context) : self {
         $instance = new static;
+
+        $instance->context = $context;
 
         if (!array_key_exists("id", $data)) {
             throw new InvalidArgumentException("Authentication method id is required.");

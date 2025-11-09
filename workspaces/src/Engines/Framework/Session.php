@@ -21,9 +21,12 @@
 
 namespace Waystone\Workspaces\Engines\Framework;
 
-use Keruald\Database\DatabaseEngine;
-use User;
 use Waystone\Workspaces\Engines\Errors\ErrorHandling;
+use Waystone\Workspaces\Engines\Users\UserRepository;
+
+use Keruald\Database\DatabaseEngine;
+
+use User;
 
 /**
  * Session class
@@ -42,6 +45,8 @@ class Session {
 
     public DatabaseEngine $db;
 
+    private UserRepository $users;
+
     /*
      * @var Session current session instance
      */
@@ -52,9 +57,12 @@ class Session {
      *
      * @return Session current session instance
      */
-    public static function load (DatabaseEngine $db) {
+    public static function load (
+        DatabaseEngine $db,
+        UserRepository $users,
+    ) {
         if (!isset(self::$instance)) {
-            self::$instance = new self($db);
+            self::$instance = new self($db, $users);
         }
 
         return self::$instance;
@@ -63,8 +71,12 @@ class Session {
     /**
      * Initializes a new instance of Session object
      */
-    private function __construct (DatabaseEngine $db) {
+    private function __construct (
+        DatabaseEngine $db,
+        UserRepository $users,
+    ) {
         $this->db = $db;
+        $this->users = $users;
 
         //Starts PHP session, and gets id
         session_start();
@@ -249,7 +261,7 @@ class Session {
 
         //Gets user instance
         require_once('includes/objects/user.php');
-        $user = new User($row['user_id']);
+        $user = new User($row['user_id'], $db);
 
         //Adds session property to this user instance
         $user->session = $row;
@@ -311,4 +323,3 @@ class Session {
         $this->clean();
     }
 }
-
