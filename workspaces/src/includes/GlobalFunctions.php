@@ -2,6 +2,8 @@
 
 use Waystone\Workspaces\Engines\Workspaces\Workspace;
 
+use Keruald\OmniTools\HTTP\Requests\Request;
+
 ////////////////////////////////////////////////////////////////////////////////
 ///                                                                          ///
 /// Misc helper functions                                                    ///
@@ -63,27 +65,6 @@ function get_url () {
 }
 
 /*
- * Gets server URL
- * @todo find a way to detect https:// on non standard port
- * @return string the server URL
- */
-function get_server_url () {
-    if (php_sapi_name() == 'cli') {
-        return '';
-    }
-    switch ($port = $_SERVER['SERVER_PORT']) {
-        case '80':
-            return "http://$_SERVER[SERVER_NAME]";
-
-        case '443':
-            return "https://$_SERVER[SERVER_NAME]";
-
-        default:
-            return "http://$_SERVER[SERVER_NAME]:$_SERVER[SERVER_PORT]";
-    }
-}
-
-/*
  * Gets $_SERVER['PATH_INFO'] or computes the equivalent if not defined.
  * @return string the relevant URL part
  */
@@ -98,20 +79,20 @@ function get_current_url () {
     }
 
     //In other cases, we'll need to get the relevant part of the URL
-    $current_url = get_server_url() . $_SERVER['REQUEST_URI'];
+    $current_url = Request::getServerURL() . $_SERVER['REQUEST_URI'];
 
     //Relevant URL part starts after the site URL
     $len = strlen($Config['SiteURL']);
 
     //We need to assert it's the correct site
     if (substr($current_url, 0, $len) != $Config['SiteURL']) {
-        dieprint_r(GENERAL_ERROR, "Edit includes/config.php and specify the correct site URL<br /><strong>Current value:</strong> $Config[SiteURL]<br /><strong>Expected value:</strong> a string starting by " . get_server_url(), "Setup");
+        dieprint_r(GENERAL_ERROR, "Edit includes/config.php and specify the correct site URL<br /><strong>Current value:</strong> $Config[SiteURL]<br /><strong>Expected value:</strong> a string starting by " . Request::getServerURL(), "Setup");
     }
 
     if (array_key_exists('REDIRECT_URL', $_SERVER)) {
         //With mod_rewrite, we can use REDIRECT_URL
         //We take the end of the URL, ie *FROM* $len position
-        return substr(get_server_url() . $_SERVER["REDIRECT_URL"], $len);
+        return substr(Request::getServerURL() . $_SERVER["REDIRECT_URL"], $len);
     }
 
     //Last possibility: use REQUEST_URI, but remove QUERY_STRING
@@ -119,7 +100,7 @@ function get_current_url () {
     //but you need to discard $_SERVER['QUERY_STRING']
 
     //We take the end of the URL, ie *FROM* $len position
-    $url = substr(get_server_url() . $_SERVER["REQUEST_URI"], $len);
+    $url = substr(Request::getServerURL() . $_SERVER["REQUEST_URI"], $len);
 
     //But if there are a query string (?action=... we need to discard it)
     if ($_SERVER['QUERY_STRING']) {

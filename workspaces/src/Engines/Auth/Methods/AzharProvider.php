@@ -20,6 +20,8 @@ namespace Waystone\Workspaces\Engines\Auth\Methods;
 use Waystone\Workspaces\Engines\Auth\AuthenticationMethod;
 use Waystone\Workspaces\Engines\I18n\Language;
 
+use Keruald\OmniTools\HTTP\Requests\Request;
+
 use stdClass;
 
 /**
@@ -56,7 +58,7 @@ class AzharProvider extends AuthenticationMethod {
         if ($action == "user.login.azhar.initialize") {
             //Redirects user to Azhàr SSO service
             $callbackUrl =
-                get_server_url() . get_url($this->context->workspace->code)
+                Request::getServerURL() . get_url($this->context->workspace->code)
                 . '?action=user.login.azhar.success&authenticationMethodId='
                 . $this->id;
             $url = $this->url . '?mode=provider&key=' . $this->clientKey
@@ -150,7 +152,7 @@ class AzharProvider extends AuthenticationMethod {
      * @retrun string the login link
      */
     public function getAuthenticationLink () {
-        $url = get_server_url() . get_url($this->context->workspace->code)
+        $url = Request::getServerURL() . get_url($this->context->workspace->code)
              . '?action=user.login.azhar.initialize&authenticationMethodId=' . $this->id;
         return $url;
     }

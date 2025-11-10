@@ -21,6 +21,7 @@
 
 use Keruald\Cache\Engines\CacheVoid;
 use Keruald\Database\Engines\MySQLiEngine;
+use Keruald\OmniTools\HTTP\Requests\Request;
 
 ////////////////////////////////////////////////////////////////////////////////
 ///                                                                          ///
@@ -119,7 +120,7 @@ $Config['Theme'] = 'bluegray';
  *
  */
 
-$Config['SiteURL'] = get_server_url();
+$Config['SiteURL'] = Request::getServerURL();
 $Config['BaseURL'] = '';
 
 ////////////////////////////////////////////////////////////////////////////////
