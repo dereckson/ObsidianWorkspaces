@@ -20,11 +20,10 @@ namespace Waystone\Workspaces\Engines\Auth\Actions;
 
 use Waystone\Workspaces\Engines\Auth\UserAction;
 use Waystone\Workspaces\Engines\Serialization\ArrayDeserializable;
+use Waystone\Workspaces\Engines\Users\UserGroup;
 
 use Exception;
 use JsonSerializable;
-
-use UserGroup;
 
 /**
  * User action to add a user into a group

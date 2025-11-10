@@ -15,7 +15,11 @@
  * @filesource
  */
 
+namespace Waystone\Workspaces\Engines\Users;
+
 use Waystone\Workspaces\Engines\Errors\ErrorHandling;
+
+use Exception;
 
 /**
  * UserGroup class

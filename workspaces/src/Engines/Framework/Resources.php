@@ -2,14 +2,13 @@
 
 namespace Waystone\Workspaces\Engines\Framework;
 
+use Waystone\Workspaces\Engines\Users\UserGroup;
 use Waystone\Workspaces\Engines\Users\UserRepository;
 use Waystone\Workspaces\Engines\Workspaces\Workspace;
 
 use Keruald\OmniTools\DataTypes\Option\None;
 use Keruald\OmniTools\DataTypes\Option\Option;
 use Keruald\OmniTools\DataTypes\Option\Some;
-
-use UserGroup;
 
 use InvalidArgumentException;
 

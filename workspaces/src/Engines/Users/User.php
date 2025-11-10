@@ -23,8 +23,6 @@ use Waystone\Workspaces\Engines\Workspaces\Workspace;
 
 use Keruald\Database\DatabaseEngine;
 
-use UserGroup;
-
 /**
  * User class
  */
