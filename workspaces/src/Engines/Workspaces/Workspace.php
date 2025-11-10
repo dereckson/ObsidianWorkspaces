@@ -21,6 +21,8 @@ use Waystone\Workspaces\Engines\Errors\ErrorHandling;
 use Waystone\Workspaces\Engines\Framework\Context;
 use Waystone\Workspaces\Engines\Users\User;
 
+use Keruald\OmniTools\Collections\Vector;
+
 use Cache;
 use Language;
 
@@ -45,6 +47,10 @@ class Workspace {
      */
     public $configuration;
 
+    ///
+    /// Constructors
+    ///
+
     /**
      * Initializes a new instance
      *
@@ -56,6 +62,17 @@ class Workspace {
             $this->load_from_database();
         }
     }
+
+    public static function fromRow ($row) : self {
+        $workspace = new self;
+        $workspace->load_from_row($row);
+
+        return $workspace;
+    }
+
+    ///
+    /// Load data
+    ///
 
     /**
      * Loads the object Workspace (ie fill the properties) from the $_POST array
@@ -220,39 +237,43 @@ class Workspace {
      * @return Workspace[] A list of workspaces
      */
     public static function get_user_workspaces ($user_id) {
-        global $db;
-
         //Gets the workspaces list from cache, as this complex request could take 100ms
         //and is called on every page.
         $cache = Cache::load();
+        $cachedWorkspaces = $cache->get("workspaces-$user_id");
 
-        if (!$workspaces = unserialize($cache->get("workspaces-$user_id"))) {
-            $clause = User::get_permissions_clause_from_user_id($user_id, $db);
-            $sql = "SELECT DISTINCT w.*
-                     FROM " . TABLE_PERMISSIONS . " p, " . TABLE_WORKSPACES . " w
-                     WHERE p.target_resource_type = 'W' AND
-                           p.target_resource_id = w.workspace_id AND
-                           p.permission_name = 'accessLevel' AND
-                           p.permission_flag > 0 AND
-                           ($clause)";
-            if (!$result = $db->query($sql)) {
-                ErrorHandling::messageAndDie(SQL_ERROR,
-                    "Can't get user workspaces", '', __LINE__, __FILE__, $sql);
-            }
-
-            $workspaces = [];
-
-            while ($row = $db->fetchRow($result)) {
-                $workspace = new Workspace();
-                $workspace->id = $row['workspace_id'];
-                $workspace->load_from_row($row);
-                $workspaces[] = $workspace;
-            }
-
-            $cache->set("workspaces-$user_id", serialize($workspaces));
+        if ($cachedWorkspaces !== null && $cachedWorkspaces !== false) {
+            return unserialize($cachedWorkspaces);
         }
 
+        $workspaces = self::loadWorkspacesForUser($user_id);
+        $cache->set("workspaces-$user_id", serialize($workspaces));
+
         return $workspaces;
+    }
+
+    /**
+     * @return self[]
+     */
+    private static function loadWorkspacesForUser (int $user_id) : array {
+        global $db;
+
+        $clause = User::get_permissions_clause_from_user_id($user_id, $db);
+        $sql = "SELECT DISTINCT w.*
+                 FROM " . TABLE_PERMISSIONS . " p, " . TABLE_WORKSPACES . " w
+                 WHERE p.target_resource_type = 'W' AND
+                       p.target_resource_id = w.workspace_id AND
+                       p.permission_name = 'accessLevel' AND
+                       p.permission_flag > 0 AND
+                       ($clause)";
+        if (!$result = $db->query($sql)) {
+            ErrorHandling::messageAndDie(SQL_ERROR,
+                "Can't get user workspaces", '', __LINE__, __FILE__, $sql);
+        }
+
+        return Vector::from($result)
+            ->map(fn($row) => self::fromRow($row))
+            ->toArray();
     }
 
     /**
