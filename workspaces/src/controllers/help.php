@@ -20,6 +20,8 @@
 // HTML output
 //
 
+use Waystone\Workspaces\Engines\I18n\Language;
+
 $file  = $Config['Content']['Help'] . DIRECTORY_SEPARATOR;
 $file .= (count($context->url) > 1) ? $context->url[1] : 'index';
 $file .= '.html';

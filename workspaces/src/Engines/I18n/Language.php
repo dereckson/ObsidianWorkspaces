@@ -15,8 +15,14 @@
  * @filesource
  */
 
+namespace Waystone\Workspaces\Engines\I18n;
+
 use Waystone\Workspaces\Engines\Controller\LoadableWithContext;
 use Waystone\Workspaces\Engines\Framework\Context;
+
+use Smarty\Smarty;
+
+use InvalidArgumentException;
 
 /**
  * Language services
@@ -100,9 +106,10 @@ class Language implements LoadableWithContext {
 
     /**
      * Gets a common lang spoken by the site and the user's browser
-     * @see Language::getHttpAcceptLanguages
      *
      * @return string the language
+     * @see Language::getHttpAcceptLanguages
+     *
      */
     public static function findLanguage () {
         if (file_exists('lang') && is_dir('lang')) {
@@ -116,8 +123,9 @@ class Language implements LoadableWithContext {
 
             //The array $langs contains now the language available.
             //Gets the langs the user should want:
-            if (!$userlangs = static::getHttpAcceptLanguages())
+            if (!$userlangs = static::getHttpAcceptLanguages()) {
                 return;
+            }
 
             //Gets the intersection between the both languages arrays
             //If it matches, returns first result
@@ -130,8 +138,9 @@ class Language implements LoadableWithContext {
             //by default return en-US and not en or fr-BE and not fr, so second pass
             foreach ($userlangs as $userlang) {
                 $lang = explode('-', $userlang);
-                if (count($lang) > 1)
+                if (count($lang) > 1) {
                     $userlangs2[] = $lang[0];
+                }
             }
             $intersect = array_intersect($userlangs2, $langs);
             if (count($intersect)) {

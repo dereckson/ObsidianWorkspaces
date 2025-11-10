@@ -17,6 +17,7 @@
 
 use Waystone\Workspaces\Engines\Apps\Application;
 use Waystone\Workspaces\Engines\Errors\ErrorHandling;
+use Waystone\Workspaces\Engines\I18n\Language;
 
 /**
  * Documents application class

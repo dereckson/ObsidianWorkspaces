@@ -15,10 +15,15 @@
  * @filesource
  */
 
+namespace Waystone\Workspaces\Engines\I18n;
+
+use Exception;
+
 /**
  * Represents a localizable message
  */
 class Message {
+
     /**
      * @var Array the localized message
      */

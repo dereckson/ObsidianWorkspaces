@@ -16,6 +16,9 @@
  *
  */
 
+use Waystone\Workspaces\Engines\I18n\Language;
+use Waystone\Workspaces\Engines\I18n\TextFileMessage;
+
 /**
  * Disclaimer class
  */

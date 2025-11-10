@@ -18,8 +18,7 @@
 namespace Waystone\Workspaces\Engines\Auth\Methods;
 
 use Waystone\Workspaces\Engines\Auth\AuthenticationMethod;
-
-use Language;
+use Waystone\Workspaces\Engines\I18n\Language;
 
 use stdClass;
 

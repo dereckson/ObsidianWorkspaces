@@ -15,10 +15,15 @@
  * @filesource
  */
 
+namespace Waystone\Workspaces\Engines\I18n;
+
+use Exception;
+
 /**
  * Represents a localizable message stored in a plain text file
  */
 class TextFileMessage extends Message {
+
     /**
      * @var string The folder where the message is stored.
      */

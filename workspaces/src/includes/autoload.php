@@ -52,10 +52,6 @@ function obsidian_autoload ($name) {
     if ($name == 'CacheMemcached') { require $dir . '/includes/cache/memcached.php'; return true; }
     if ($name == 'CacheVoid') { require $dir . '/includes/cache/void.php'; return true; }
 
-    if ($name == 'Language') { require $dir . '/includes/i18n/Language.php'; return true; }
-    if ($name == 'Message') { require $dir . '/includes/i18n/Message.php'; return true; }
-    if ($name == 'TextFileMessage') { require $dir . '/includes/i18n/TextFileMessage.php'; return true; }
-
     if ($name == 'Disclaimer') { require $dir . '/includes/objects/Disclaimer.php'; return true; }
     if ($name == 'UserGroup') { require $dir . '/includes/objects/usergroup.php'; return true; }
 

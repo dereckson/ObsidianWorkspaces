@@ -20,15 +20,14 @@ namespace Waystone\Workspaces\Engines\Auth;
 use Waystone\Workspaces\Engines\Auth\Actions\AddToGroupUserAction;
 use Waystone\Workspaces\Engines\Auth\Actions\GivePermissionUserAction;
 use Waystone\Workspaces\Engines\Framework\Context;
+use Waystone\Workspaces\Engines\I18n\Language;
+use Waystone\Workspaces\Engines\I18n\Message;
 use Waystone\Workspaces\Engines\Serialization\ArrayDeserializableWithContext;
 use Waystone\Workspaces\Engines\Users\User;
 
 use Keruald\OmniTools\DataTypes\Option\None;
 use Keruald\OmniTools\DataTypes\Option\Option;
 use Keruald\OmniTools\DataTypes\Option\Some;
-
-use Language;
-use Message;
 
 use Exception;
 use InvalidArgumentException;

@@ -17,9 +17,8 @@
 
 namespace Waystone\Workspaces\Engines\Apps;
 
+use Waystone\Workspaces\Engines\I18n\Message;
 use Waystone\Workspaces\Engines\Serialization\ArrayDeserializable;
-
-use Message;
 
 /**
  * Application configuration class

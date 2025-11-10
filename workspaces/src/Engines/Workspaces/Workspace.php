@@ -19,12 +19,12 @@ namespace Waystone\Workspaces\Engines\Workspaces;
 
 use Waystone\Workspaces\Engines\Errors\ErrorHandling;
 use Waystone\Workspaces\Engines\Framework\Context;
+use Waystone\Workspaces\Engines\I18n\Language;
 use Waystone\Workspaces\Engines\Users\User;
 
 use Keruald\OmniTools\Collections\Vector;
 
 use Cache;
-use Language;
 
 use Exception;
 use LogicException;
