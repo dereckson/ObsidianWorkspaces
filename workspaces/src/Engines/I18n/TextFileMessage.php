@@ -47,7 +47,7 @@ class TextFileMessage extends Message {
         //Finds relevant files
         $files = scandir($folder);
         foreach ($files as $file) {
-            if (string_starts_with($file, $filename . '-') && get_extension($file) == 'txt') {
+            if (str_starts_with($file, $filename . '-') && get_extension($file) == 'txt') {
                 $lang = substr($file, strlen($filename) + 1, -4);
                 if (strpos($lang, '-') !== false) {
                     //The user have quux-lang.txt and quux-foo-lang.txt files
