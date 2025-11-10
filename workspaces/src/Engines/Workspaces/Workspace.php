@@ -24,7 +24,7 @@ use Waystone\Workspaces\Engines\Users\User;
 
 use Keruald\OmniTools\Collections\Vector;
 
-use Cache;
+use Psr\SimpleCache\InvalidArgumentException as InvalidArgumentCacheException;
 
 use Exception;
 use LogicException;
@@ -235,28 +235,22 @@ class Workspace {
      * @param int $user_id The user to get his workspaces
      *
      * @return Workspace[] A list of workspaces
+     * @throws InvalidArgumentCacheException
      */
     public static function get_user_workspaces ($user_id) {
-        //Gets the workspaces list from cache, as this complex request could take 100ms
-        //and is called on every page.
-        $cache = Cache::load();
-        $cachedWorkspaces = $cache->get("workspaces-$user_id");
+        global $context;
+        $cache = $context->cache;
 
-        if ($cachedWorkspaces !== null && $cachedWorkspaces !== false) {
-            return unserialize($cachedWorkspaces);
-        }
-
-        $workspaces = self::loadWorkspacesForUser($user_id);
-        $cache->set("workspaces-$user_id", serialize($workspaces));
-
-        return $workspaces;
+        return $cache->get("workspaces-$user_id") ?? self::loadForUser($user_id);
     }
 
     /**
      * @return self[]
      */
-    private static function loadWorkspacesForUser (int $user_id) : array {
-        global $db;
+    private static function loadForUser (int $user_id) : array {
+        global $context;
+        $db = $context->db;
+        $cache = $context->cache;
 
         $clause = User::get_permissions_clause_from_user_id($user_id, $db);
         $sql = "SELECT DISTINCT w.*
@@ -271,9 +265,13 @@ class Workspace {
                 "Can't get user workspaces", '', __LINE__, __FILE__, $sql);
         }
 
-        return Vector::from($result)
+        $workspaces = Vector::from($result)
             ->map(fn($row) => self::fromRow($row))
             ->toArray();
+
+        $cache->set("workspaces-$user_id", $workspaces);
+
+        return $workspaces;
     }
 
     /**

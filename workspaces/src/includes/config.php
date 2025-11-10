@@ -19,6 +19,7 @@
  *
  */
 
+use Keruald\Cache\Engines\CacheVoid;
 use Keruald\Database\Engines\MySQLiEngine;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -258,15 +259,15 @@ const CACHE_DIR = 'cache';
  * data from heavy database queries, or frequently accessed stuff.
  *
  * To use memcached:
- *    - $Config['cache']['engine'] = 'memcached';
+ *    - $Config['cache']['engine'] = CacheMemcached::class;
  *    - $Config['cache']['server'] = 'localhost';
  *    - $Config['cache']['port']   = 11211;
  *
  * To disable cache:
- *    - $Config['cache']['engine'] = 'void';
+ *    - $Config['cache']['engine'] = CacheVoid::class;
  *    (or omit the cache key)
  */
-$Config['cache']['engine'] = 'void';
+$Config['cache']['engine'] = CacheVoid::class;
 
 ////////////////////////////////////////////////////////////////////////////////
 ///                                                                          ///

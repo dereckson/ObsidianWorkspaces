@@ -18,9 +18,9 @@
 namespace Waystone\Workspaces\Engines\Framework;
 
 use Keruald\Database\DatabaseEngine;
+use Psr\SimpleCache\CacheInterface;
 use Smarty\Smarty;
 use Waystone\Workspaces\Engines\Users\User;
-use Waystone\Workspaces\Engines\Users\UserRepository;
 use Waystone\Workspaces\Engines\Workspaces\WorkSpace;
 
 /**
@@ -66,6 +66,8 @@ class Context {
      * @var Smarty the template engine
      */
     public Smarty $templateEngine;
+
+    public CacheInterface $cache;
 
     ///
     /// Helper methods

@@ -3,9 +3,11 @@
     "description": "Core interfaces for Obsidian Workspaces",
     "type": "project",
     "require": {
+        "keruald/cache": "^0.1.1",
         "keruald/database": "0.5.2",
         "keruald/omnitools": "0.16.0",
         "keruald/yaml": "0.1.1",
+        "psr/simple-cache": "^1.0 || ^2.0 || ^3.0",
         "smarty/smarty": "^5.6.0"
     },
     "require-dev": {

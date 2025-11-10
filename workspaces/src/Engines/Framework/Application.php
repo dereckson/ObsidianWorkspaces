@@ -2,9 +2,11 @@
 
 namespace Waystone\Workspaces\Engines\Framework;
 
-use Keruald\Database\Database;
 use Waystone\Workspaces\Engines\Errors\ErrorHandling;
 use Waystone\Workspaces\Engines\Users\UserRepository;
+
+use Keruald\Cache\CacheFactory;
+use Keruald\Database\Database;
 
 class Application {
 
@@ -27,6 +29,8 @@ class Application {
         );
         $context->url = get_current_url_fragments();
         $context->initializeTemplateEngine($context->config['Theme']);
+
+        $context->cache = CacheFactory::load($context->config["cache"]);
 
         return $context;
     }

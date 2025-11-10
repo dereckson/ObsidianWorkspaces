@@ -48,10 +48,6 @@ function obsidian_autoload ($name) {
     /// Keruald and Obsidian Workspaces libraries
     ///
 
-    if ($name == 'Cache') { require $dir . '/includes/cache/cache.php'; return true; }
-    if ($name == 'CacheMemcached') { require $dir . '/includes/cache/memcached.php'; return true; }
-    if ($name == 'CacheVoid') { require $dir . '/includes/cache/void.php'; return true; }
-
     if ($name == 'Disclaimer') { require $dir . '/includes/objects/Disclaimer.php'; return true; }
     if ($name == 'UserGroup') { require $dir . '/includes/objects/usergroup.php'; return true; }
 
