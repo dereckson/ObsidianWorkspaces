@@ -16,6 +16,8 @@
  *
  */
 
+namespace Waystone\Workspaces\Engines\Content;
+
 use Waystone\Workspaces\Engines\I18n\Language;
 use Waystone\Workspaces\Engines\I18n\TextFileMessage;
 
@@ -23,6 +25,7 @@ use Waystone\Workspaces\Engines\I18n\TextFileMessage;
  * Disclaimer class
  */
 class Disclaimer {
+
     public $id;
     public $title;
     public $text;
@@ -58,4 +61,5 @@ class Disclaimer {
 
         return $instance;
     }
+
 }

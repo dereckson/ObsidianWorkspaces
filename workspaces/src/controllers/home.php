@@ -16,6 +16,7 @@
  *
  */
 
+use Waystone\Workspaces\Engines\Content\Disclaimer;
 use Waystone\Workspaces\Engines\Controller\Controller;
 use Waystone\Workspaces\Engines\I18n\Language;
 
