@@ -44,12 +44,6 @@ function obsidian_autoload ($name) {
     if ($name == 'HeaderController') { require $dir . '/controllers/header.php'; return true; }
     if ($name == 'HomepageController') { require $dir . '/controllers/home.php'; return true; }
 
-    ///
-    /// Keruald and Obsidian Workspaces libraries
-    ///
-
-    if ($name == 'Disclaimer') { require $dir . '/includes/objects/Disclaimer.php'; return true; }
-
     return false;
 }
 
