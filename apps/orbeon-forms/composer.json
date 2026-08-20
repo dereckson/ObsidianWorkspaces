@@ -15,9 +15,9 @@
         }
     ],
     "require-dev": {
-        "nasqueron/codestyle": "^0.1.2",
+        "nasqueron/codestyle": "^0.2.2",
         "phpunit/phpunit": "^12.5",
-        "squizlabs/php_codesniffer": "^4.0"
+        "squizlabs/php_codesniffer": "^4.0.4"
     },
     "require": {
         "keruald/database": "0.6.1",

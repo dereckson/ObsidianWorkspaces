@@ -3,19 +3,19 @@
     "description": "Core interfaces for Obsidian Workspaces",
     "type": "project",
     "require": {
-        "keruald/cache": "^0.1.1",
-        "keruald/database": "0.5.2",
+        "keruald/cache": "^0.1.2",
+        "keruald/database": "0.6.1",
         "keruald/omnitools": "0.16.0",
         "keruald/yaml": "0.1.1",
         "psr/simple-cache": "^1.0 || ^2.0 || ^3.0",
-        "smarty/smarty": "^5.6.0"
+        "smarty/smarty": "^5.8.4"
     },
     "require-dev": {
+        "nasqueron/codestyle": "^0.2.2",
+        "netresearch/jsonmapper": "^v6.0.0",
         "phpunit/phpunit": "^12.4",
-        "nasqueron/codestyle": "^0.1.2",
-        "netresearch/jsonmapper": "^v5.0.0",
-        "squizlabs/php_codesniffer": "^4.0",
-        "vlucas/phpdotenv": "^v5.6.2",
+        "squizlabs/php_codesniffer": "^4.0.4",
+        "vlucas/phpdotenv": "^v5.6.4",
         "ext-mysqli": "*"
     },
     "license": "BSD-2-Clause",
