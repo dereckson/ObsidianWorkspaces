@@ -52,6 +52,7 @@ class FilesCollectionTest extends TestCase {
     }
 
     protected function setUp () : void {
+        $this->removeCollectionFiles();
         $this->initializeDocuments();
 
         global $Config;
@@ -100,7 +101,7 @@ class FilesCollectionTest extends TestCase {
         $oldConfigDocumentStorage = $Config['DocumentStorage'];
         $Config['DocumentStorage'] = []; //Path isn't defined
 
-        $this>$this->expectException(Exception::class);
+        $this->expectException(Exception::class);
         FilesCollection::getCollectionPath('quux');
 
         $Config['DocumentStorage'] = $oldConfigDocumentStorage;
@@ -138,7 +139,7 @@ class FilesCollectionTest extends TestCase {
         $filename = $this->collection->getDocumentPath('greenBook');
 
         $this->assertJsonFileEqualsJsonFile(
-            'includes/collection/greenBook1.json',
+            __DIR__ . '/greenBook1.json',
             $filename
         );
 
@@ -146,7 +147,7 @@ class FilesCollectionTest extends TestCase {
         $this->collection->update($book);
 
         $this->assertJsonFileEqualsJsonFile(
-            'includes/collection/greenBook2.json',
+            __DIR__ . '/greenBook2.json',
             $filename
         );
 
@@ -162,9 +163,20 @@ class FilesCollectionTest extends TestCase {
      * Tears down resources when tests are done
      */
     public static function tearDownAfterClass () : void {
-        //Removes created directories
-        rmdir(UNITTESTING_FILESCOLLECTION_PATH . '/quux');
-        rmdir(UNITTESTING_FILESCOLLECTION_PATH);
+        self::removeCollectionFiles();
+    }
+
+    private static function removeCollectionFiles () : void {
+        $collectionPath = UNITTESTING_FILESCOLLECTION_PATH . '/quux';
+        if (is_dir($collectionPath)) {
+            foreach (glob($collectionPath . '/*') as $filename) {
+                unlink($filename);
+            }
+            rmdir($collectionPath);
+        }
+        if (is_dir(UNITTESTING_FILESCOLLECTION_PATH)) {
+            rmdir(UNITTESTING_FILESCOLLECTION_PATH);
+        }
     }
 
 }

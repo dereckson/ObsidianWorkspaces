@@ -49,6 +49,10 @@ class MongoDBCollectionTest extends TestCase {
     }
 
     public function setUp () : void {
+        if (!class_exists('MongoClient')) {
+            $this->markTestSkipped('The legacy MongoDB driver is not available.');
+        }
+
         global $Config;
         $Config = static::getConfig();
 

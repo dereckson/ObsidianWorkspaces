@@ -65,6 +65,10 @@ class MySQLCollectionTest extends TestCase {
      * Initializes the resources needed for thist test.
      */
     public function setUp () : void {
+        if (!class_exists(__NAMESPACE__ . '\\MySQLDatabase')) {
+            $this->markTestSkipped('The legacy MySQL database adapter is not available.');
+        }
+
         $db = new MySQLDatabase(
             UNITTESTING_MYSQL_HOST,
             UNITTESTING_MYSQL_USERNAME,

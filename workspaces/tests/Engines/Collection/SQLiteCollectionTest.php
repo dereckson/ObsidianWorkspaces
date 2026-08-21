@@ -62,6 +62,14 @@ class SQLiteCollectionTest extends TestCase {
     }
 
     public function setUp () : void {
+        if (!class_exists("SQLite3")) {
+            $this->markTestSkipped("The SQLite3 extension is not available.");
+        }
+
+        if (!defined('COLLECTIONS_SQLITE_DATABASE_READY') && file_exists(UNITTESTING_SQLITE_FILE)) {
+            unlink(UNITTESTING_SQLITE_FILE);
+        }
+
         $this->initializeDocuments();
 
         global $Config;
@@ -169,6 +177,8 @@ class SQLiteCollectionTest extends TestCase {
      * Clears resources created for this test
      */
     public static function tearDownAfterClass () : void {
-        unlink(UNITTESTING_SQLITE_FILE);
+        if (file_exists(UNITTESTING_SQLITE_FILE)) {
+            unlink(UNITTESTING_SQLITE_FILE);
+        }
     }
 }
