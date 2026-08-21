@@ -13,7 +13,7 @@
     "require-dev": {
         "nasqueron/codestyle": "^0.2.2",
         "netresearch/jsonmapper": "^v6.0.0",
-        "phpunit/phpunit": "^12.4",
+        "phpunit/phpunit": "^13.3",
         "squizlabs/php_codesniffer": "^4.0.4",
         "vlucas/phpdotenv": "^v5.6.4",
         "ext-mysqli": "*"

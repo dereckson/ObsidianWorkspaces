@@ -29,7 +29,7 @@
     },
     "require-dev": {
         "nasqueron/codestyle": "^0.2.2",
-        "phpunit/phpunit": "^12.5",
+        "phpunit/phpunit": "^13.3",
         "squizlabs/php_codesniffer": "^4.0.4"
     },
     "replace": {
