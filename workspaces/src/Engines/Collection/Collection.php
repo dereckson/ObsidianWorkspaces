@@ -39,7 +39,7 @@ abstract class Collection {
     /**
      * @var string the name of the document collection class to use
      */
-    public $documentType = 'CollectionDocument';
+    public $documentType = CollectionDocument::class;
 
     ///
     /// Factory
