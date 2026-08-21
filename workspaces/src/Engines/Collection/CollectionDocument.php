@@ -19,6 +19,7 @@ namespace Waystone\Workspaces\Engines\Collection;
 
 use Waystone\Workspaces\Engines\Serialization\ObjectDeserializable;
 
+use AllowDynamicProperties;
 use JsonSerializable;
 
 /**
@@ -26,6 +27,7 @@ use JsonSerializable;
  *
  * This class represents a document, inside a collection.
  */
+#[AllowDynamicProperties]
 class CollectionDocument implements JsonSerializable, ObjectDeserializable {
 
     /**
