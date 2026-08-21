@@ -49,7 +49,7 @@ class FilesCollection extends Collection {
             . $collectionId;
 
         //Ensure directory exists. If not, creates it or throws an exception
-        if (!file_exists($path) && !mkdir($path, 0700, true)) {
+        if (!file_exists($path) && !@mkdir($path, 0700, true)) {
             throw new Exception("Directory doesn't exist and couldn't be created: $path");
         }
 
