@@ -42,7 +42,7 @@ class TextFileMessage extends Message {
      */
     public function __construct ($folder, $filename) {
         $this->folder = $folder;
-        $this->folder = $filename;
+        $this->filename = $filename;
 
         //Finds relevant files
         $files = scandir($folder);
