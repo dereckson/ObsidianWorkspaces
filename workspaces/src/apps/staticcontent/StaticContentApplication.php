@@ -17,6 +17,8 @@
 
 use Waystone\Workspaces\Engines\Apps\Application;
 
+use Keruald\OmniTools\IO\Directory;
+
 /**
  * Static content application class
  *
@@ -28,28 +30,39 @@ class StaticContentApplication extends Application {
      */
     public static $name = "StaticContent";
 
-    private function getFilePath ($file) {
+    private Directory $directory;
+
+    protected function onAfterInitialize () : void {
         global $Config;
 
+        $path = [
+            $Config["Content"]["Workspaces"],
+            $this->context->workspace->code,
+            $this->context->configuration->path,
+        ];
+
+        $this->directory = Directory::fromPathFragments($path);
+    }
+
+
+    private function getFilePath ($file) {
         if ($file === "" || $file === NULL) {
             $file = "index.html";
         }
 
-        return $Config['Content']['Workspaces']
-            . DIRECTORY_SEPARATOR
-            . $this->context->workspace->code
-            . DIRECTORY_SEPARATOR
-            . $this->context->configuration->path
-            . DIRECTORY_SEPARATOR
-            . $file;
+       return $this->directory->getFile($file);
     }
 
     public function serveFile ($file) {
-        $path = $this->getFilePath($file);
+        $file = $this->getFilePath($file);
+
         $smarty = $this->context->templateEngine;
 
-        if (file_exists($path)) {
-            switch ($ext = strtolower(get_extension($path))) {
+        if ($file->exists()) {
+            $path = $file->getPath();
+
+            $ext = strtolower($file->getExtension());
+            switch ($ext) {
                 case "html":
                 case "htm":
                     $smarty->assign('PAGE_TITLE', $title);

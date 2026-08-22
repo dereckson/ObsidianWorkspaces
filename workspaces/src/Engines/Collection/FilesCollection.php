@@ -20,6 +20,9 @@ namespace Waystone\Workspaces\Engines\Collection;
 use Exception;
 use Generator;
 
+use Keruald\OmniTools\Collections\Vector;
+use Keruald\OmniTools\IO\Directory;
+
 /**
  * Files Collection class
  *
@@ -206,16 +209,9 @@ class FilesCollection extends Collection {
      * @return int The number of documents
      */
     public function count () {
-        $dir = $this->getCurrentCollectionPath();
-        $count = 0;
-        $files = scandir($dir);
-        foreach ($files as $file) {
-            if (get_extension($file) == 'json') {
-                $count++;
-            }
-        }
+        $dir = new Directory($this->getCurrentCollectionPath());
 
-        return $count;
+        return $dir->countFiles("*.json");
     }
 
     /**
@@ -225,31 +221,24 @@ class FilesCollection extends Collection {
      *     CollectionDocument
      */
     public function getAll () {
-        $dir = $this->getCurrentCollectionPath();
-        $files = scandir($dir);
+        $dir = new Directory($this->getCurrentCollectionPath());
+
+        $files = $dir->glob("*.json");
         foreach ($files as $file) {
-            if (get_extension($file) == 'json') {
-                $documentId = get_filename($file);
-                yield $this->get($documentId);
-            }
+            $documentId = $file->getFileNameWithoutExtension();
+
+            yield $this->get($documentId);
         }
     }
 
     /**
      * Gets documents list
      *
-     * @return array The documents list
+     * @return Vector<string> The documents list
      */
-    public function getDocumentsList () {
-        $dir = $this->getFilePath('');
-        $files = scandir($dir);
-        $documents = [];
-        foreach ($files as $file) {
-            if (get_extension($file) == 'json') {
-                $documents[] = get_filename($file);
-            }
-        }
-
-        return $documents;
+    public function getDocumentsList () : Vector {
+        return (new Directory($this->getCurrentCollectionPath()))
+            ->glob("*.json")
+            ->map(fn ($file) => $file->getFileNameWithoutExtension());
     }
 }

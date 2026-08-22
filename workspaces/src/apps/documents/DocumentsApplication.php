@@ -19,45 +19,43 @@ use Waystone\Workspaces\Engines\Apps\Application;
 use Waystone\Workspaces\Engines\Errors\ErrorHandling;
 use Waystone\Workspaces\Engines\I18n\Language;
 
+use Keruald\OmniTools\Collections\Vector;
+use Keruald\OmniTools\IO\Directory;
+use Keruald\OmniTools\IO\File;
+
 /**
  * Documents application class
  */
 class DocumentsApplication extends Application {
+
     /**
      * @var string the application name
      */
     public static $name = "Documents";
 
-    /**
-     * Gets path to a document file
-     */
-    private function getFilePath ($file) {
+    private Directory $directory;
+
+    protected function onAfterInitialize () : void {
         global $Config;
 
-        return $Config['Content']['Workspaces']
-            . DIRECTORY_SEPARATOR
-            . $this->context->workspace->code
-            . DIRECTORY_SEPARATOR
-            . $this->context->configuration->path
-            . DIRECTORY_SEPARATOR
-            . $file;
+        $path = [
+            $Config["Content"]["Workspaces"],
+            $this->context->workspace->code,
+            $this->context->configuration->path,
+        ];
+
+        $this->directory = Directory::fromPathFragments($path);
     }
 
     /**
      * Gets documents list
      *
-     * @return array The documents list
+     * @return Vector<bool> The documents list
      */
-    public function getDocumentsList () {
-        $dir = $this->getFilePath('');
-        $files = scandir($dir);
-        $documents = [];
-        foreach ($files as $file) {
-            if (get_extension($file) == 'json') {
-                $documents[] = get_filename($file);
-            }
-        }
-        return $documents;
+    public function getDocumentsList () : Vector {
+        return $this->directory
+            ->globFiles("*.json")
+            ->map(fn (File $file) => $file->getFileNameWithoutExtension());
     }
 
     /**
@@ -67,8 +65,7 @@ class DocumentsApplication extends Application {
      * @return stdClass the document JSON representation
      */
     public function getDocument ($docId) {
-        $file = $this->getFilePath($docId . '.json');
-        $data = file_get_contents($file);
+        $data = $this->directory->getFile($docId . ".json")->read();
 
         $data = json_decode($data);
         if ($data === null) {
@@ -103,7 +100,7 @@ class DocumentsApplication extends Application {
         //Gets resources for HTML output
         if (count($url) == 1) {
             //Prints the list of the documents
-            $documents = $this->getDocumentsList();
+            $documents = $this->getDocumentsList()->toArray();
             $smarty->assign('documents', $documents);
             $smarty->assign(
                 "docs_url",

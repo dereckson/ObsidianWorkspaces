@@ -17,6 +17,8 @@
 
 namespace Waystone\Workspaces\Engines\I18n;
 
+use Keruald\OmniTools\IO\Directory;
+
 use Exception;
 
 /**
@@ -45,22 +47,23 @@ class TextFileMessage extends Message {
         $this->filename = $filename;
 
         //Finds relevant files
-        $files = scandir($folder);
+        $dir = new Directory($folder);
+
+        $files = $dir->glob($filename . '-*.txt');
         foreach ($files as $file) {
-            if (str_starts_with($file, $filename . '-') && get_extension($file) == 'txt') {
-                $lang = substr($file, strlen($filename) + 1, -4);
-                if (str_contains($lang, '-')) {
-                    //The user have quux-lang.txt and quux-foo-lang.txt files
-                    continue;
-                }
-                $file = $folder . DIRECTORY_SEPARATOR . $file;
-                $this->localizations[$lang] = file_get_contents($file);
+            $tokens = explode('-', $file->getFileNameWithoutExtension());
+            if (count($tokens) > 2) {
+                //The user have quux-lang.txt and quux-foo-lang.txt files
+                continue;
             }
+            $lang = $tokens[1];
+
+            $this->localizations[$lang] = $file->read();
         }
 
         //Fallback if only one file is offered
-        $file = $folder . DIRECTORY_SEPARATOR . $filename . '.txt';
-        if (file_exists($file)) {
+        $file = $dir->getFile($filename . '.txt');
+        if ($file->exists()) {
             if (count($this->localizations)) {
                 if (array_key_exists(Language::FALLBACK, $this->localizations)) {
                     trigger_error("Ignored file: $filename.txt, as $filename-" . Language::FALLBACK . ".txt already exists and is used for fallback purpose", E_USER_NOTICE);
@@ -69,8 +72,8 @@ class TextFileMessage extends Message {
                 trigger_error("You have $filename.txt and $filename-<lang>.txt files; you should have one or the other, but not both", E_USER_NOTICE);
             }
 
+            $this->localizations[Language::FALLBACK] = $file->read();
 
-            $this->localizations[Language::FALLBACK] = file_get_contents($file);
             return;
         }
 
