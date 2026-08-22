@@ -10,17 +10,6 @@ use Keruald\OmniTools\HTTP\Requests\Request;
 ///                                                                          ///
 ////////////////////////////////////////////////////////////////////////////////
 
-//Plural management
-
-/*
- * Gets a "s" if the specified amount requests the plural
- * @param mixed $amount the quantity (should be numeric)
- * @return string 's' if the amount is greater or equal than 2 ; otherwise, ''
- */
-function s ($amount) {
-	if ($amount >= 2 || $amount <= -2 ) return 's';
-}
-
 /**
  * Gets file extension
  * @param string $file the file to get the extension
