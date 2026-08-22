@@ -62,15 +62,15 @@ class TextFileMessage extends Message {
         $file = $folder . DIRECTORY_SEPARATOR . $filename . '.txt';
         if (file_exists($file)) {
             if (count($this->localizations)) {
-                if (array_key_exists(MESSAGE_FALLBACK_LANG, $this->localizations)) {
-                    trigger_error("Ignored file: $filename.txt, as $filename-" . MESSAGE_FALLBACK_LANG . ".txt already exists and is used for fallback purpose", E_USER_NOTICE);
+                if (array_key_exists(Language::FALLBACK, $this->localizations)) {
+                    trigger_error("Ignored file: $filename.txt, as $filename-" . Language::FALLBACK . ".txt already exists and is used for fallback purpose", E_USER_NOTICE);
                     return;
                 }
                 trigger_error("You have $filename.txt and $filename-<lang>.txt files; you should have one or the other, but not both", E_USER_NOTICE);
             }
 
 
-            $this->localizations[MESSAGE_FALLBACK_LANG] = file_get_contents($file);
+            $this->localizations[Language::FALLBACK] = file_get_contents($file);
             return;
         }
 
