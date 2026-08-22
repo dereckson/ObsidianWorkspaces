@@ -25,14 +25,14 @@ use Exception;
 class TextFileMessage extends Message {
 
     /**
-     * @var string The folder where the message is stored.
+     * The folder where the message is stored.
      */
-    public $folder;
+    public string $folder;
 
     /**
-     * @var string The message filename, without extension or language suffix.
+     * The message filename, without extension or language suffix.
      */
-    public $filename;
+    public string $filename;
 
     /**
      * Initializes a new instance of the TextFileMessage class.
@@ -40,7 +40,7 @@ class TextFileMessage extends Message {
      * @param string $folder The folder where the message is stored.
      * @param string $filename The message filename, without extension or language suffix.
      */
-    public function __construct ($folder, $filename) {
+    public function __construct (string $folder, string $filename) {
         $this->folder = $folder;
         $this->filename = $filename;
 
@@ -49,7 +49,7 @@ class TextFileMessage extends Message {
         foreach ($files as $file) {
             if (str_starts_with($file, $filename . '-') && get_extension($file) == 'txt') {
                 $lang = substr($file, strlen($filename) + 1, -4);
-                if (strpos($lang, '-') !== false) {
+                if (str_contains($lang, '-')) {
                     //The user have quux-lang.txt and quux-foo-lang.txt files
                     continue;
                 }
