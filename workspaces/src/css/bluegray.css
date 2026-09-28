@@ -7,7 +7,6 @@
     Tags:           Bootstrap, blue, light gray, responsive
     Breakpoints:    768px
     Filename:       bluegray.css
-    Version:        1.0
     Created:        2014-01-24
     Licence:        Apache License 2.0
     -------------------------------------------------------------    */
@@ -16,7 +15,6 @@
     Table of contents
     - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-    :: Fonts
     :: Main styles
     :: Titles
     :: Wrappers
@@ -29,12 +27,6 @@
     :: Block grids
 
 */
-
-/*  -------------------------------------------------------------
-    Fonts
-    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -    */
-
-@import url(http://fonts.googleapis.com/css?family=Source+Sans+Pro:400,200,400italic,600);
 
 /*  -------------------------------------------------------------
     Main styles

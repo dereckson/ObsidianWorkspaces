@@ -6,6 +6,7 @@
     <title>{#SiteTitle#}{if $PAGE_TITLE} :: {$PAGE_TITLE}{/if}</title>
     <link href="{#StaticContentURL#}/css/bootstrap.css" rel="stylesheet">
     <link href="{#StaticContentURL#}/css/font-awesome.min.css" rel="stylesheet">
+    <link href="{#StaticContentURL#}/css/fonts.css" rel="stylesheet">
     <link href="{#StaticContentURL#}/css/bluegray.css" rel="stylesheet">
     <link href="{#StaticContentURL#}/favicon.ico" rel="shorcut icon" type="image/x-icon">
     <link href="{#StaticContentURL#}/favicon.png" rel="icon" type="image/png" />
