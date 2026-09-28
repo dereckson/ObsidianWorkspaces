@@ -104,7 +104,7 @@ class DocumentsApplication extends Application {
             $smarty->assign('documents', $documents);
             $smarty->assign(
                 "docs_url",
-                get_url($this->context->workspace->code, "docs")
+                $this->context->request->buildUrl($this->context->workspace->code, "docs")
             );
             $template = 'documents_list.tpl';
         } else {

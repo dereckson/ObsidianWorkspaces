@@ -57,10 +57,10 @@ class AzharProvider extends AuthenticationMethod {
 
         if ($action == "user.login.azhar.initialize") {
             //Redirects user to Azhàr SSO service
-            $callbackUrl =
-                Request::getServerURL() . get_url($this->context->workspace->code)
-                . '?action=user.login.azhar.success&authenticationMethodId='
-                . $this->id;
+            $callbackUrl = Request::getServerURL()
+                         . $this->context->request->buildUrl($this->context->workspace->code)
+                         . '?action=user.login.azhar.success&authenticationMethodId='
+                         . $this->id;
             $url = $this->url . '?mode=provider&key=' . $this->clientKey
                 . '&sessionKey=' . $this->getSessionKey()
                 . '&url=' . urlencode($callbackUrl);
@@ -152,7 +152,8 @@ class AzharProvider extends AuthenticationMethod {
      * @retrun string the login link
      */
     public function getAuthenticationLink () {
-        $url = Request::getServerURL() . get_url($this->context->workspace->code)
+        $url = Request::getServerURL()
+             . $this->context->request->buildUrl($this->context->workspace->code)
              . '?action=user.login.azhar.initialize&authenticationMethodId=' . $this->id;
         return $url;
     }

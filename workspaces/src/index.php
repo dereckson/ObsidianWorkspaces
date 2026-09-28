@@ -44,7 +44,7 @@ Language::load($context)->configLoad('core.conf');
 
 //Loads workspace
 try {
-    if (Workspace::is_workspace($context->url[0])) {
+    if (isset($context->url[0]) && Workspace::is_workspace($context->url[0])) {
         $context->workspace = Workspace::fromCode(array_shift($context->url));
         $context->workspace->loadConfiguration($context);
     }

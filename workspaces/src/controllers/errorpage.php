@@ -56,7 +56,7 @@ class ErrorPageController extends Controller {
      */
     public function handleRequest () {
         $smarty = $this->context->templateEngine;
-        $smarty->assign("URL_HOME", get_url());
+        $smarty->assign("URL_HOME", $this->context->request->buildUrl());
 
         switch ($this->errorCode) {
             case 404:

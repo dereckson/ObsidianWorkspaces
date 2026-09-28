@@ -47,6 +47,7 @@ class ApplicationContext extends Context {
         $applicationContext->workspace = $sourceContext->workspace;
         $applicationContext->user = $sourceContext->user;
         $applicationContext->session = $sourceContext->session;
+        $applicationContext->request = $sourceContext->request;
         $applicationContext->url = $sourceContext->url;
         $applicationContext->templateEngine = $sourceContext->templateEngine;
 

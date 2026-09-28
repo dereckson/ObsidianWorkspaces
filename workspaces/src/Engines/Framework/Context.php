@@ -18,6 +18,7 @@
 namespace Waystone\Workspaces\Engines\Framework;
 
 use Keruald\Database\DatabaseEngine;
+use Keruald\OmniTools\HTTP\Requests\Request;
 use Psr\SimpleCache\CacheInterface;
 use Smarty\Smarty;
 use Waystone\Workspaces\Engines\Users\User;
@@ -56,6 +57,11 @@ class Context {
      * @var Session the current session
      */
     public Session $session;
+
+    /**
+     * @var Request the current HTTP request
+     */
+    public Request $request;
 
     /**
      * @var string[] the URL fragments

@@ -96,7 +96,10 @@ switch ($urlFragment) {
                     $smarty->assign('WAP', Language::get("AccountCreated"));
 
                     //Redirects users to homepage
-                    header('refresh: 5; url=' . get_url());
+                    header(
+                        'refresh: 5; url='
+                        . $context->request->buildUrl()
+                    );
 
                     //Calls void controller
                     $smarty->assign('screen', 'user.create');
@@ -163,7 +166,9 @@ switch ($urlFragment) {
                 $smarty->assign('OpenID', $_COOKIE['LastOpenID']);
             }
 
-            $action  = $context->workspace ? get_url($context->workspace->code) . '/' : get_url();
+            $action = $context->workspace
+                ? $context->request->buildUrl($context->workspace->code) . '/'
+                : $context->request->buildUrl();
             $action .= implode('/', $context->url);
 
             if (isset($LoginError)) {

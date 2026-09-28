@@ -22,9 +22,6 @@
 ///                                                                          ///
 ////////////////////////////////////////////////////////////////////////////////
 
-//Loads global functions
-include_once("GlobalFunctions.php"); //Global functions
-
 //Loads configuration
 if (isset($_SERVER) && array_key_exists('OBSIDIAN_CONFIG', $_SERVER)) {
     $configFile = $_SERVER['OBSIDIAN_CONFIG'];
